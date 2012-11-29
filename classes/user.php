@@ -239,6 +239,28 @@ class User {
     }
     
     /**
+    * @param $user A player to upgrade to MJ
+    * @param $d An array of data, containing new password
+    */
+    public static function upgradeToMJ($user, $d){
+        $user = new User($user->getId());
+        if ( $user || $user->getRole() == 'player' ){
+            // Insert animator
+            $sql = "INSERT INTO Animators SET `userId`='".$user->getId()."', `password`='".sha1($d['password'])."'";
+            $res = mysql_query ( $sql );
+            $nb = mysql_affected_rows();
+            if($res && ($nb === 1)){
+                // Validate it by authentification, and return it
+                $auth = self::auth($d['email'], $d['password']);
+                if($auth['status'] == 2){
+                    return $user->updateData($d);
+                }
+            }
+        }
+        return FALSE;
+    }
+    
+    /**
     * Register a new USER with the datas $d and return it.
     * Or return false if error occurs.
     * Used for players

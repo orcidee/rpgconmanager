@@ -82,12 +82,8 @@ if(!$db){
             if(strlen(@$_POST['firstname']) <= 0){
                 $msg["firstname"] = "Merci de nous indiquer ton prénom.";
             }
-            if(strlen(@$_POST['email']) <= 0){
-                $msg["email"] = "Merci de nous indiquer ton adresse email.";
-            }elseif( ! Controls::validateEmail(@$_POST['email'])){
-                $msg["email"] = "Bein ça alors?! Ton adresse email n'est pas valide.";
-            }elseif(User::emailExists(@$_POST['email'])){
-                $msg["email"] = "Cette adresse email est déjà enregistrée. <a href=''>Clique ici si tu as oublié ton mot de passe</a>.";
+            if(strlen(@$_POST['phone']) <= 0){
+                $msg["phone"] = "Désolé de te demander ça, mais nous devons pouvoir contacter les MJ par téléphone. Merci de bien vouloir saisir ce champs.";
             }
             if(strlen(@$_POST['password']) <= 0){
                 $msg["password"] = "Tu dois saisir un mot de passe STP.";
@@ -97,12 +93,38 @@ if(!$db){
             if(@$_POST['password'] != @$_POST['confirm']){
                 $msg["confirm"] = "La confirmation de mot de passe que tu as saisi ne correspond pas.";
             }
-            if(!isset($msg) || count($msg) == 0){
-                $user = User::registerMJ($_POST);
-                if($user){
-                    $_SESSION["userId"] = $user->getId();
+            if(strlen(@$_POST['email']) <= 0){
+                $msg["email"] = "Merci de nous indiquer ton adresse email.";
+            }elseif( ! Controls::validateEmail(@$_POST['email'])){
+                $msg["email"] = "Bein ça alors?! Ton adresse email n'est pas valide.";
+            }elseif(User::emailExists(@$_POST['email'])){
+                
+                // Upgrade Player => MJ
+                $testUser = User::pseudoAuth($_POST['email']);
+                if($testUser->getRole() == 'player'){
+                    if(!isset($msg) || count($msg) == 0){
+                        $res = User::upgradeToMJ($testUser, $_POST);
+                        $user = $res['user'];
+                        if($user){
+                            $_SESSION["userId"] = $user->getId();
+                        }else{
+                            $msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu es inscrit toujours comme 'joueur'.";
+                        }
+                        $msg["email"] = 'Tu étais inscrit comme "joueur", tu es désormais "animateur". Félicitations!';
+                    }
                 }else{
-                    $msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu n'a pas été enregistré.";
+                    $msg["email"] = "Cette adresse email est déjà enregistrée. <a href='pwd-forgotten.php'>Clique ici si tu as oublié ton mot de passe</a>.";
+                }
+            }
+            
+            if(!isset($msg) || count($msg) == 0){
+                if(!$user){
+                    $user = User::registerMJ($_POST);
+                    if($user){
+                        $_SESSION["userId"] = $user->getId();
+                    }else{
+                        $msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu n'a pas été enregistré.";
+                    }
                 }
             }
         }
@@ -114,7 +136,7 @@ if(!$db){
             ?>
             <h1>Authentification</h1>
             <div class='login'>
-            
+                <p>Seuls ton nom, ton prénom et ton adresse email seront affichés sur le site. Les autres informations te concernant seront gardées confidentielles et utilisées uniquement par des membres de l'association Orc'idee.</p>
                 <div class="left">
                 
                     <?php
@@ -156,9 +178,9 @@ if(!$db){
                     
                         <?php
                         if (@$_POST['action'] == 'register'){
-                            echo "<div class='register-result'><ul>";
+                            echo "<div class='msg register-result'><ul>";
                             foreach($msg as $key => $v){
-                                echo "<li>".$key.": $v</li>";
+                                echo "<li>$v</li>";
                             }
                             echo "</ul></div>";
                         }else{
@@ -187,12 +209,13 @@ if(!$db){
                                 <label for='confirm'>Confirmer MdP *</label>
                                 <input type='password' name='confirm' value='' />
                                 
+                                <label for='phone'>Téléphone *</label>
+                                <input type='text' name='phone' value='<?php echo @$_POST['phone']; ?>' />
+                                
                             </fieldset>
                             
                             <fieldset>
                                 <legend>Champs facultatifs</legend>
-                                <label for='phone'>Téléphone</label>
-                                <input type='text' name='phone' value='<?php echo @$_POST['phone']; ?>' />
                                 
                                 <label for='address'>Adresse</label>
                                 <input type='text' name='address' value='<?php echo @$_POST['address']; ?>' />
@@ -212,17 +235,6 @@ if(!$db){
                             <input type='hidden' name='action' value='register' />
                             
                         </form>
-                        
-                        <div class="msg">
-                            <ul>
-                            <?php if(@$_POST['action'] == 'register'){
-                                foreach ($msg as $k => $v){
-                                    echo "<li>$v</li>";
-                                }
-                            }?>
-                            </ul>
-                        </div>
-                        
                     </div>
                 
                 <?php } ?>

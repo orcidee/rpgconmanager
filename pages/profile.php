@@ -116,6 +116,7 @@ if(Controls::isAppOpen() && $user && ($user->getRole() == "animator" || $user->g
         echo '<li><label for="email">Email *</label>';
         echo '<input name="email" type="text" value="'.$user->getEmail().'" '.$readonly.' /></li>';
         
+        /* TODO : créer un flag "Le MJ est d'accord d'afficher ses infos en public" ... en attendant, on affiche rien.
         echo '<li><label for="phone">Téléphone</label>';
         echo '<input name="phone" type="text" value="'.$user->getPhone().'" '.$readonly.' /></li>';
         
@@ -130,7 +131,7 @@ if(Controls::isAppOpen() && $user && ($user->getRole() == "animator" || $user->g
         
         echo '<li><label for="country">Pays</label>';
         echo '<input name="country" type="text" value="'.$user->getCountry().'" '.$readonly.' /></li></ul>';
-        
+        */
         if (@$_POST['action'] === 'edit'){
         
             echo '<input type="hidden" name="action" value="validate"/>';
