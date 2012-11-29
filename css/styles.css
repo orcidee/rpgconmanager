@@ -185,6 +185,10 @@ td.application-controls{
     height: 55px;
     color:red;
 }
+.login div.forgottenPwd{
+    display:block;
+    margin: 10px auto;
+}
 
 .list{
     width:600px;

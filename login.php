@@ -136,7 +136,10 @@ if(!$db){
                         <input type='submit' value="S'authentifier" class='submit' />
                         <input type='hidden' name='action' value='auth' />
                         <input type='hidden' name="forward" value="<?php echo @$_REQUEST['forward']; ?>" />
+                        
                     </form>
+                    
+                    <div class="forgottenPwd"><a href="pwd-forgotten.php">Mot de passe oublié</a></div>
                     
                     <div class="msg">
                         <?php if((@$_POST['action'] == 'auth') && ($res === 0 || $res === 1)){

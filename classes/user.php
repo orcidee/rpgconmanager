@@ -134,6 +134,21 @@ class User {
     }
     
     /**
+    * Réinitialise le mot de passe de l'utilisateur.
+    * Retourne le nouveau mot de passe, ou false en cas d'échec.
+    */
+    public function resetPassword(){
+        $pwd = "";
+        $chaine = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        srand((double)microtime()*1000000);
+        for($i=0; $i<8; $i++) {
+            $pwd .= $chaine[rand()%strlen($chaine)];
+        }
+        $user = new User($this->userId);
+        return ($user->updatePassword($pwd)) ? $pwd : false;
+    }
+    
+    /**
     * Met à jour le mot de passe de l'utilisateur. Retourne true si la mise à jour est un succès.
     */
     public function updatePassword($pwd){
