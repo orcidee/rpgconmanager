@@ -101,6 +101,11 @@ if(!$db){
         if(@$_GET['page'] == "tables"){
             $view->content = "tables";
         }
+        
+        // Définition des numéros de table
+        if(@$_GET['page'] == "users"){
+            $view->content = "users";
+        }
     }
     
     if(@$_GET['page'] == "logout"){

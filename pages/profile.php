@@ -133,6 +133,9 @@ if($light){
         echo '<li><label for="email">Email *</label>';
         echo '<input name="email" type="text" value="'.$userDisplayed->getEmail().'" '.$readonly.' /></li>';
         
+        echo '<li><label for="role">Role</label>';
+        echo '<input name="role" type="text" value="'.$userDisplayed->getRole().'" readonly="readonly" class="info" /></li>';
+        
         if($full){
             echo '<li><label for="phone">Téléphone</label>';
             echo '<input name="phone" type="text" value="'.$userDisplayed->getPhone().'" '.$readonly.' /></li>';

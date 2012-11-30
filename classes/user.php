@@ -61,6 +61,24 @@ class User {
         }
     }
     
+    public static function getUsers($role = "all", $sort = null){
+        
+        if($role == 'player'){
+            $sql = "SELECT u.* FROM users u LEFT JOIN animators a ON u.userId = a.userId WHERE a.userId IS NULL";
+        }elseif($role == 'animator'){
+            $sql = 'SELECT * FROM users INNER JOIN animators ON users.userId=animators.userId';
+        }elseif($role == 'administrator'){
+            $sql = 'SELECT * FROM users INNER JOIN administrators ON users.userId=administrators.userId';
+        }else{
+            $sql = "SELECT * FROM users";
+        }
+        
+        if(!is_null($sort) && ""!=$sort){
+            $sql .= " ORDER BY $sort";
+        }
+        return mysql_query ( $sql );
+    }
+    
     /**
     * Met à jours les données de l'utilisateur en BD, avec les données passées en paramètre.
     * Retourne un tableau associatif "user" (mis à jour) et "msg".
@@ -441,7 +459,6 @@ class User {
     public function participatesTo ($partyId){
         $sql = "SELECT * FROM Inscriptions WHERE partyId = ".$partyId." AND userId = ".$this->userId;
         $res = mysql_query ( $sql );
-        $row = mysql_fetch_assoc($res);
         $nb = mysql_num_rows($res);
         return ($res && $nb > 0);
     }
@@ -452,7 +469,6 @@ class User {
         if($this->getRole() == 'animator' || $this->getRole() == 'administrator'){
             $sql = "SELECT * FROM Parties WHERE partyId = ".$partyId." AND userId = ".$this->userId;
             $res = mysql_query ( $sql );
-            $row = mysql_fetch_assoc($res);
             $nb = mysql_num_rows($res);
             return ($res && $nb > 0);
         }
@@ -493,6 +509,7 @@ class User {
     public function getRole(){
         return $this->role;
     }
-    
-        
+    public function isAdmin(){
+        return ($this->role == 'administrator');
+    }
 }
