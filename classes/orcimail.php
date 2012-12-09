@@ -3,6 +3,29 @@ require_once(dirname(__FILE__).'/../classes/user.php');
 
 class Orcimail {
 
+    public static function sendPassword($user, $pwd){
+        $to = $user->getEmail();
+        $body = "
+        <p>Bonjour ".$user->getFirstname().",</p>
+        <p>Suite à ta demande, ton mot de passe a été réinitialisé.</p>
+		<p>Voici ton nouveau mot de passe:  $pwd  </p>
+        
+        <p></p><p>Nous te suggérons de vérifier tes informations et de modifier ton mot de passe,
+        via ta page de profil (<a href='http://localhost/orcidee/rpgconmanager/?page=profile'>
+        http://localhost/orcidee/rpgconmanager/?page=profile)</a>)</p>
+        
+        <p>Pour toute information supplémentaire, n'hésite pas à nous contacter à: 
+        <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a>.</p><br/>
+        
+        <p><strong>Nous nous réjouissons de te voir à Orc'idée et espérons que tu passeras un excellent week-end !</strong></p>";
+    
+        return self::sendMail (array(
+            'body' => $body,
+            'to' => $to,
+            'subject' => "Orc'idee - Réinitialisation du mot de passe"
+        ));
+    }
+
     public static function notifyCancel($party){
 
         $u = new User($party->getUserId());
@@ -314,7 +337,7 @@ class Orcimail {
                     "Content-type: text/html; charset=UTF-8";
         
         $signature = "<div style='clear:both;'><img src='http://www.orcidee.ch/images/divers/Logop.png' alt='Orcidee'/>".
-        "<p>Convention lémanique de jeu de rôle et de société</p>".
+        "<p>Convention lémanique de jeu de simulation</p>".
         "<p>Lausanne</p>".
         "<p><strong><a href='http://www.orcidee.ch'>www.orcidee.ch</a></strong></p></div>";
         

@@ -61,6 +61,24 @@ class User {
         }
     }
     
+    public static function getUsers($role = "all", $sort = null){
+        
+        if($role == 'player'){
+            $sql = "SELECT u.* FROM users u LEFT JOIN animators a ON u.userId = a.userId WHERE a.userId IS NULL";
+        }elseif($role == 'animator'){
+            $sql = 'SELECT * FROM users INNER JOIN animators ON users.userId=animators.userId';
+        }elseif($role == 'administrator'){
+            $sql = 'SELECT * FROM users INNER JOIN administrators ON users.userId=administrators.userId';
+        }else{
+            $sql = "SELECT * FROM users";
+        }
+        
+        if(!is_null($sort) && ""!=$sort){
+            $sql .= " ORDER BY $sort";
+        }
+        return mysql_query ( $sql );
+    }
+    
     /**
     * Met à jours les données de l'utilisateur en BD, avec les données passées en paramètre.
     * Retourne un tableau associatif "user" (mis à jour) et "msg".
@@ -131,6 +149,21 @@ class User {
         $nb = mysql_num_rows($res);
         
         return ($res && ($nb === 1));
+    }
+    
+    /**
+    * Réinitialise le mot de passe de l'utilisateur.
+    * Retourne le nouveau mot de passe, ou false en cas d'échec.
+    */
+    public function resetPassword(){
+        $pwd = "";
+        $chaine = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        srand((double)microtime()*1000000);
+        for($i=0; $i<8; $i++) {
+            $pwd .= $chaine[rand()%strlen($chaine)];
+        }
+        $user = new User($this->userId);
+        return ($user->updatePassword($pwd)) ? $pwd : false;
     }
     
     /**
@@ -217,6 +250,28 @@ class User {
                             }
                         }
                     }
+                }
+            }
+        }
+        return FALSE;
+    }
+    
+    /**
+    * @param $user A player to upgrade to MJ
+    * @param $d An array of data, containing new password
+    */
+    public static function upgradeToMJ($user, $d){
+        $user = new User($user->getId());
+        if ( $user || $user->getRole() == 'player' ){
+            // Insert animator
+            $sql = "INSERT INTO Animators SET `userId`='".$user->getId()."', `password`='".sha1($d['password'])."'";
+            $res = mysql_query ( $sql );
+            $nb = mysql_affected_rows();
+            if($res && ($nb === 1)){
+                // Validate it by authentification, and return it
+                $auth = self::auth($d['email'], $d['password']);
+                if($auth['status'] == 2){
+                    return $user->updateData($d);
                 }
             }
         }
@@ -404,7 +459,6 @@ class User {
     public function participatesTo ($partyId){
         $sql = "SELECT * FROM Inscriptions WHERE partyId = ".$partyId." AND userId = ".$this->userId;
         $res = mysql_query ( $sql );
-        $row = mysql_fetch_assoc($res);
         $nb = mysql_num_rows($res);
         return ($res && $nb > 0);
     }
@@ -415,7 +469,6 @@ class User {
         if($this->getRole() == 'animator' || $this->getRole() == 'administrator'){
             $sql = "SELECT * FROM Parties WHERE partyId = ".$partyId." AND userId = ".$this->userId;
             $res = mysql_query ( $sql );
-            $row = mysql_fetch_assoc($res);
             $nb = mysql_num_rows($res);
             return ($res && $nb > 0);
         }
@@ -456,6 +509,7 @@ class User {
     public function getRole(){
         return $this->role;
     }
-    
-        
+    public function isAdmin(){
+        return ($this->role == 'administrator');
+    }
 }

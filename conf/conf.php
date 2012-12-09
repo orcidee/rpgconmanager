@@ -11,7 +11,7 @@ ini_set('mbstring.detect_order','auto');
 
 //putenv("TZ=UTC");
 
-define("MODULE_PATH", "manager_dev");
+define("MODULE_PATH", "rpgconmanager");
 
 define("MAIL_FROM", "inscription@orcidee.ch");
 define("MAIL_CC", "moduleparties@orcidee.ch");
