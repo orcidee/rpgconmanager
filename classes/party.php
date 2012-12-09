@@ -357,7 +357,7 @@ class Party {
         }
         
         // Initialisation des slots
-        $sql = "SELECT * FROM Parties";
+        $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused')";
         $res = mysql_query ( $sql );
         
         while ($row = mysql_fetch_assoc($res)) {
