@@ -131,9 +131,11 @@ if($user){
                 unset($_SESSION['party']);
                 $saveOK = $p->save();
                 if($saveOK) {
+                    echo "<p>Partie <strong>".(($edit)?'éditée':'créée')."</strong> avec succès.</p>".
+                    "<p>Tu va recevoir un mail de confirmation tout soudain!</p>";
                 
                     // Send congratulation's mail
-                    $isMailOk = Orcimail::congratulations($p, $user, $edit);
+                    $isMailOk = Orcimail::notifyCreate($p, $edit);
                     
                 }else{
                     // Display errors

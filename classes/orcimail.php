@@ -253,12 +253,9 @@ class Orcimail {
         ));
     }
     
-    public static function congratulations($p, $user, $edit){
+    public static function notifyCreate ($p, $edit){
         
-        // Congratulations
-        echo "<p>Partie <strong>".(($edit)?'éditée':'créée')."</strong> avec succès.</p>".
-        "<p>Tu va recevoir un mail de confirmation tout soudain!</p>";
-        
+        $user = $p->getAnimator();
         $type = $p->getType();
         
         $message = "
