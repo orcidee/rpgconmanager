@@ -17,6 +17,9 @@ $user = User::getFromSession();
 if($user){
     
     if($user->getRole() == "administrator" or $user->getRole() == "animator"){
+    	
+		// Indicate if the intial creation/edition form should be used
+		$createOrEdit = false;
 
         // AFFICHAGE DES DONNEES SAISIES - DEMANDE DE CONFIRMATION
         if (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
@@ -102,10 +105,15 @@ if($user){
                 </form> <?php
                 
             }else{
-                echo "<p class='dbg'>Partie invalide</p>";
-                print_r($party->errors);
-                print_r($party->infos);
-				print_r($_POST);
+                print "<p>La créature chargée de valider les parties pense que ces informations ".
+                "contiennent des erreurs.</p><p>Pourrait-vérifier :</p><ul>".
+                "<li>Que tous les champs obligatoires soient remplis</li>".
+                "<li>Que le nombre minimum de joueurs soit bien un nombre strictement positif</li>".
+                "<li>Que le nombre maximum de joueurs soit bien un nombre ".
+                "égal ou supérieur au nombre minumum de joueurs</li></ul> ";
+                /*print_r($party->errors);
+                print_r($party->infos);*/
+				$createOrEdit = true;
             }
         }
         
@@ -136,6 +144,10 @@ if($user){
         
         // SAISIE INITIALE DES DONNEES  / (RE)EDITION
         elseif( ! isset($_POST) or @$_POST['action'] == 'undo' or count($_POST) == 0) {
+        	$createOrEdit = true;
+        }
+		
+		if($createOrEdit) {
             
             // Default: Reedit form, before saving new party.
             // pv = previous values. No previous values by default.
@@ -148,6 +160,14 @@ if($user){
                 $pv = $p->toArray();
                 $editExisting = true;
                 unset ($_SESSION['party']);
+				
+			}elseif (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
+				// Correcting invalid data
+				$pv = $_POST;
+				if(isset($_GET['partyId']) && $user) {
+					$editExisting = true;
+				}
+				
 			}elseif(isset($_GET['partyId']) && $user){
                 // Edit an existing party by id
 				$p = new Party($_GET['partyId'], false);

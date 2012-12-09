@@ -48,6 +48,8 @@ class Party {
                 isset($data['name']) && strlen($data['name']) > 0 &&
                 isset($data['playerMin']) && strlen($data['playerMin']) > 0 &&
                 isset($data['playerMax']) && strlen($data['playerMax']) > 0 &&
+                is_numeric($data['playerMin']) && is_numeric($data['playerMax']) &&
+                0 < $data['playerMin'] && $data['playerMin'] <= $data['playerMax'] &&
                 isset($data['level']) && strlen($data['level']) > 0 &&
                 isset($data['start']) && strlen($data['start']) > 0 &&
                 isset($data['duration']) && strlen($data['duration']) > 0 ) {
