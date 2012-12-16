@@ -1,0 +1,390 @@
+html
+{
+font-family: 'courrier new';
+    color: #000000;
+    background-color: #ffffff;
+}
+
+body
+{
+margin: 7px;
+padding:7px;
+padding-left: 10px;
+  padding-bottom: 35px;
+ background-image: url("http://www.orcidee.ch/templates/western/images/content2.png");
+  background-color: #f8f6e9;
+    margin-top:25px;
+   box-shadow: 0px 6px 6px black;
+   border: 1px solid #000000;
+   width:669px;
+}
+nav#main-nav {
+    margin: 0  0 20px 0;
+	background-image: url("http://www.orcidee.ch/templates/western/images/clou.png");
+background-repeat: no-repeat;
+width:669px;
+height: 46px;
+padding-top: 10px;
+padding-left: 25px;
+}
+nav#bottom-nav {
+    margin: 20px  0 0 0;
+}
+nav a{
+    margin: 0 10px;
+}
+ul, li{
+    list-style:none;
+    overflow:hidden;
+    padding:0;
+    margin:0;
+}
+a {
+color: #933a0a;
+text-decoration:underline;
+}
+p
+{
+font-size: 16px;
+}
+h2
+{
+font-size: 20px;
+}
+
+h1
+{
+font-size: 22px;
+text-decoration: underline;
+width:669px;
+height: 46px;
+}
+fieldset 
+{
+border: 1px solid #000000;
+}
+input.submit,
+.login input.submit
+{
+margin:auto;
+background-color: #66390d;
+border: 2px solid #3e2208;
+border-radius: 2px;
+color: #ffffff;
+}
+
+input.subscribe
+{
+margin:auto;
+margin-top: 7px;
+background-color: #66390d;
+border: 2px solid #3e2208;
+border-radius: 2px;
+color: #ffffff
+}
+.profile input.submit
+{
+float: none;
+margin-top: 10px;
+background-color: #66390d;
+border: 2px solid #3e2208;
+border-radius: 2px;
+color: #ffffff
+}
+ul.profile li
+{
+color: #000000;
+border-bottom-color: #000000;
+}
+ul.profile input.info
+{
+color: #000000;
+font-weight: bold;
+}
+.login .right{
+    float:left;
+    width:287px;
+    padding: 0 0 0 15px;
+    border-left: 1px solid #000000;
+}
+.login fieldset{
+    width:auto;
+    margin:10px 0 20px 0;
+    padding:0;
+    border:none;
+}
+.login fieldset legend{
+    display:none;
+}
+.login p{
+    height: 55px;
+}
+.login p.auth-result{
+    height: 55px;
+    color:red;
+}
+.login div.forgottenPwd{
+    display:block;
+    margin: 10px auto;
+}
+
+.list{
+    width:640px;
+}
+.list li {
+    margin: 0 0 20px 0;
+}
+.list ul.players li {
+    margin: 2px 0;
+}
+.list li div{
+    display:block;
+    overflow:hidden;
+    float:left;
+	text-align:left;
+}
+.list li div.clear{
+    clear:both;
+	width:620px;
+    padding-left:10px;
+}
+.list li div.clear div{
+    padding:0;
+	text-align:left;
+}
+
+.list li div.top,
+.list li div.main,
+.list li div.more{
+    border-bottom: 1px solid #000000;
+}
+.ui-dialog.t2012 .ui-dialog-titlebar{
+    background:none repeat scroll 0 0 #531368;
+    color:#FFFfff;
+}
+.ui-dialog.ui-widget{
+    font-size:0.8em;
+	color: #000000; 
+}
+.ui-dialog label,
+.ui-dialog input,
+.ui-dialog fieldset,
+.ui-dialog form{
+    float:none;
+    clear:none;
+    text-align:left;
+}
+.ui-dialog fieldset{
+    border:none;
+    margin:0;
+    padding:0;
+    width:auto;
+	color: #000000;
+}
+.ui-dialog label{
+    width:55px;
+    margin:4px 10px;
+    display:block;
+    float:left;
+}
+.ui-dialog input{
+    float:left;
+    width:160px;
+    padding:2px 4px;
+    margin:2px 10px 2px 15px;
+}
+.ui-dialog input.readonly{
+    border-color:#ffffff;
+}
+.ui-dialog p{
+    font-size:1em;
+    margin:15px 0 5px;
+	color: #000000;
+}
+.ui-dialog p.partyTitle{
+    font-weight:bold;
+    margin:10px 0;
+	color: #000000;
+}
+
+.ui-dialog.ui-dialog-buttonpane button,
+.ui-widget button
+{
+margin:auto;
+background-color: #66390d;
+border: 2px solid #3e2208;
+border-radius: 2px;
+color: #ffffff
+}
+
+
+.list li div.main .left, 
+.list li div.main .clear.left 
+{
+padding-top: 4px;
+padding-bottom: 5px;
+
+}
+.list li div.more
+{
+padding-top: 5px;
+padding-bottom: 5px;
+
+}
+.list li span.partyName 
+{
+text-decoration: underline;
+}
+.list li div.top{
+background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+border: 1px solid #000000;
+}
+
+.list li div.type{
+    font-size:0.8em;
+    font-weight:bold;
+    padding:13px 0 0 0;
+}
+.list li div.name{
+    font-size:1.3em;
+    font-weight:bold;
+}
+ul.pagination {
+    text-align: center;
+}
+ul.pagination li{
+    display: inline;
+    margin: 0 10px;
+}
+ul.pagination li a{
+    text-decoration:none;
+    font-weight:normal;
+}
+ul.pagination li a.activ{
+    color:#000;
+    font-weight:bold;
+}
+ul.pagination li a:hover{
+    text-decoration:underline;
+}
+
+.party-create .party-preview{
+    border:1px solid;
+}
+.party-create .party-preview td{
+    border:1px solid;
+    padding: 3px 5px;
+}
+
+
+.ui-dialog.ui-widget{
+    font-size:0.8em;
+}
+.ui-dialog label,
+.ui-dialog input,
+.ui-dialog fieldset,
+.ui-dialog form{
+    float:none;
+    clear:none;
+    text-align:left;
+}
+.ui-dialog fieldset{
+    border:none;
+    margin:0;
+    padding:0;
+    width:auto;
+}
+.ui-dialog label{
+    width:55px;
+    margin:4px 10px;
+    display:block;
+    float:left;
+}
+.ui-dialog input{
+    float:left;
+    width:160px;
+    padding:2px 4px;
+    margin:2px 10px 2px 15px;
+}
+.ui-dialog input.readonly{
+    border-color:#fff;
+}
+.ui-dialog p{
+    font-size:1em;
+    margin:15px 0 5px;
+}
+.ui-dialog p.partyTitle{
+    font-weight:bold;
+    margin:10px 0;
+}
+
+#dispo-preview li{
+    display:block;
+    height:12px;
+    margin:0;
+    padding:0;
+    font-family:verdana;
+    font-size:0.6em;
+    overflow:hidden;
+    background-color:#efefef;
+}
+#dispo-preview li.flip{
+    background-color:#f7f7f7;
+}
+#dispo-preview li div{
+    margin: 0;
+    height:8px;
+}
+#dispo-preview li div.bar{
+    margin: 2px 0 0 80px;
+    height:10px;
+}
+#dispo-preview li div.h{
+    width: 70px;
+    margin:0 0 1px 10px;
+    height:12px;
+    float:left;
+    text-align:left;
+}
+#dispo-preview li .green{
+    background-color:green;
+}
+#dispo-preview li .orange{
+    background-color:orange;
+}
+#dispo-preview li .red{
+    background-color:red;
+}
+#dispo-preview li .black{
+    background-color:black;
+}
+
+#filteringForm
+{
+text-align:left;
+margin-left: 0px;
+}
+
+#filteringForm fieldset
+{
+width: 630px;
+margin-left: 0px;
+
+}
+#filteringForm input.submit
+{
+margin-left: 200px;
+margin-right: 200px;
+font-weight:bold;
+}
+.separator
+{
+clear:both;
+width:100%;
+height:60px;
+margin:auto;
+background-position: center center;
+background-image: url("http://www.orcidee.ch/templates/western/images/separateur.png");
+background-repeat: no-repeat;
+}
+
