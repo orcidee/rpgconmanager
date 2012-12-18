@@ -341,7 +341,6 @@ if($user){
             
             
         }
-        echo "<br/><a href='".Controls::home()."?page=list'>Lister les parties</a>";
     }else{
         echo "<p>Acces restreint aux animateurs et maîtres de jeu</p>";
     }

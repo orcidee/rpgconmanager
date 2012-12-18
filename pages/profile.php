@@ -56,13 +56,6 @@ if($light){
                 echo "<li>".$v."</li>";
             }
             echo "</ul>";
-            if($success){
-                ?><ul>
-                    <li><a href="<?php echo Controls::home();?>?page=profile">Voir le profil</a></li>
-                    <li><a href="<?php echo Controls::home();?>?page=logout">Se déconnecter</a></li>
-                    <li><a href="<?php echo Controls::home();?>?page=list">Afficher la liste des émissions</a></li>
-                </ul><?php
-            }
         }
     }
     

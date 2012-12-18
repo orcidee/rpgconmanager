@@ -112,42 +112,33 @@ if(!$db){
         $view->content = "logout";
     }
 
-    // ??
-    if(is_null($view->content)){
+    if(!$user){
         
-        echo "<h2>".@$title."</h2>" .
-        "<p>Pour accéder à cette section du site, une authentification est nécessaire.</p>".
-        "<ul>";
+        // By default: No forward after authentification
+        $forward = "";
         
-        if(!$user){
+        // $title not null means we know the feature requested (see switch case, upper in this page)
+        if(!is_null($title)){
         
-            // By default: No forward after authentification
-            $forward = "";
-            
-            // $title not null means we know the feature requested (see switch case, upper in this page)
-            if(!is_null($title)){
-            
-                $forwardValues = "";
-                // Add here valid forward parameter
-                if(isset($_GET['page'])){
-                    $forwardValues .= "page=".$_GET['page']."&";
-                }
-                if(isset($_GET['partyId'])){
-                    $forwardValues .= "partyId=".$_GET['partyId']."&";
-                }
-                $forward = "?forward=".urlencode($forwardValues);
+            $forwardValues = "";
+            // Add here valid forward parameter
+            if(isset($_GET['page']) && $_GET['page'] != 'logout'){
+                $forwardValues .= "page=".$_GET['page']."&";
             }
-        
-            echo "<li><a href='login.php".$forward."'>S'authentifier ou s'enregistrer comme MJ</a><br/>".
-            "&#40;Nécessaire pour proposer une partie.&#41;</li><br/>";
+            if(isset($_GET['partyId'])){
+                $forwardValues .= "partyId=".$_GET['partyId']."&";
+            }
+            $forward = "?forward=".urlencode($forwardValues);
         }
-            
-        echo "<li><a href='?page=list'>Afficher la liste des parties</a></li></ul>";
-        
-        
-    }else{
+    }
+    
+    include("menu.php");
+    
+    if(!is_null($view->content)){
         $view->html();
     }
+    
+    
 
 }
 mysql_close($dbServer);

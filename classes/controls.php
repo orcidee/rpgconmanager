@@ -223,7 +223,7 @@ class Controls {
     */
     public static function currentURI() {
         $pageURL = 'http';
-        if($_SERVER["AUTH_TYPE"] !== "Basic"){
+        if(isset($_SERVER["AUTH_TYPE"]) && $_SERVER["AUTH_TYPE"] !== "Basic"){
             if ($_SERVER["HTTPS"] == "on") {
                 $pageURL .= "s";
             }

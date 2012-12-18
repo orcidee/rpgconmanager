@@ -35,6 +35,9 @@ if(!$db){
 
     
     $user = User::getFromSession();
+    
+    include "menu.php";
+    
     if($user) {
         
         // Vous êtes déjà authentifié
@@ -42,13 +45,7 @@ if(!$db){
         ?>
         <h1>Authentification</h1>
         <div class='login'>
-            <p>Tu es déjà authentifié</p>
-            <ul>
-                <li><a href="<?php echo Controls::home();?>?page=profile">Voir le profil</a></li>
-                <li><a href="<?php echo Controls::home();?>?page=logout">Se déconnecter</a></li>
-                <li><a href="<?php echo Controls::home();?>?page=list">Liste des parties</a></li>
-                <li><a href="<?php echo Controls::home();?>?page=create">Inscrire une nouvelle partie</a></li>
-            </ul>
+            <p>Bravo, tu es authentifié</p>
         </div>
         <?php
         
@@ -244,23 +241,7 @@ if(!$db){
             if(isset($_REQUEST['forward']) && strlen($_REQUEST['forward']) > 0){
                 header("Location:".Controls::home()."?".urldecode($_REQUEST['forward']));
             } else {
-            
-                echo $head;
-                ?>
-                <h1>Authentification</h1>
-                <div class='login'>
-                    <p>Tu es désormais authentifié!</p>
-                    <ul>
-                        <li><a href="<?php echo Controls::home();?>?page=profile">Voir le profil</a></li>
-                        <li><a href="<?php echo Controls::home();?>?page=logout">Se déconnecter</a></li>
-                        <li><a href="<?php echo Controls::home();?>?page=list">Liste des parties</a></li>
-                        <li><a href="<?php echo Controls::home();?>?page=create">Inscrire une nouvelle partie</a></li>
-                        <?php if($user->getRole() == "administrator"){
-                            echo "<li><a href='".Controls::home()."?page=conf'>Panneau de contrôles</a></li>";
-                        }?>
-                    </ul>
-                </div>
-                <?php
+                header("Location:".Controls::currentURI());
             }
         }
     }
