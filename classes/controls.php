@@ -100,7 +100,12 @@ class Controls {
         return false;
     }
     
-    
+    /**
+    * Retourne la date (timestamp) de la prochaine convention.
+    */
+    public static function getConvDate($pattern = null){
+        return self::getDatesOfKey($pattern, "convDate");
+    }
     /**
     * Retourne la date (timestamp) d'ouverture de l'application, ou False si inconnue.
     */
@@ -138,7 +143,12 @@ class Controls {
         return self::getDatesOfKey($pattern, "playerCloseDate");
     }
     
-    
+    /**
+    * Defini en BD la date (timestamp) de la prochaine convention. Retourne true réussi.
+    */
+    public static function setConvDate($stamp){
+        return self::setDatesOfKey($stamp, "convDate");
+    }
     /**
     * Defini en BD la date (timestamp) d'ouverture de l'application. Retourne true réussi.
     */

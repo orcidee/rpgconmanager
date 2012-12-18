@@ -38,6 +38,13 @@ if(!$db){
         
                     // Exécution
                     switch ($action) {
+                        case "conv-date" :
+                            if(Controls::setConvDate($stamp)){
+                                echo '"ok", "newDate":"' . Controls::getConvDate("%d.%m.%Y") . '"}';
+                            }else{
+                                echo '"error"}';
+                            }
+                            break;
                         case "open-app" :
                             if(Controls::setAppOpenDate($stamp)){
                                 echo '"ok", "newDate":"' . Controls::getAppOpenDate("%d.%m.%Y à %H:%M") . '"}';

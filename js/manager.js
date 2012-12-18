@@ -474,6 +474,9 @@ orcidee.manager = {
         init: function() {
             var me = this;
             // bind buttons events
+            $("input#conv-date").click(function(){
+                me.saveNewDates(this, $(".convention-date .conv-date")[0]);
+            });
             $("input#open-app").click(function(){
                 me.saveNewDates(this, $(".application-controls .open-date")[0]);
             });
@@ -502,6 +505,9 @@ orcidee.manager = {
                 
             var dp = $(btn).siblings(".datepicker")[0];
             var hours = $(btn).siblings("select")[0];
+            
+            var hoursValue = (typeof(hours) == 'undefined')?'00:00':$(hours).val();
+            
             var date = $(dp).datepicker("getDate");
             
             var y = date.getFullYear(),
@@ -509,7 +515,7 @@ orcidee.manager = {
                 d = (date.getDate()).toString();
             
             // prepared to PHP pattern: %Y/%m/%d %H:%M
-            var stamp = y + "/" + ((m.length==1)?"0":"") + m + "/" + ((d.length==1)?"0":"") + d + " " + $(hours).val();
+            var stamp = y + "/" + ((m.length==1)?"0":"") + m + "/" + ((d.length==1)?"0":"") + d + " " + hoursValue;
             
             $.ajax({
                 data:{"stamp": stamp, "action": action},

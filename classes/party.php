@@ -112,6 +112,16 @@ class Party {
         return $players;
     }
     
+    public static function getYears(){
+        $years = array();
+        $sql = "SELECT DISTINCT year FROM Parties";
+        $res = mysql_query ( $sql );
+        while ($row = mysql_fetch_assoc($res)) {
+            $years[] = $row['year'];
+        }
+        return $years;
+    }
+    
     /**
     * Save "this" party in DB
     */

@@ -18,6 +18,16 @@ ul, li{
     padding:0;
     margin:0;
 }
+.left{
+    float:left;
+}
+.clear{
+    overflow:hidden;
+    clear:both;
+}
+.w300{
+    width:300px;
+}
 ul.profile input.info{
     background-color:#fff;
     border:none;

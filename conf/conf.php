@@ -19,10 +19,10 @@ define("MAIL_CC", "moduleparties@orcidee.ch");
 // FIXME:
 // Should be controls properties (instead of constants)
 // Used in pages/create.php, ...
-define("START_AT", "2012-03-31 11:00:00");
-define("END_AT", "2012-04-01 17:00:00");
 
-define("THIS_YEAR", "2012");
+define("END_AT", "2013-04-01 17:00:00");
+
+define("THIS_YEAR", "2013");
 define("TABLES", 30);
 
 define("CACHE_KILL", "20120325T22:04");

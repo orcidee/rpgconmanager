@@ -79,6 +79,9 @@ if($user && $user->getRole() == 'administrator'){
 }
 
 if(@$_POST['formFiltered']){
+    if(@$_POST['year'] != "" && is_numeric($_POST['year']) && $_POST['year'] != 'all'){
+		$where[] = "Parties.year = ".$_POST['year'];
+	}
 	if(@$_POST['typeId'] != "" && is_numeric($_POST['typeId'])){
 		$where[] = "Parties.typeId = ".$_POST['typeId'];
 	}
@@ -148,6 +151,15 @@ if($isListShowable){
 		<div>
 			<fieldset>
 				<legend>Filtrer par :</legend>
+                <label for="year">Année</label>
+                <select name="year">
+                    <option value='all'>Toutes</option>
+                    <?php
+                    $years = Party::getYears();
+                    foreach($years as $year){
+                        echo "<option ".((@$_POST['year']==$year) ? "selected='selected'" : "")." value='".$year."' >".$year."</option>";
+                    } ?>
+                </select>
 				<label for="typeId">Type</label>
 				<select name='typeId'>
 					<option value=''>---</option>
