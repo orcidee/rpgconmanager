@@ -53,7 +53,21 @@ if(!$db){
         
         echo '"status":"' . (($res) ? "ok" : "ko") . '"}';
         
-    }
+    }elseif(isset($_POST['action'])){
+		
+		$p = new Party($_POST['paty_id'], false);
+		
+		Switch($_POST['action']){
+			case "ctc_mj":
+				$res = $p->mailAnim($_POST['paty_id'], $_POST['txt'], $_POST['email']);
+				if($res){
+					echo 1;
+				}else{
+					echo 0;
+				}
+			break;
+		}
+	}
 }
 mysql_close($dbServer);
 ?>

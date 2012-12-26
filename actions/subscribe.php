@@ -18,7 +18,7 @@ if(!$db){
 }else{
     if(isset($_GET['partyId']) && isset($_GET['email']) && Controls::validateEmail($_GET['email']) && isset($_GET['lastname']) && isset($_GET['firstname'])){
         $email = $_GET['email'];
-        
+        $partyId = $_GET['partyId'];
         // Si un user est authentifié, verifier l'email et procéder.
         $user = User::getFromSession();
         if($user){
@@ -49,13 +49,18 @@ if(!$db){
                     
                     $p = new Party($partyId,false);
                     
-                    $isMailOk = Orcimail::subscribeToParty($p, $user);
-                
-                    if($isMailOk){
-                        echo '{"status":"ok", "message":"Inscription enregistrée !"}';
-                    }else{
-                        echo '{"status":"error", "message":"Envoi de mail impossible."}';
-                    }
+					if($p->freeSlot() > 0){
+						$isMailOk = Orcimail::subscribeToParty($p, $user);
+						
+						if($isMailOk){
+							echo '{"status":"ok", "message":"Inscription enregistrée !"}';
+						}else{
+							echo '{"status":"error", "message":"Envoi de mail impossible."}';
+						}
+					}else{
+						echo '{"status":"error", "message":"Partie plaine, merci d\'essayer une autre partie !"}';
+					}
+					
                 }elseif($inscription->status == "old"){
                     echo '{"status":"ok", "message":"Déjà inscrit précédemment !"}';
                 }else {
@@ -69,7 +74,7 @@ if(!$db){
         }
 	}else{
         echo '{"status":"error", "message":"Données POST invalides."}';
-    }    
+    }
 }
 mysql_close($dbServer);
 ?>

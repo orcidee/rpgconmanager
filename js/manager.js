@@ -192,6 +192,7 @@ orcidee.manager = {
                 
                 var btn = this;
                 var pId = $(this).parent().parent().attr("data-partyid");
+				var playerId = $(this).attr("player-id");
 				var playerMail = $(this).attr("player-mail");
 				var playerName = $(this).attr("player-name");
                 log("désinscription de la partie " + pId + " de l'utilisateur " + playerName + " avec l'email " + playerMail);
@@ -199,6 +200,7 @@ orcidee.manager = {
                 if (confirm("Voulez-vous désinscrire " + playerName + " de la partie " + pId + " ?\n(un mail sera envoyé pour confirmer)")) {
                     $.ajax({
                         data:{
+                            player_id: playerId,
                             email: playerMail,
                             partyId: pId
                         },
@@ -311,7 +313,6 @@ orcidee.manager = {
                                         success: function(json, s, xhr){
 											//vincent
 											log("success");
-                                            
 											if(typeof(json) != 'undefined' && typeof(json.status) != 'undefined'){
 												log(json.status);
                                                 
@@ -329,6 +330,9 @@ orcidee.manager = {
                                             }
                                         },
 										error: function(xhr, s, e){
+												$("#dialog-form").html("<p>Erreur inconnue</p>");
+                                                $($(btn).siblings(".ui-dialog-buttonpane").find("button")[1]).hide();
+												
 											log("erreur : " + s);
 										}
                                     });

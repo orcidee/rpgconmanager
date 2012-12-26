@@ -236,6 +236,15 @@ class Orcimail {
         ));
     }
 
+    public static function ctcAdmin($pBody, $pId, $pMail, $pEmail){
+        
+        return self::sendMail(array(
+            'to' => $pMail,
+            'subject' => ("Orc'idee - Contact pour la partie ".$pId),
+            'body' => $pBody . "/nPrière de répondre à: " . $pEmail
+        ));
+    }
+
     public static function unsubscribedToCanceledParty ($p, $user){    
         // Corps de l'email
         $message = "

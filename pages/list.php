@@ -411,13 +411,31 @@ if($isListShowable){
 										if ($isAdmin) {
 											echo "<a href='actions/party.php' class='unsubscribeNow' player-code='".sha1($player->getId())."' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
 										}elseif($user && $user->getId() == $player->getId()){
-											echo "<a href='actions/party.php' class='unsubscribe' player-mail='".$player->getEmail()."' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
+											echo "<a href='actions/party.php' class='unsubscribe' player-mail='".$player->getEmail()."' player-id='" . $user->getId() . "' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
 										}									
 										echo "</li>";
 									}
 									?>
 								</ul>
 							</div>
+							<?php if(!$animates && $p->accMail()){ ?>
+							<div class="more clear">
+								<span onClick="showElem('ctct_mj_<?php echo $row['partyId']; ?>')">Contacter le MJ:</span>
+								<ul id="ctct_mj_<?php echo $row['partyId']; ?>" style="display:none">
+									
+									<div id="ret_ctct_mj_<?php echo $row['partyId']; ?>" style="width:100%"></div>
+										<?php if($user){?>
+											<input type="text" value="<?php echo $user->getEmail();?>" id="mail_ctct_mj_<?php echo $row['partyId']; ?>">
+										<?php }else{?>
+											<span>Email:</span><input email="true" error_id="error_mail_<?php echo $row['partyId']; ?>" require="true" onBlur="testInput(this)" type="text" value="" id="mail_ctct_mj_<?php echo $row['partyId']; ?>"><br /><div id="error_mail_<?php echo $row['partyId']; ?>"></div><br />
+										<?php }?>
+									
+										<span>Message:</span>
+										<textarea id="txt_ctc_mj_<?php echo $row['partyId']; ?>" rows="10" cols="50"></textarea>
+										<input class="submit" type="button" onClick="sendMailAdmin('<?php echo $row['partyId']; ?>')" value="Envoyer">
+								</ul>
+							</div>
+							<?php } ?>
 							<div class="center">
 								<?php if ($allow['subscribe']) { 
 										if (count($p->getPlayers()) < $row['playerMax']) {?>

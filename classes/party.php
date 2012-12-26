@@ -557,9 +557,45 @@ class Party {
     public function getYear(){		return $this->year;	}
     public function getState(){		return $this->state;	}
     
+	public function accMail(){
+		$sql = 'SELECT accepteMail FROM users WHERE userId = (SELECT userId FROM parties WHERE partyId = ' . $this->userId . ');';
+		$res = mysql_query($sql);
+		$res = mysql_fetch_assoc($res);
+		
+		if($res['accepteMail']){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public function freeSlot(){
+		$sql = "SELECT COUNT(*) AS nbr FROM inscriptions WHERE partyId = " . $this->partyId . ";";
+		$res = mysql_query($sql);
+		$res = mysql_fetch_assoc($res);
+		
+		return ($this->getPlayerMax() - $res['nbr']);
+	}
+	
+    public static function mailAnim($pId, $pBody, $pEmail){
+		$id = htmlentities($pId, ENT_QUOTES, "UTF-8");
+		$sql = 'SELECT email FROM users WHERE userId = (SELECT userId FROM parties WHERE partyId = ' . $id . ') AND accepteMail = 1;';
+		
+		$res = mysql_query($sql);
+		
+		if(mysql_num_rows($res) == 1){
+			$res = mysql_fetch_assoc($res);
+			//$email = $res['email'];
+			$email = 'vincentzellweger@hotmail.com';
+			return Orcimail::ctcAdmin(htmlentities($pBody, ENT_QUOTES, "UTF-8"), htmlentities($pId, ENT_QUOTES, "UTF-8"), $email, $pEmail);
+		}else{
+			return false;
+		}
+		
+	}
     
     
-    
+	
     private static function dateToSlot($date){
     
         $start = strtotime(START_AT);

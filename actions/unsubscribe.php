@@ -16,9 +16,9 @@ header("Content-type: application/json; charset=UTF-8");
 if(!$db){
     echo '{"status":"error", "message":"Connexion impossible à la base de données."}';
 }else{
-    if(isset($_GET['partyId'])){
+    if(isset($_GET['partyId']) && (($user = User::getFromSession()) != FALSE)){
 		// on a le login encodé : on désinscrit
-		if(isset($_GET['u'])){
+		if(isset($_GET['u']) && $user->getRole() == "administrator"){
 			$p = new Party($_GET['partyId'], false);
 			if($p && $p->isValid){
 			
@@ -46,7 +46,7 @@ if(!$db){
 			}else{
 				echo '{"status":"error", "message":"Numéro de partie '.$p->getId().' inconnu"}';
 			}
-		}elseif(isset($_GET['email']) && Controls::validateEmail($_GET['email'])){
+		}elseif(isset($_GET['email']) && Controls::validateEmail($_GET['email']) && ($user->getRole() == "administrator") || $user->getId() == $_GET['player_id']){
 			// On n'a que l'email : envoi un message pour demander confirmation
 			$email = $_GET['email'];
             // Verifier si l'email existe
