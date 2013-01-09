@@ -42,14 +42,17 @@ if(!$db){
         // Procéder à l'inscription
         if($user){
             $_SESSION["userEmail"] = $user->getEmail();
-            $inscription = new Inscription($user->getUserId(), $partyId);
-            if($inscription->isValid){            
-                if($inscription->status == "created"){
-                
-                    
-                    $p = new Party($partyId,false);
-                    
-					if($p->freeSlot() > 0){
+			$p = new Party($partyId,false);
+			
+			if($p->freeSlot() > 0){
+				$inscription = new Inscription($user->getUserId(), $partyId);
+				if($inscription->isValid){
+					if($inscription->status == "created"){
+
+
+
+
+
 						$isMailOk = Orcimail::subscribeToParty($p, $user);
 						
 						if($isMailOk){
@@ -57,18 +60,23 @@ if(!$db){
 						}else{
 							echo '{"status":"error", "message":"Envoi de mail impossible."}';
 						}
-					}else{
-						echo '{"status":"error", "message":"Partie plaine, merci d\'essayer une autre partie !"}';
+					}elseif($inscription->status == "old"){
+						echo '{"status":"ok", "message":"Déjà inscrit précédemment !"}';
+					}else {
+						echo '{"status":"error", "message":"Erreur à l\'inscription !"}';
 					}
-					
-                }elseif($inscription->status == "old"){
-                    echo '{"status":"ok", "message":"Déjà inscrit précédemment !"}';
-                }else {
-                    echo '{"status":"error", "message":"Erreur à l\'inscription !"}';
-                }
-            }else{
-                echo '{"status":"error", "message":"Inscription invalide."}';
-            }
+				}else{
+
+
+					echo '{"status":"error", "message":"Inscription invalide."}';
+				}
+			}else{
+				echo '{"status":"error", "message":"Partie complète, merci d\'essayer une autre partie !"}';
+			}
+
+
+
+
         }else{
             echo '{"status":"error", "message":"L\'adresse email est déjà enregistrée, mais les nom/prénom ne correpondent pas."}';
         }

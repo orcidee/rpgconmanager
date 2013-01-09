@@ -241,7 +241,7 @@ class Orcimail {
         return self::sendMail(array(
             'to' => $pMail,
             'subject' => ("Orc'idee - Contact pour la partie ".$pId),
-            'body' => $pBody . "/nPrière de répondre à: " . $pEmail
+            'body' => $pBody . "<br /><br /><b>Prière de répondre à : " . $pEmail . "</b>"
         ));
     }
 

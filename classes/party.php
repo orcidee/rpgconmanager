@@ -533,14 +533,30 @@ class Party {
         $res = mysql_query ( $sql );
         return mysql_fetch_assoc($res);
     }
-    public function getName(){		return stripslashes($this->name);	}
-    public function getKind(){		return $this->kind;	}
-    public function getScenario(){		return $this->scenario;	}
-    public function getPlayerMin(){		return $this->playerMin;	}
-    public function getPlayerMax(){		return $this->playerMax;	}
-    public function getLevel(){		return $this->level;	}
-    public function getDuration(){		return $this->duration;	}
-    public function getStart(){		return $this->start;	}
+    public function getName(){
+		return stripslashes($this->name);
+	}
+    public function getKind(){
+		return $this->kind;
+	}
+    public function getScenario(){
+		return $this->scenario;
+	}
+    public function getPlayerMin(){
+		return $this->playerMin;
+	}
+    public function getPlayerMax(){
+		return $this->playerMax;
+	}
+    public function getLevel(){
+		return $this->level;
+	}
+    public function getDuration(){
+		return $this->duration;
+	}
+    public function getStart(){
+		return $this->start;
+	}
     public function getDescription(){
         return $this->description;
     }
@@ -548,21 +564,29 @@ class Party {
         $this->description = $desc;
 		$this->isFake = true;
     }
-    public function getNote(){		return $this->note;	}
+    public function getNote(){
+		return $this->note;
+	}
     public function setNote($note){
 		$this->note = $note;
 		$this->isFake = true;
 	}
-    public function getLanguage(){		return $this->language;	}
-    public function getYear(){		return $this->year;	}
-    public function getState(){		return $this->state;	}
+    public function getLanguage(){
+		return $this->language;
+	}
+    public function getYear(){
+		return $this->year;
+	}
+    public function getState(){
+		return $this->state;
+	}
     
 	public function accMail(){
-		$sql = 'SELECT accepteMail FROM users WHERE userId = (SELECT userId FROM parties WHERE partyId = ' . $this->userId . ');';
-		$res = mysql_query($sql);
-		$res = mysql_fetch_assoc($res);
-		
-		if($res['accepteMail']){
+		$sql = 'SELECT * FROM Users WHERE userId = (SELECT userId FROM Parties where partyId = ' . $this->partyId . ')';
+		$result = mysql_query($sql);
+//return (mysql_num_rows($result) == 1);
+		$row = mysql_fetch_assoc($result);
+		if($row['accepteMail']){
 			return true;
 		}else{
 			return false;
@@ -570,7 +594,7 @@ class Party {
 	}
 	
 	public function freeSlot(){
-		$sql = "SELECT COUNT(*) AS nbr FROM inscriptions WHERE partyId = " . $this->partyId . ";";
+		$sql = "SELECT COUNT(*) AS nbr FROM Inscriptions WHERE partyId = " . $this->partyId . ";";
 		$res = mysql_query($sql);
 		$res = mysql_fetch_assoc($res);
 		
@@ -579,14 +603,13 @@ class Party {
 	
     public static function mailAnim($pId, $pBody, $pEmail){
 		$id = htmlentities($pId, ENT_QUOTES, "UTF-8");
-		$sql = 'SELECT email FROM users WHERE userId = (SELECT userId FROM parties WHERE partyId = ' . $id . ') AND accepteMail = 1;';
+		$sql = 'SELECT email FROM Users WHERE userId = (SELECT userId FROM Parties WHERE partyId = ' . $id . ') AND accepteMail = 1;';
 		
 		$res = mysql_query($sql);
 		
 		if(mysql_num_rows($res) == 1){
-			$res = mysql_fetch_assoc($res);
-			//$email = $res['email'];
-			$email = 'vincentzellweger@hotmail.com';
+			$row = mysql_fetch_assoc($res);
+			$email = $row['email'];
 			return Orcimail::ctcAdmin(htmlentities($pBody, ENT_QUOTES, "UTF-8"), htmlentities($pId, ENT_QUOTES, "UTF-8"), $email, $pEmail);
 		}else{
 			return false;

@@ -22,7 +22,7 @@ if($user){
             <p>La prochaine convention le: <span class='conv-date'><?php echo START_AT;?></span></p>
             <div class='left w300'>
                 <p>Redéfinir la date de la convention</p>
-                <div id='datepicker0' class='datepicker' data-selected='<?php echo $ts;?>'></div>
+                <div id='datepicker6' class='datepicker' data-selected='<?php echo $ts;?>'></div>
                 <input type="button" value="Définir" id="conv-date"/>
             </div>
         </div>

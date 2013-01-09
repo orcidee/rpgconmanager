@@ -77,10 +77,11 @@ function sendMailAdmin(pId){
 }
 
 function sendMailAdminConfirm(pTxt, pId){
-	if(pTxt == 0){
-		$(pId).slideDown("Slow", function(){
-			$(pId).html("Votre email a bien été envoyé.");
-		});
+	if(pTxt == "1"){
+		alert("Votre email a bien été envoyé.");
+		//$(pId).slideDown("Slow", function(){
+		//	$(pId).html("Votre email a bien été envoyé.");
+		//});
 	}else{
 		alert("Erreur lors de l'envoi de l'email");
 	}
