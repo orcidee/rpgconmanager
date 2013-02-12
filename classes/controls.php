@@ -290,4 +290,6 @@ class Controls {
 	}
 
 }
-?>
+// TODO Ceci devrait être récupéré via une fonction statique, et pas via une constante
+// + l'heure devrait être définie via la page de contrôles...
+define("START_AT", Controls::getConvDate("%Y-%m-%d") . " 11:00:00");?>

@@ -210,12 +210,13 @@ orcidee.manager = {
                         success: function(json, s, xhr){
                             log(json);
                             if(json.status != "ok"){
-								alert("Le mail n'a pas pu être envoyé !\n("+s+")");
+								alert("Le mail n'a pas pu être envoyé !\n("+json.message+")");
 							}else{
 								alert("Un mail a été envoyé, il faut cliquer sur le lien !");
 							}
                         },
 						error: function(xhr, s, e){
+							alert("Le mail n'a pas pu être envoyé !\n("+s+", "+e+")");
 							log("erreur de désinscription : " + s);
                         }
                     });
@@ -235,7 +236,8 @@ orcidee.manager = {
                     $.ajax({
                         data:{
                             u: playerCode,
-                            partyId: pId
+                            partyId: pId,
+							admin: 1
                         },
                         url:"actions/unsubscribe.php",
                         type: "GET",

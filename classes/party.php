@@ -533,30 +533,14 @@ class Party {
         $res = mysql_query ( $sql );
         return mysql_fetch_assoc($res);
     }
-    public function getName(){
-		return stripslashes($this->name);
-	}
-    public function getKind(){
-		return $this->kind;
-	}
-    public function getScenario(){
-		return $this->scenario;
-	}
-    public function getPlayerMin(){
-		return $this->playerMin;
-	}
-    public function getPlayerMax(){
-		return $this->playerMax;
-	}
-    public function getLevel(){
-		return $this->level;
-	}
-    public function getDuration(){
-		return $this->duration;
-	}
-    public function getStart(){
-		return $this->start;
-	}
+    public function getName(){		return stripslashes($this->name);	}
+    public function getKind(){		return $this->kind;	}
+    public function getScenario(){		return $this->scenario;	}
+    public function getPlayerMin(){		return $this->playerMin;	}
+    public function getPlayerMax(){		return $this->playerMax;	}
+    public function getLevel(){		return $this->level;	}
+    public function getDuration(){		return $this->duration;	}
+    public function getStart(){		return $this->start;	}
     public function getDescription(){
         return $this->description;
     }
@@ -564,22 +548,14 @@ class Party {
         $this->description = $desc;
 		$this->isFake = true;
     }
-    public function getNote(){
-		return $this->note;
-	}
+    public function getNote(){		return $this->note;	}
     public function setNote($note){
 		$this->note = $note;
 		$this->isFake = true;
 	}
-    public function getLanguage(){
-		return $this->language;
-	}
-    public function getYear(){
-		return $this->year;
-	}
-    public function getState(){
-		return $this->state;
-	}
+    public function getLanguage(){		return $this->language;	}
+    public function getYear(){		return $this->year;	}
+    public function getState(){		return $this->state;	}
     
 	public function accMail(){
 		$sql = 'SELECT * FROM Users WHERE userId = (SELECT userId FROM Parties where partyId = ' . $this->partyId . ')';

@@ -78,9 +78,11 @@ if($user && $user->getRole() == 'administrator'){
     $where[] = "Parties.state in ('validated', 'verified')";
 }
 
+$filterYear = false;
 if(@$_POST['formFiltered']){
     if(@$_POST['year'] != "" && is_numeric($_POST['year']) && $_POST['year'] != 'all'){
 		$where[] = "Parties.year = ".$_POST['year'];
+		$filterYear = true;
 	}
 	if(@$_POST['typeId'] != "" && is_numeric($_POST['typeId'])){
 		$where[] = "Parties.typeId = ".$_POST['typeId'];
@@ -92,6 +94,8 @@ if(@$_POST['formFiltered']){
 		$where[] = "Parties.state = '".$_POST['partyState']."'";
 	}
 }
+if(!$filterYear) $where[] = "Parties.year = ".THIS_YEAR;
+
 $sortType = "Parties.start";
 if (isset($_POST['sortType'])){
 	switch ($_POST['sortType']){

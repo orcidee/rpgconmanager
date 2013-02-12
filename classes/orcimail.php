@@ -11,8 +11,7 @@ class Orcimail {
 		<p>Voici ton nouveau mot de passe:  $pwd  </p>
         
         <p></p><p>Nous te suggérons de vérifier tes informations et de modifier ton mot de passe,
-        via ta page de profil (<a href='http://localhost/orcidee/rpgconmanager/?page=profile'>
-        http://localhost/orcidee/rpgconmanager/?page=profile)</a>)</p>
+        via <a href='".Controls::home()."?page=profile'>ta page de profil</a></p>
         
         <p>Pour toute information supplémentaire, n'hésite pas à nous contacter à: 
         <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a>.</p><br/>

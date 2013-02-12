@@ -26,7 +26,6 @@ mysql_query("SET NAMES 'utf8'");
 
 require_once(dirname(__FILE__).'/conf/conf.php');
 require_once(dirname(__FILE__).'/classes/controls.php');
-define("START_AT", Controls::getConvDate("%Y-%m-%d") . " 10:00:00");
 require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
