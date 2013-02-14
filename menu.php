@@ -25,8 +25,9 @@ $root = Controls::home();
 				
 				if($user->isAdmin()){
 					echo "<li class='print'><a href='".$root."?page=print'>Imprimer les plans</a></li>";
-					echo "<li class='conf'><a href='".$root."?page=conf'>Contrôles de l'application</a></li>";
 					echo "<li class='tables'><a href='".$root."?page=tables'>Numéros de table</a></li>";
+					echo "<li class='tables'><a href='".$root."?page=users'>Utilisateurs</a></li>";
+					echo "<li class='conf'><a href='".$root."?page=conf'>Contrôles de l'application</a></li>";
 				}
 				
 				echo "<li class='profile'><a href='".$root."?page=profile'>Profil</a></li>";

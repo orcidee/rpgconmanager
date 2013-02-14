@@ -38,7 +38,7 @@ if(!$db){
     
     include "menu.php";
     
-    if($user) {
+    if($user && $user->getRole() != "player") {
         
         // Vous êtes déjà authentifié
         echo $head;
@@ -54,7 +54,7 @@ if(!$db){
         $res = null;
         
         // Processus d'authentification
-        if(!$user && (@$_POST['action'] == 'auth')){
+        if(@$_POST['action'] == 'auth'){
             $res = User::auth($_POST["email"], $_POST["password"]);
             if($res['status'] === 0){
                 // Authentification échouée, credentials non valides
@@ -72,7 +72,7 @@ if(!$db){
         }
         
         // Processus d'enregistrement
-        if(!$user && (@$_POST['action'] == 'register')){
+        if(@$_POST['action'] == 'register'){
             if(strlen(@$_POST['lastname']) <= 0){
                 $msg["lastname"] = "Merci de nous indiquer ton nom.";
             }
@@ -115,20 +115,18 @@ if(!$db){
             }
             
             if(!isset($msg) || count($msg) == 0){
-                if(!$user){
-                    $user = User::registerMJ($_POST);
-                    if($user){
-                        $_SESSION["userId"] = $user->getId();
-                    }else{
-                        $msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu n'a pas été enregistré.";
-                    }
-                }
+				$user = User::registerMJ($_POST);
+				if($user){
+					$_SESSION["userId"] = $user->getId();
+				}else{
+					$msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu n'a pas été enregistré.";
+				}
             }
         }
         
         // Si l'authentification ou l'enregistrement ont échoués, quel qu'en soit la raison.
-        if(!$user){
-        
+        if(!$user || $user->getRole() == "player"){
+			$email = $user ? $user->getEmail() : @$_POST['email'];
             echo $head;
             ?>
             <h1>Authentification</h1>
@@ -147,7 +145,7 @@ if(!$db){
                     <form action='' method='POST'>
                         
                         <label for='email'>Email *</label>
-                        <input type='text' name='email' value='<?php echo @$_POST['email']; ?>' />
+                        <input type='text' name='email' value='<?php echo $email; ?>' />
                         
                         <label for='password'>Mot de passe *</label>
                         <input type='password' name='password' value='' />
@@ -198,7 +196,7 @@ if(!$db){
                                 <input type='text' name='firstname' value='<?php echo @$_POST['firstname']; ?>' />
                                 
                                 <label for='email'>Email *</label>
-                                <input type='text' name='email' value='<?php echo @$_POST['email']; ?>' />
+                                <input type='text' name='email' value='<?php echo $email; ?>' />
                                 
                                 <label for='password'>Mot de passe *</label>
                                 <input type='password' name='password' value='' />

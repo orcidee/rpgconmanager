@@ -64,13 +64,13 @@ class User {
     public static function getUsers($role = "all", $sort = null){
         
         if($role == 'player'){
-            $sql = "SELECT u.* FROM users u LEFT JOIN animators a ON u.userId = a.userId WHERE a.userId IS NULL";
+            $sql = "SELECT u.* FROM Users u WHERE u.userId not in (select a.userId FROM Animators a)";
         }elseif($role == 'animator'){
-            $sql = 'SELECT * FROM users INNER JOIN animators ON users.userId=animators.userId';
+            $sql = 'SELECT * FROM Users u INNER JOIN Animators a ON u.userId = a.userId';
         }elseif($role == 'administrator'){
-            $sql = 'SELECT * FROM users INNER JOIN administrators ON users.userId=administrators.userId';
+            $sql = 'SELECT * FROM Users u INNER JOIN Administrators a ON u.userId=a.userId';
         }else{
-            $sql = "SELECT * FROM users";
+            $sql = "SELECT * FROM Users";
         }
         
         if(!is_null($sort) && ""!=$sort){

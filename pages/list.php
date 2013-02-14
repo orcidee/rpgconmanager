@@ -80,9 +80,10 @@ if($user && $user->getRole() == 'administrator'){
 
 $filterYear = false;
 if(@$_POST['formFiltered']){
-    if(@$_POST['year'] != "" && is_numeric($_POST['year']) && $_POST['year'] != 'all'){
-		$where[] = "Parties.year = ".$_POST['year'];
+    if(@$_POST['year'] != "")
+	{
 		$filterYear = true;
+		if (is_numeric($_POST['year'])) $where[] = "Parties.year = ".$_POST['year'];
 	}
 	if(@$_POST['typeId'] != "" && is_numeric($_POST['typeId'])){
 		$where[] = "Parties.typeId = ".$_POST['typeId'];
@@ -126,6 +127,20 @@ if($isListShowable){
     
     echo "<h1>Liste des parties".$addTitle."</h1>";
 
+	// Lien pour ajouter une partie
+	if (!$user || $user->getRole() == 'player') {
+		$forwardValues = "page=".$_GET['page']."&";
+		if(isset($_GET['filter'])){
+			$forwardValues .= "filter=".$_GET['filter']."&";
+		}
+		if(isset($_GET['email'])){
+			$forwardValues .= "email=".$_GET['email']."&";
+		}
+		if(isset($_GET['p'])){
+			$forwardValues .= "p=".$_GET['p']."&";
+		}
+		echo "<div><a href='login.php?forward=".urlencode($forwardValues)."'>Tu peux t'authentifier ici pour inscrire ou éditer une partie.</a></div>";
+	}
     
     // Lightbox qui apparaît au clic sur "Je veux m'inscrire à cette partie"
     // Cf. javascript: orcidee.manager.list.dialogBox
@@ -157,12 +172,12 @@ if($isListShowable){
 				<legend>Filtrer par :</legend>
                 <label for="year">Année</label>
                 <select name="year">
-                    <option value='all'>Toutes</option>
                     <?php
                     $years = Party::getYears();
                     foreach($years as $year){
                         echo "<option ".((@$_POST['year']==$year) ? "selected='selected'" : "")." value='".$year."' >".$year."</option>";
                     } ?>
+                    <option value='all'>Toutes</option>
                 </select>
 				<label for="typeId">Type</label>
 				<select name='typeId'>
@@ -240,6 +255,7 @@ if($isListShowable){
 		$total = $row['NumberOfParties'];
 		
 		if ($total > 0){
+
 			// Pagination's stuff
 			$pageSize = 10;
 			$max = ceil($total / $pageSize);
@@ -264,8 +280,16 @@ if($isListShowable){
 			echo "<div>Parties ".((($currentP-1)* $pageSize) + 1)." à ".min($currentP * $pageSize, $total)." sur ".$total."</div>";
 
 			?>
-			<br/>
-			<div class='list'>
+			<div class='list'>							
+				<input type='hidden' name="pageNb" value="1">
+				<ul class='pagination'>
+					<?php
+					for($i = 1 ; $i <= $max ; $i++){
+						echo "<li><a href=\"#\" onclick=\"document.forms['filteringForm'].pageNb.value='".$i."';document.forms['filteringForm'].submit();\" ".(($i == $currentP)? "class='activ'" : "").">$i</a></li>";
+					}
+					?>
+				</ul>
+
 				<ul id='game-list' cellspacing='0' cellpadding='0'>
 
 					<?php
@@ -457,7 +481,6 @@ if($isListShowable){
 						?>
 				</ul>
 				
-				<input type='hidden' name="pageNb" value="1">
 				<ul class='pagination'>
 					<?php
 					for($i = 1 ; $i <= $max ; $i++){
@@ -468,19 +491,6 @@ if($isListShowable){
 			
 			</div>
 			<?php
-			if (!$user || $user->getRole() == 'player') {
-				$forwardValues = "page=".$_GET['page']."&";
-				if(isset($_GET['filter'])){
-					$forwardValues .= "filter=".$_GET['filter']."&";
-				}
-				if(isset($_GET['email'])){
-					$forwardValues .= "email=".$_GET['email']."&";
-				}
-				if(isset($_GET['p'])){
-					$forwardValues .= "p=".$_GET['p']."&";
-				}
-				echo "<div><a href='login.php?forward=".urlencode($forwardValues)."'>Tu peux t'authentifier ici pour inscrire ou éditer une partie.</a></div>";
-			}
 		}else{
 			echo "<p>Aucune partie !</p>";
 			if ($filtered){

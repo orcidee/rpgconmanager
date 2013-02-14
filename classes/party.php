@@ -114,7 +114,7 @@ class Party {
     
     public static function getYears(){
         $years = array();
-        $sql = "SELECT DISTINCT year FROM Parties";
+        $sql = "SELECT DISTINCT year FROM Parties order by year DESC";
         $res = mysql_query ( $sql );
         while ($row = mysql_fetch_assoc($res)) {
             $years[] = $row['year'];

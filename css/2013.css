@@ -337,6 +337,7 @@ font-family: 'courrier new';
 ul.pagination 
 {
     text-align: center;
+	margin-bottom: 10px;
 }
 ul.pagination li{
     display: inline;
@@ -502,4 +503,9 @@ margin:auto;
 background-position: center center;
 background-image: url("http://www.orcidee.ch/templates/western/images/separateur.png");
 background-repeat: no-repeat;
+}
+
+.register-result
+{
+color: red;
 }

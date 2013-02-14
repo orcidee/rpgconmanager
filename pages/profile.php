@@ -11,8 +11,9 @@ $user = User::getFromSession();
 
 // Define what is available to show
 if(isset($_GET['id'])){
+	// TODO probablement possible de simplifier ces différentes conditions...
     $animator  = $user && $user->getRole() == "animator" && $user->getId() == @$_GET['id'] ;
-    $light     = $user && Controls::isAppOpen();
+    $light     = $user && ((Controls::isAppOpen() && $user->getId() == @$_GET['id']) || $user->getRole() == "administrator") ;
     $full      = $user && (($light && $animator) || $user->getRole() == "administrator") ;
     $profileId = @$_GET['id'];
     $userDisplayed = new User($profileId);
@@ -48,7 +49,7 @@ if($light){
                     $msg[] = "Ton nouveau mot de passe est trop faible, équipe le de plus de caractère.";
                 }
             }else{
-                $msg[] = "Ancien mot de passe incorrect. <a href=''>Clique ici, si tu as oublié ton mot de passe</a>.";
+                $msg[] = "Ancien mot de passe incorrect. Déconnecte-toi et réinitialise ton mot de passe si tu l'as.";
             }
             
             echo "<ul class='result'>";
@@ -169,7 +170,6 @@ if($light){
     echo "</div>";
     
 } else {
-
     // Conditions non remplies pour afficher cette page.
-
+	echo "Vous n'êtes pas autorisé à voir ce profil.";
 }

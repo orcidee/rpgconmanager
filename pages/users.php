@@ -18,10 +18,10 @@ if($user && $user->isAdmin()){
         <form action="" method="GET">
             <label for="filter">Role:</label>
             <select name="filter">
-                <option value='all' selected='selected'>Tous</option>
-                <option value='player'>Joueur</option>
-                <option value='animator'>MJ</option>
-                <option value='administrator'>Admin</option>
+                <option value='all'>Tous</option>
+                <option value='player' <?php echo (@$_GET['filter']=='player') ? "selected='selected'" : ""; ?>>Joueur</option>
+                <option value='animator' <?php echo (@$_GET['filter']=='animator') ? "selected='selected'" : ""; ?>>MJ</option>
+                <option value='administrator' <?php echo (@$_GET['filter']=='administrator') ? "selected='selected'" : ""; ?>>Admin</option>
             </select>
             <input type="hidden" name="page" value="users" />
             <input type="submit" value="filtrer"/>
