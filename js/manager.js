@@ -342,7 +342,7 @@ orcidee.manager = {
                                     if($("#dialog-form .res").size()>0){
                                         //$("#dialog-form .res").html("");
                                     }else{
-                                        $("#dialog-form").append("<p class='res'>Ta saisie n'est pas valide: Ton nom doit contenir entre 1 et 17 caractères. Ton email doit être valide.</p>");
+                                        $("#dialog-form").append("<p class='res'>Votre saisie n'est pas valide : votre nom doit contenir entre 1 et 17 caractères. Votre adresse email doit être valide.</p>");
                                     }
                                 }
                             }

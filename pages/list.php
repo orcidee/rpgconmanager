@@ -139,7 +139,7 @@ if($isListShowable){
 		if(isset($_GET['p'])){
 			$forwardValues .= "p=".$_GET['p']."&";
 		}
-		echo "<div><a href='login.php?forward=".urlencode($forwardValues)."'>Tu peux t'authentifier ici pour inscrire ou éditer une partie.</a></div>";
+		echo "<div><a href='login.php?forward=".urlencode($forwardValues)."'>Vous pouvez vous authentifier ici pour inscrire ou éditer une partie.</a></div>";
 	}
     
     // Lightbox qui apparaît au clic sur "Je veux m'inscrire à cette partie"
@@ -161,7 +161,7 @@ if($isListShowable){
             ?>
         </fieldset>
         </form>
-        <p>Une confirmation va t'être envoyée par email, avec toutes les infos.</p>
+        <p>Une confirmation va être envoyée par email, avec toutes les infos.</p>
     </div>
 
 	<!-- Form to filter and sort results -->
@@ -531,6 +531,7 @@ if($isListShowable){
 				if(sha1($player->getId()) == $_GET['u']){
 					// This player want to unsubscribe
 					$res = Inscription::unsubscribe($p->getId(), $player->getId());
+					Orcimail::notifyUnsubscribtion($p, $player);
 					break;
 				}
 			}
@@ -574,7 +575,7 @@ if($isListShowable){
         if(isset($_GET['p'])){
             $forwardValues .= "p=".$_GET['p']."&";
         }
-        echo "<a href='login.php?forward=".urlencode($forwardValues)."'>Tu peux t'enregistrer ou t'authentifier comme MJ ou administrateur en cliquant ici.</a>";
+        echo "<a href='login.php?forward=".urlencode($forwardValues)."'>Vous pouvez vous enregistrer ou vous authentifier comme MJ ou administrateur en cliquant ici.</a>";
     }
     if(!Controls::isPlayerOpen()){
         echo "<p>L'inscription joueur n'est pas encore disponible.</p>";

@@ -48,13 +48,8 @@ if(!$db){
 				$inscription = new Inscription($user->getUserId(), $partyId);
 				if($inscription->isValid){
 					if($inscription->status == "created"){
-
-
-
-
-
 						$isMailOk = Orcimail::subscribeToParty($p, $user);
-						
+						Orcimail::notifySubscribtion($p, $user);
 						if($isMailOk){
 							echo '{"status":"ok", "message":"Inscription enregistrée !"}';
 						}else{
@@ -66,17 +61,11 @@ if(!$db){
 						echo '{"status":"error", "message":"Erreur à l\'inscription !"}';
 					}
 				}else{
-
-
 					echo '{"status":"error", "message":"Inscription invalide."}';
 				}
 			}else{
 				echo '{"status":"error", "message":"Partie complète, merci d\'essayer une autre partie !"}';
 			}
-
-
-
-
         }else{
             echo '{"status":"error", "message":"L\'adresse email est déjà enregistrée, mais les nom/prénom ne correpondent pas."}';
         }

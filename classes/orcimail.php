@@ -27,7 +27,7 @@ class Orcimail {
 
     public static function notifyCancel($party){
 
-        $u = new User($party->getUserId());
+        $u = $party->getAnimator();
         $to = $u->getEmail();
     
         $body = "
@@ -122,6 +122,54 @@ class Orcimail {
         ));
     }
 
+    public static function notifySubscribtion($party, $user){
+    
+        $mj = $party->getAnimator();
+        $to = $mj->getEmail();
+    
+        $body = "
+        <p>Bonjour ".$mj->getFirstname().",</p>
+        <br/>
+        <p>Un joueur s'est inscrit à votre partie '".$party->getName()."' !</p>
+        <p>Il s'agit de <strong>".$user->getFirstname()." ".$user->getLastname()."</strong>
+        que vous pouvez contacter à l'adresse suivante :
+		<a href='mailto:".$user->getEmail()."'>".$user->getEmail()."</a></p>
+        <br/>        
+        <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
+		<br/>
+        <p>Bonne préparation !</p>";
+
+        return self::sendMail (array(
+            'body' => $body,
+            'to' => $to,
+            'subject' => "Orc'idee - Animation ".$party->getId()." - Inscription ".$user->getFirstname()." ".$user->getLastname()
+        ));
+    }
+
+    public static function notifyUnsubscribtion($party, $user, $forced = false){
+    
+        $mj = $party->getAnimator();
+        $to = $mj->getEmail();
+    
+        $body = "
+        <p>Bonjour ".$mj->getFirstname().",</p>
+        <br/>
+        <p>Un joueur ". ($forced ? "a été " : "s'est")." désinscrit de votre partie '".$party->getName()."' !</p>
+        <p>Il s'agit de <strong>".$user->getFirstname()." ".$user->getLastname()."</strong>
+        que vous pouvez contacter à l'adresse suivante :
+		<a href='mailto:".$user->getEmail()."'>".$user->getEmail()."</a></p>
+        <br/>
+        <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
+		<br/>
+        <p>Bonne préparation !</p>";
+
+        return self::sendMail (array(
+            'body' => $body,
+            'to' => $to,
+            'subject' => "Orc'idee - Animation ".$party->getId()." - Désinscription ".$user->getFirstname()." ".$user->getLastname()
+        ));
+    }
+
     public static function subscribeToParty ($p, $user){
     
         $type = $p->getType();
@@ -130,7 +178,7 @@ class Orcimail {
         // Corps de l'email à l'inscription joueur, à une partie.
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
-        <p>Ceci est une confirmation d'inscription à l'animation no ".$p->getId().".</p>
+        <p>Ceci est une confirmation d'inscription à l'animation no ".$p->getId().", animée par ".$mj->getFirstname()." ".$mj->getLastname().".</p>
         <br/>
         <p><strong>Vous allez donc participer à l'animation suivante</strong></p>
         <table cellpadding='5' cellspacing='0' border='1'>
@@ -140,11 +188,6 @@ class Orcimail {
             <tr><td>Scénario</td><td>".$p->getScenario()."</td></tr>
             <tr><td>Description</td><td>".$p->getDescription()."</td></tr>
             <tr><td>Niveau de jeu</td><td>";
-            
-            /*
-            "<tr><td>Nombre de joueurs minimum</td><td>".$p->getPlayerMin()."</td></tr>
-            <tr><td>Nombre de joueurs maximum</td><td>".$p->getPlayerMax()."</td></tr>";*/
-            
             
             $lvl = "Peu importe";
             if($p->getLevel() == 'high'){
@@ -164,29 +207,17 @@ class Orcimail {
             $message .= $date."</strong></td></tr>
         </table>
         
-        <br/><p><strong>Animateur / MJ</strong>
-        <p>Au cas où vous auriez besoin de contacter l'animateur de cette partie...</p>
-        
-        <table cellpadding='5' cellspacing='0' border='1'>
-            <tr><td>Nom</td><td>".$mj->getLastname()."</td></tr>
-            <tr><td>Prénom</td><td>".$mj->getFirstname()."</td></tr>
-            <tr><td>Email</td><td>".$mj->getEmail()."</td></tr>";
-            /*
-            <tr><td>Télephone</td><td>".$user->getPhone()."</td></tr>
-            <tr><td>Adresse</td><td>".$user->getAddress()."</td></tr>
-            <tr><td>NPA</td><td>".$user->getNpa()."</td></tr>
-            <tr><td>Ville</td><td>".$user->getCity()."</td></tr>
-            <tr><td>Pays</td><td>".$user->getCountry()."</td></tr>*/
+        <br/>
+        <p>Au cas où vous auriez besoin de contacter l'animateur de cette partie, vous pouvez utiliser le formulaire sur la <a href='".Controls::home()."?page=list'>liste des parties</a></p>
+		<br/>";
         
         $unlink = Controls::home()."?page=list&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
         
-        $message .= "</table>
-        <p>Lien pour <strong>vous désinscrire</strong>: <a href='".$unlink."'>".$unlink."</a></p>
-        
-        <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p><br/>
+        $message .= "<p>Cliquez là <strong><a href='".$unlink."'>vous désinscrire</a></strong></p>
+        <br />
+        <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
+		<br/>
         <p><strong>Nous nous réjouissons de vous voir à Orc'idée et espérons que vous passerez un excellent week-end !</strong></p>";
-        
-        
         
         return self::sendMail(array(
             'to' => $user->getEmail(),
@@ -199,17 +230,22 @@ class Orcimail {
         // Corps de l'email
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
+		<br/>
         <p>Vous avez demandé à être désinscrit de l'animation no ".$p->getId().",
 			intitulée '".stripslashes($p->getName())."',
-			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>";
+			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>
+		<br/>";
 			        
         $unlink = Controls::home()."?page=list&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
         
-        $message .= "<p><strong>Veuillez confirmer<strong> en cliquant sur le lien suivant :
+        $message .= "<p><strong>Veuillez confirmer</strong> en cliquant sur le lien suivant :
 			<a href='".$unlink."'>".$unlink."</a></p>
 		<p>(sinon, ignorez juste ce message)</p>
+		<br/>
         <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
-        <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>";
+		<br/>
+        <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>
+		<br/>";
         
         return self::sendMail(array(
             'to' => $user->getEmail(),
@@ -301,7 +337,8 @@ class Orcimail {
         <p><strong>Note aux organisateurs</strong><br/>".$p->getNote()."</p>
         
         <p><strong>Quelques informations vous concernant.</strong>
-        <br/>Merci de nous contacter si elles sont incorrectes.</p>
+        <br/>Merci de les corriger si nécessaire sur <a href='".Controls::home()
+        ."?page=profile'>votre profil</a>.</p>
         <table cellpadding='5' cellspacing='0' border='1'>
             <tr><td>Nom</td><td>".$user->getLastname()."</td></tr>
             <tr><td>Prénom</td><td>".$user->getFirstname()."</td></tr>

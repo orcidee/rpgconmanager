@@ -63,7 +63,7 @@ if(!$db){
                     $pwd = $user->resetPassword();
                     if($pwd){
                         if(Orcimail::sendPassword($user, $pwd)){
-                            $msg = "Ton mot de passe a été réinitialisé, tu le trouveras dans l'email qui vient de t'être envoyé.";
+                            $msg = "Le mot de passe a été réinitialisé, vous le trouverez dans l'email qui vient de vois être envoyé.";
                         }else{
                             $msg = "Erreur inconnue lors de la réinitialisation du mot de passe.";
                         }
@@ -71,10 +71,10 @@ if(!$db){
                         $msg = "Erreur inconnue lors de la réinitialisation du mot de passe.";
                     }
                 }else{
-                    $msg = "Cette adresse email nous est inconnue. Peut-être as-tu utilisé une autre adresse par le passé. N'hésite pas à t'enregistrer à nouveau si tel est ton désir.";
+                    $msg = "Cette adresse email nous est inconnue. Peut-être avez-vous utilisé une autre adresse par le passé. N'hésitez pas à vous enregistrer à nouveau si tel est votre désir.";
                 }
             }else{
-                $msg = "Saisis une adresse email valide STP ! Ainsi nous serons en mesure de te retransmettre ton mot de passe.";
+                $msg = "Saisissez une adresse email valide SVP ! Ainsi nous serons en mesure de vous réinitialiser le mot de passe.";
             }
         }
         ?><form action='' method='POST'>

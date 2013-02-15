@@ -47,10 +47,10 @@ if($user){
                 $txt = "<div class='your-party'>" .
                 "<p>La créature chargée de valider les parties, considère que ces informations ".
                 "sont parfaites pour la conv. </p>".
-                "<p>A toi maintenant d'y jeter un dernier coup avant de nous ".
-                "confirmer ces données en cliquant sur le bouton \"Confirmer\". Si tu souhaites ".
-                "corriger quelque chose, clique alors sur \"Corriger\".</p>".
-                "<p>Un mail de confirmation te sera envoyé.</p>";
+                "<p>A vous maintenant d'y jeter un dernier coup d'oeil avant de nous ".
+                "confirmer ces données en cliquant sur le bouton \"Confirmer\". Si vous souhaitez ".
+                "corriger quelque chose, cliquez alors sur \"Corriger\".</p>".
+                "<p>Un mail de confirmation vous sera envoyé.</p>";
                 
                 $type = $party->getType();
                 
@@ -106,10 +106,10 @@ if($user){
                 
             }else{
                 print "<p>La créature chargée de valider les parties pense que ces informations ".
-                "contiennent des erreurs.</p><p>Pourrait-vérifier :</p><ul>".
-                "<li>Que tous les champs obligatoires soient remplis</li>".
-                "<li>Que le nombre minimum de joueurs soit bien un nombre strictement positif</li>".
-                "<li>Que le nombre maximum de joueurs soit bien un nombre ".
+                "contiennent des erreurs.</p><p>Pouvez-vous vérifier :</p><ul>".
+                "<li>que tous les champs obligatoires soient remplis</li>".
+                "<li>que le nombre minimum de joueurs soit bien un nombre strictement positif</li>".
+                "<li>que le nombre maximum de joueurs soit bien un nombre ".
                 "égal ou supérieur au nombre minumum de joueurs</li></ul> ";
                 /*print_r($party->errors);
                 print_r($party->infos);*/
@@ -132,7 +132,7 @@ if($user){
                 $saveOK = $p->save();
                 if($saveOK) {
                     echo "<p>Partie <strong>".(($edit)?'éditée':'créée')."</strong> avec succès.</p>".
-                    "<p>Tu va recevoir un mail de confirmation tout soudain!</p>";
+                    "<p>Vous allez recevoir un mail de confirmation tout soudain !</p>";
                 
                     // Send congratulation's mail
                     $isMailOk = Orcimail::notifyCreate($p, $edit);
@@ -191,8 +191,8 @@ if($user){
             // Avoid reediting critical fields when the party has been validated already
             $enable = "";
             if($editExisting && isset($p) && $p->getState() == 'validated'){
-                echo "<p><strong>Ta partie a le status \"validée\". Cela implique que certains champs ne
-                sont plus éditables. Merci pour ta compréhension.</strong></p>";
+                echo "<p><strong>Votre partie a le status \"validée\". Cela implique que certains champs ne
+                sont plus éditables. Merci pour votre compréhension.</strong></p>";
 				$enable = "disabled='disabled'";
             }
 			
@@ -331,7 +331,7 @@ if($user){
                     
                 </fieldset>
                 
-                <input type="submit" class="submit" value="Soumettre les données saisies" />
+                <input type="submit" class="submit" value="Soumettre les données" />
                 <input type="reset" class="submit" value="Réinitialiser le formulaire" />
                 
             </form>

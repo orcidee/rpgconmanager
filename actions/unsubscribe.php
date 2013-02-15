@@ -29,6 +29,7 @@ if(!$db){
 						if(sha1($player->getId()) == $_GET['u']){
 							// This player want to unsubscribe
 							$res = Inscription::unsubscribe($p->getId(), $player->getId());
+							Orcimail::notifyUnsubscribtion($p, $player, true);
 							break;
 						}
 					}
