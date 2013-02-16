@@ -45,9 +45,9 @@ if($user){
             
                 // Display the party & talk about validity & ask confirmation
                 $txt = "<div class='your-party'>" .
-                "<p>La créature chargée de valider les parties, considère que ces informations ".
-                "sont parfaites pour la conv. </p>".
-                "<p>A vous maintenant d'y jeter un dernier coup d'oeil avant de nous ".
+                "<p>Le gratte-papier chargé de valider les parties considère que ces informations ".
+                "sont suffisantes pour prendre en considération votre demande. </p>".
+                "<p>A vous maintenant d'y jeter un dernier coup d'oeil avant de lui ".
                 "confirmer ces données en cliquant sur le bouton \"Confirmer\". Si vous souhaitez ".
                 "corriger quelque chose, cliquez alors sur \"Corriger\".</p>".
                 "<p>Un mail de confirmation vous sera envoyé.</p>";

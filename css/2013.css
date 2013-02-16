@@ -1,37 +1,40 @@
 @font-face {
-  font-family: 'menu';
-  src: url("http://www.orcidee.ch/templates/western/fonts/NASHVILL.TTF");
+  font-family: 'partie';
+  src: url("http://www.orcidee.ch/templates/western/fonts/Winslett.ttf");
   }
 
 html
 {
 font-family: 'courrier new';
     color: #000000;
-	  background-color: #ffffff;
+background-color: rgba(255, 255, 255, 0.01);
 
 }
 
 body
 {
-margin: 7px;
+margin: 0;
 padding:7px;
 padding-left: 10px;
-  padding-bottom: 35px;
- background-image: url("http://www.orcidee.ch/templates/western/images/content2.png");
-  background-color: #f8f6e9;
-    margin-top:25px;
-   box-shadow: 0px 6px 6px black;
-   border: 1px solid #000000;
-   width:669px;
+padding-bottom: 35px;
+background-image: url("http://www.orcidee.ch/templates/western/images/content2.png");
+background-color: #f8f6e9;
+border: 1px solid #000000;
+width:651px;
+font-family: 'courrier new';
+   
 }
 
 nav#main-nav {
-    margin: 0  0 0 0;
-	background-image: url("http://www.orcidee.ch/templates/western/images/clou.png");
+margin: 0  0 0 0;
+background-image: url("http://www.orcidee.ch/templates/western/images/cloup.png");
 background-repeat: no-repeat;
-width:669px;
+width:590px;
 padding-top: 10px;
 padding-left: 30px;
+padding-right: 30px;
+text-align:center;
+
 }
 nav#bottom-nav {
     margin: 15px 0 0 0;
@@ -40,6 +43,13 @@ nav#bottom-nav {
 nav a{
     margin: 0 10px;
 }
+#manager-main-menu li
+{
+display: inline;	
+	
+}
+
+
 ul, li{
     list-style:none;
     overflow:hidden;
@@ -62,26 +72,34 @@ font-size: 20px;
 h1
 {
 font-size: 28px;
-text-decoration: underline;
-font-family: 'menu';
+font-family: 'partie';
 height: 30px;
 text-align: center;
 text-transform:uppercase;
+font-weight: normal;
 }
+
 fieldset 
 {
     border: 1px solid #000000;
+    width:474px;
+}
+fieldset fieldset{
+    width:450px;
 }
 
- input .submit,
+
+ input.submit,
 .login input.submit
 {
 margin:auto;
-background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre1.jpg");
 background-color: #66390d;
-border: 2px solid #3e2208;
-color: #ffffff;
+border: 3px solid #ba6835;
+color: #fff6e5;
 font-weight: bold;
+font-style: italic;
+}
 
 }
 
@@ -89,25 +107,41 @@ input.subscribe
 {
 margin:auto;
 margin-top: 7px;
-background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre1.jpg");
 background-color: #66390d;
-border: 2px solid #3e2208;
-color: #ffffff;
+border: 3px solid #ba6835;
+color: #fff6e5;
 font-weight: bold;
+font-style: italic;
 }
+
+
 div.profile input.submit
 {
 
-margin: 10px 3 0 3;
-background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+margin: 0 3 0 3;
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre1.jpg");
 background-color: #66390d;
-border: 2px solid #3e2208;
-color: #ffffff;
+border: 3px solid #ba6835;
+color: #fff6e5;
 font-weight: bold;
-
-
-
+font-style: italic;
 }
+
+input.submit:active,
+.login input.submit:active,
+input.subscribe:active,
+div.profile input.submit:active
+{
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre2.jpg");
+background-color: #66390d;
+border: 3px solid #ba6835;
+color: #fff6e5;
+font-weight: bold;
+font-style: italic;	
+	
+}
+
 div.profile form
 {
 display: inline-block;
@@ -120,13 +154,15 @@ input#check-dispo
 {
 margin:auto;
 margin-top: 7px;
-background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre1.jpg");
 background-color: #66390d;
-border: 2px solid #3e2208;
-color: #ffffff;
+border: 3px solid #ba6835;
+color: #fff6e5;
+font-weight: bold;
+font-style: italic;
 margin: 10px;
 text-align: center;
-font-weight: bold;
+
 }
 div.party-create a
 {
@@ -159,7 +195,7 @@ padding-left: 0px;
 
 .login .right{
     float:left;
-    width:287px;
+    width:310px;
     padding: 0 0 0 15px;
     border-left: 1px solid #000000;
 
@@ -187,7 +223,7 @@ padding-left: 0px;
 
 
 .list{
-    width:640px;
+    width:647px;
 }
 .list li {
     margin: 0 0 20px 0;
@@ -203,7 +239,7 @@ padding-left: 0px;
 }
 .list li div.clear{
     clear:both;
-	width:620px;
+	width:635px;
     padding-left:10px;
 }
 .list li div.clear div{
@@ -280,7 +316,7 @@ padding-left: 0px;
 margin:auto;
 margin-top: 7px;
 background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
-background-color: #66390d;
+background-color: #e9d88f;
 border: 2px solid #3e2208;
 color: #ffffff;
 }
@@ -319,6 +355,7 @@ text-decoration: underline;
 .list li div.top
 {
 background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+background-color: #e9d88f;
 border: 1px solid #000000;
 font-variant: small-caps;
 font-size: 1.3em;
@@ -406,6 +443,11 @@ border-bottom-color: #000000;
 	margin: 0px 20px;
 }
 
+.Pactions
+{
+margin: 15px 70px 15px 70px;
+}
+
 ul.profile input.info {
 
 border: 1px solid #ddcb90;
@@ -481,18 +523,30 @@ margin-left: 0px;
 
 #filteringForm fieldset
 {
-width: 630px;
+width: 625px;
 margin-left: 0px;
 
 }
 #filteringForm input.submit
 {
-margin:7px 200px 0 200px;
-background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
+margin:7px 260px 0 260px;
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre1.jpg");
 background-color: #66390d;
-border: 2px solid #3e2208;
-color: #ffffff;
+border: 3px solid #ba6835;
+color: #fff6e5;
 font-weight: bold;
+font-style: italic;
+
+}
+#filteringForm input.submit:active
+{
+background-image: url("http://www.orcidee.ch/templates/western/images/cuivre2.jpg");
+background-color: #66390d;
+border: 3px solid #ba6835;
+color: #fff6e5;
+font-weight: bold;
+font-style: italic;	
+	
 }
 .separator
 {
@@ -508,4 +562,11 @@ background-repeat: no-repeat;
 .register-result
 {
 color: red;
+}
+
+.party-create,
+.login
+
+{
+padding: 0 10px 0 10px;	
 }

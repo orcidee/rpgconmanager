@@ -1,5 +1,5 @@
 body{
-    font-size: 16px;
+    font-size: 0.9em;
     font-weight:normal;
     font-family: georgia, verdana, arial;
 }
@@ -66,7 +66,7 @@ ul.profile label{
 
 label, input, select, textarea{
     float:left;
-    margin: 10px;
+    margin: 5px;
     text-align:left;
     font-family: verdana, arial;
 }
@@ -100,10 +100,17 @@ label {
     clear:both;
     width:200px;
 }
+
 form{
     text-align:center;
     overflow:hidden;
 }
+
+form input.submit
+{
+	margin-top: 7px;
+}
+
 fieldset{
     overflow:hidden;
     margin:10px auto;
@@ -119,9 +126,10 @@ legend{
 }
 input.submit{
     clear:both;
-    width:200px;
     float:none;
     text-align:center;
+    padding: 0 5px 0 5px;
+    width: auto; 
 }
 .profile input.submit{
     float:left;
@@ -242,10 +250,10 @@ td.application-controls{
 }
 .list li div.more .left,
 .list li div.more .clear.left{
-    width:290px;
+    width:390px;
 }
 .list li div.more .right{
-    width:290px;
+    width:200px;
 }
 .list li div.center{
     clear:both;

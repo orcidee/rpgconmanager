@@ -156,22 +156,25 @@ if($light){
         
         if($full){
             if ($isedit){
-            
+            echo "<div class='Pactions'>";
                 echo '<input type="hidden" name="action" value="validate"/>';
                 echo '<input type="submit" value="Valider les modifications" class="submit"/></form>';
 
                 echo '<form action="" method="POST">';
                 echo '<input type="submit" value="Annuler" class="submit"/></form>';
+            echo "</div>";
             
             }else{
 
-                echo '<form action="" method="POST">';
+               echo "<div class='Pactions'>"; 
+            	echo '<form action="" method="POST">';
                 echo '<input type="hidden" name="action" value="edit"/>';
                 echo '<input type="submit" value="Modifier les données" class="submit"/></form>';
                 
                 echo '<form action="" method="POST">';
                 echo '<input type="hidden" name="action" value="password"/>';
-                echo '<input type="submit" value="Modifier le mot de passe" class="submit"/></form>';
+                echo '<input type="submit" value="Modifier le mot de passe" class="submit"/></form>'; 
+                echo "</div>";
             }
         }
     }

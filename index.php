@@ -12,6 +12,7 @@ require_once(dirname(__FILE__).'/conf/conf.php');
         <link rel="stylesheet" type="text/css" href="css/styles.css?_<?php echo CACHE_KILL;?>" />
 		<link rel="stylesheet" type="text/css" href="css/2013.css?_<?php echo CACHE_KILL;?>"/>
 
+
     </head>
     <body>
 

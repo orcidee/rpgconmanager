@@ -45,7 +45,7 @@ if(!$db){
         ?>
         <h1>Authentification</h1>
         <div class='login'>
-            <p>Bravo, tu es authentifié</p>
+            <p>Bravo, vous êtes authentifié</p>
         </div>
         <?php
         
@@ -62,7 +62,7 @@ if(!$db){
                 unset($_SESSION["userId"]);
             }elseif($res['status'] === 1){
                 // Authentification échouée car email pas valide
-                $msg = "Ton adresse email n'est pas une adresse email valide!";
+                $msg = "Votre adresse email n'est pas une adresse email valide !";
                 unset($_SESSION["userId"]);
             }elseif($res['status'] === 2){
                 // Authentification réussie
@@ -74,26 +74,26 @@ if(!$db){
         // Processus d'enregistrement
         if(@$_POST['action'] == 'register'){
             if(strlen(@$_POST['lastname']) <= 0){
-                $msg["lastname"] = "Merci de nous indiquer ton nom.";
+                $msg["lastname"] = "Merci de nous indiquer votre nom.";
             }
             if(strlen(@$_POST['firstname']) <= 0){
-                $msg["firstname"] = "Merci de nous indiquer ton prénom.";
+                $msg["firstname"] = "Merci de nous indiquer votre prénom.";
             }
             if(strlen(@$_POST['phone']) <= 0){
-                $msg["phone"] = "Désolé de te demander ça, mais nous devons pouvoir contacter les MJ par téléphone. Merci de bien vouloir saisir ce champs.";
+                $msg["phone"] = "Désolé de vous demander ça, mais nous devons pouvoir contacter les MJ par téléphone. Merci de bien vouloir saisir ce champ.";
             }
             if(strlen(@$_POST['password']) <= 0){
-                $msg["password"] = "Tu dois saisir un mot de passe STP.";
+                $msg["password"] = "Vous devez saisir un mot de passe.";
             }elseif( ! User::validatePassword(@$_POST['password'])){
-                $msg["password"] = "Tom mot de passe est trop faible, il lui faut au moins 5 caractères.";
+                $msg["password"] = "Votre mot de passe est trop faible, il lui faut au moins 5 caractères.";
             }
             if(@$_POST['password'] != @$_POST['confirm']){
-                $msg["confirm"] = "La confirmation de mot de passe que tu as saisi ne correspond pas.";
+                $msg["confirm"] = "La confirmation de mot de passe que saisie ne correspond pas.";
             }
             if(strlen(@$_POST['email']) <= 0){
-                $msg["email"] = "Merci de nous indiquer ton adresse email.";
+                $msg["email"] = "Merci de nous indiquer votre adresse email.";
             }elseif( ! Controls::validateEmail(@$_POST['email'])){
-                $msg["email"] = "Bein ça alors?! Ton adresse email n'est pas valide.";
+                $msg["email"] = "Bein ça alors?! Votre adresse email n'est pas valide.";
             }elseif(User::emailExists(@$_POST['email'])){
                 
                 // Upgrade Player => MJ
@@ -105,12 +105,12 @@ if(!$db){
                         if($user){
                             $_SESSION["userId"] = $user->getId();
                         }else{
-                            $msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu es inscrit toujours comme 'joueur'.";
+                            $msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Vous êtes toujours inscrit comme 'joueur'.";
                         }
-                        $msg["email"] = 'Tu étais inscrit comme "joueur", tu es désormais "animateur". Félicitations!';
+                        $msg["email"] = 'Vous êtiez inscrit comme "joueur", vous êtes désormais "animateur". Félicitations!';
                     }
                 }else{
-                    $msg["email"] = "Cette adresse email est déjà enregistrée. <a href='pwd-forgotten.php'>Clique ici si tu as oublié ton mot de passe</a>.";
+                    $msg["email"] = "Cette adresse email est déjà enregistrée. <a href='pwd-forgotten.php'>Cliquez ici si vous avez oublié votre mot de passe</a>.";
                 }
             }
             
@@ -119,7 +119,7 @@ if(!$db){
 				if($user){
 					$_SESSION["userId"] = $user->getId();
 				}else{
-					$msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Tu n'a pas été enregistré.";
+					$msg['unkown'] = "Une erreur s'est produite lors de la sauvegarde des données. Vous n'avez pas été enregistré.";
 				}
             }
         }
@@ -131,14 +131,14 @@ if(!$db){
             ?>
             <h1>Authentification</h1>
             <div class='login'>
-                <p>Seuls ton nom, ton prénom et ton adresse email seront affichés sur le site. Les autres informations te concernant seront gardées confidentielles et utilisées uniquement par des membres de l'association Orc'idee.</p>
+                <p>Seuls votre nom et votre prénom seront affichés sur le site. Les autres informations seront gardées confidentielles et utilisées uniquement par des membres de l'association Orc'idee.</p>
                 <div class="left">
                 
                     <?php
                     if (@$_POST['action'] == 'auth'){
                         echo "<p class='auth-result'>$msg</p>";
                     }else{
-                        echo "<p>Tu as déjà un compte et souhaites t'authentifier...</p>";
+                        echo "<p>Vous avez déjà un compte et souhaitez vous authentifier...</p>";
                     }
                     ?>
                     
@@ -179,7 +179,7 @@ if(!$db){
                             }
                             echo "</ul></div>";
                         }else{
-                            echo "<p>Tu souhaites t'enregistrer comme Animateur / MJ, afin de pouvoir proposer des parties ou des activités...</p>";
+                            echo "<p>Vous souhaitez vous enregistrer comme Animateur / MJ, afin de pouvoir proposer des parties ou des activités...</p>";
                         }
                         ?>
                         <form action='' method='POST'>
@@ -201,7 +201,7 @@ if(!$db){
                                 <label for='password'>Mot de passe *</label>
                                 <input type='password' name='password' value='' />
                                 
-                                <label for='confirm'>Confirmer MdP *</label>
+                                <label for='confirm'>Confirmation MdP *</label>
                                 <input type='password' name='confirm' value='' />
                                 
                                 <label for='phone'>Téléphone *</label>
