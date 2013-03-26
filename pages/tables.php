@@ -35,6 +35,7 @@ if($user){
 						" JOIN Types on Parties.typeId = Types.typeId".
 						" JOIN Users on Parties.userId = Users.userId".
 						" WHERE Parties.state in ('validated', 'verified')".
+						" AND Parties.year = ".THIS_YEAR.
 						" ORDER BY Parties.start ASC";
 				$res = mysql_query ( $sql );
 

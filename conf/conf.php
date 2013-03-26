@@ -25,6 +25,6 @@ define("END_AT", "2013-04-14 17:00:00");
 define("THIS_YEAR", "2013");
 define("TABLES", 30);
 
-define("CACHE_KILL", "20130104T22:04");
+define("CACHE_KILL", "20130304T22:04");
 
 ?>

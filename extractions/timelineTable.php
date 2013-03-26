@@ -22,8 +22,8 @@ if(!$db){
 			header("Content-type: application/vnd.ms-excel");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
-            $startDate = new DateTime(START_AT);
-            $start = strtotime(START_AT);
+            $startDate = new DateTime(Controls::getConvStart());
+            $start = strtotime(Controls::getConvStart());
             $end = strtotime(END_AT);
 			$startHour = $startDate->format("H");
 			$duration = ($end - $start) / 3600;
@@ -64,7 +64,7 @@ if(!$db){
 <?php
 					}
 
-				$sql = "SELECT Parties.* FROM Parties WHERE Parties.state in ('validated', 'verified') and Parties.table is not null order by Parties.table, Parties.start ASC";
+				$sql = "SELECT Parties.* FROM Parties WHERE Parties.state in ('validated', 'verified') and Parties.table is not null AND Parties.year = ".THIS_YEAR." order by Parties.table, Parties.start ASC";
 				$res = mysql_query ( $sql );
 
 				$colorTypes = array();

@@ -281,7 +281,7 @@ if($user){
                         <label for='start'>Heure de début souhaitée</label>
                         <select name='start' class='' id='start' $enable>";
                             
-                            $start = strtotime(START_AT);
+                            $start = strtotime(Controls::getConvStart());
                             $end = strtotime(END_AT);
                             
                             for($i = $start ; $i<$end ; $i+=3600){

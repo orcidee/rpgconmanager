@@ -356,7 +356,7 @@ class Party {
         $result["status"] = "ok";
         
         // Constantes (pattern BD)
-        $start = strtotime(START_AT);
+        $start = strtotime(Controls::getConvStart());
         $end = strtotime(END_AT);
         $nb = ($end - $start) / 60 / 60 ;
         

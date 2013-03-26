@@ -19,7 +19,7 @@ if(!$db){
 	if($user){
 		
 		if($user->getRole() == "administrator"){
-			$sql = "SELECT Parties.*, Users.lastname, Users.firstname FROM Parties join Users on Parties.userId = Users.userId WHERE Parties.state in ('validated', 'verified') order by Parties.partyId ASC";
+			$sql = "SELECT Parties.*, Users.lastname, Users.firstname FROM Parties join Users on Parties.userId = Users.userId WHERE Parties.state in ('validated', 'verified') AND Parties.year = ".THIS_YEAR." order by Parties.partyId ASC";
 			$res = mysql_query ( $sql );
 
 			include("../FPDF/fpdf.php");
