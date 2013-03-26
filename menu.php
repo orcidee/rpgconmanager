@@ -16,7 +16,7 @@ $root = Controls::home();
 <nav id='main-nav'>
     <ul id='manager-main-menu'><?php
     
-        echo "<li class='list'><a href=" . $root . ">Accueil</a> -</li>";
+        echo "<li class='list'><a href=".$root.">Accueil</a> -</li>";
         echo "<li class='list'><a href='".$root."?page=list'>Liste des parties</a> -</li>";
         
         if( $user ){

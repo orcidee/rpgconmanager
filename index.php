@@ -138,8 +138,9 @@ if(!$db){
     
     if(!is_null($view->content)){
         $view->html();
-    }
-    
+    } else {
+		echo "<br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>";
+	}
     
 
 }
@@ -156,7 +157,5 @@ if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
  else if (ieversion<=8)
   alert("Votre navigateur ne lit pas correctement notre module de gestion de parties. Nous vous recommandons de le mettre à jour, sans quoi vous pouvez rencontrer des problèmes d'affichage. Nous vous conseillons Firefox, Chrome, Opera ou Safari pour une utilisation optimale du site.")
 }
-
-</script>
-    </body>
+</script></body>
 </html>

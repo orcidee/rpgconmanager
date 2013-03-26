@@ -105,7 +105,7 @@ if($user){
                 </form> <?php
                 
             }else{
-                print "<p>La créature chargée de valider les parties pense que ces informations ".
+                print "<p>Le gratte-papier chargé de valider les parties pense que ces informations ".
                 "contiennent des erreurs.</p><p>Pouvez-vous vérifier :</p><ul>".
                 "<li>que tous les champs obligatoires soient remplis</li>".
                 "<li>que le nombre minimum de joueurs soit bien un nombre strictement positif</li>".
@@ -132,7 +132,7 @@ if($user){
                 $saveOK = $p->save();
                 if($saveOK) {
                     echo "<p>Partie <strong>".(($edit)?'éditée':'créée')."</strong> avec succès.</p>".
-                    "<p>Vous allez recevoir un mail de confirmation tout soudain !</p>";
+                    "<p>Vous allez recevoir un mail de confirmation sous peu!</p>";
                 
                     // Send congratulation's mail
                     $isMailOk = Orcimail::notifyCreate($p, $edit);
@@ -266,6 +266,9 @@ if($user){
                     
                         <legend>Organisation</legend>
                         
+                        <div id='animation'>Nous informons nos très chers MJs qu'une table ronde sur le JDR sera organisée entre <strong>17h00 et 21h00</strong> le samedi soir. 
+                       Merci de prendre cela en compte pour agender votre partie!</div>
+                        
                         <label for='duration'>Durée prévue</label>
                         <select name='duration' id='duration' $enable>";
                             
@@ -337,8 +340,7 @@ if($user){
             </form>
             
             <?php
-            
-            
+                
             
         }
     }else{

@@ -25,6 +25,11 @@ ul, li{
     overflow:hidden;
     clear:both;
 }
+div.party-create textarea.clear
+{
+overflow-y:scroll;
+}
+
 .w300{
     width:300px;
 }
@@ -89,6 +94,7 @@ textarea{
     float:none;
     clear:both;
     width:400px;
+    height: 100px;
 }
 input.subscribe{
     width:280px;
@@ -270,16 +276,19 @@ td.application-controls{
 	text-align:left;
 }
 .list li div.top{
-    background-color:#F2BBF9;
 }
 .list li div.type{
-    font-size:0.8em;
+    font-size:1em;
     font-weight:bold;
     padding:13px 0 0 0;
 }
 .list li div.name{
     font-size:1.3em;
     font-weight:bold;
+}
+.list div.state
+{
+margin-top: 2px;	
 }
 ul.pagination {
     text-align: center;

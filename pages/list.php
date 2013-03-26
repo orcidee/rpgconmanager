@@ -448,7 +448,7 @@ if($isListShowable){
 							</div>
 							<?php if(!$animates && $p->accMail()){ ?>
 							<div class="more clear">
-								<span onClick="showElem('ctct_mj_<?php echo $row['partyId']; ?>')">Contacter le MJ:</span>
+								<span class="mailMJ" onClick="showElem('ctct_mj_<?php echo $row['partyId']; ?>')">>>Contacter le MJ<<</span>
 								<ul id="ctct_mj_<?php echo $row['partyId']; ?>" style="display:none">
 									
 									<div id="ret_ctct_mj_<?php echo $row['partyId']; ?>" style="width:100%"></div>
@@ -458,7 +458,7 @@ if($isListShowable){
 											<span>Email:</span><input email="true" error_id="error_mail_<?php echo $row['partyId']; ?>" require="true" onBlur="testInput(this)" type="text" value="" id="mail_ctct_mj_<?php echo $row['partyId']; ?>"><br /><div id="error_mail_<?php echo $row['partyId']; ?>"></div><br />
 										<?php }?>
 									
-										<span>Message:</span>
+										<p><span>Message:</span></p>
 										<textarea id="txt_ctc_mj_<?php echo $row['partyId']; ?>" rows="10" cols="50"></textarea>
 										<input class="submit" type="button" onClick="sendMailAdmin('<?php echo $row['partyId']; ?>')" value="Envoyer">
 								</ul>
@@ -580,5 +580,4 @@ if($isListShowable){
     if(!Controls::isPlayerOpen()){
         echo "<p>L'inscription joueur n'est pas encore disponible.</p>";
     }
-
 } ?>
