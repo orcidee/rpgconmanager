@@ -415,18 +415,19 @@ ul.pagination li a{
     text-decoration:none;
     font-weight:normal;
 }
-ul.pagination li a.activ{
+ul.pagination li a:activ{
     color:#000;
     font-weight:bold;
 }
-ul.pagination li a:hover{
+ul.pagination li a:hover
+{
     text-decoration:underline;
 }
 
-.party-create .party-preview{
+.party-create.party-preview{
     border:1px solid;
 }
-.party-create .party-preview td{
+.party-create.party-preview td{
     border:1px solid;
     padding: 3px 5px;
 }
@@ -505,14 +506,14 @@ div.profile ul.result
 {
 	margin: 0px 20px 15px 20px;
 }
-#dispo-preview li{
+#dispo-preview li
+{
     display:block;
     height:12px;
     margin:0;
     padding:0;
     font-family:verdana;
     font-size:0.6em;
-    overflow:hidden;
     background-color:#efefef;
 }
 #dispo-preview li.flip{

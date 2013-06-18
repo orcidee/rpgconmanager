@@ -25,6 +25,7 @@ ul, li{
     overflow:hidden;
     clear:both;
 }
+
 div.party-create textarea.clear
 {
 overflow-y:scroll;
@@ -366,7 +367,6 @@ ul.pagination li a:hover{
     padding:0;
     font-family:verdana;
     font-size:0.6em;
-    overflow:hidden;
     background-color:#efefef;
 }
 #dispo-preview li.flip{
