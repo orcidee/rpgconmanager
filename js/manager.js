@@ -417,11 +417,13 @@ orcidee.manager = {
                                 charge=0,
                                 flip="",
                                 state="";
-                            
-                            for (var i=0 ; i < me.options.slots ; i++){
+
+                            var i = 0;
+                            for( var slotId in msg.slots){
+                                i++;
                                 
                                 // Current slot (inscriptions in 1 hour)
-                                var slot = msg.slots[i];
+                                var slot = msg.slots[slotId];
                                 
                                 // Current hour label
                                 time = i + me.options.start;
