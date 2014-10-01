@@ -21,7 +21,8 @@ ul, li{
 .left{
     float:left;
 }
-.clear{
+.clear,
+.mce-tinymce{
     overflow:hidden;
     clear:both;
 }
@@ -62,7 +63,7 @@ ul.profile label{
     font-weight:bold;
     margin:20px 0;
     clear:both;
-    display:none;
+    display:block;
 }
 .dbg pre{
     font-size: 1em;

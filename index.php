@@ -12,6 +12,18 @@ require_once(dirname(__FILE__).'/conf/conf.php');
         <link rel="stylesheet" type="text/css" href="css/styles.css?_<?php echo CACHE_KILL;?>" />
 		<link rel="stylesheet" type="text/css" href="css/2013.css?_<?php echo CACHE_KILL;?>"/>
 
+        <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
+        <script type="text/javascript">
+            tinymce.init({
+                selector: "textarea.tiny-mce",
+                menubar: false,
+                plugins: "link hr code table textcolor preview",
+                toolbar: [
+                    "styleselect | bold italic underline forecolor | table | code",
+                    "link hr bullist numlist | alignleft aligncenter alignright | removeformat | preview"
+                ]
+            });
+        </script>
 
     </head>
     <body>
