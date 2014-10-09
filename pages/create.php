@@ -150,7 +150,7 @@ if($user){
         }
 		
 		if($createOrEdit) {
-            
+
             // Default: Reedit form, before saving new party.
             // pv = previous values. No previous values by default.
             $editExisting = false;
@@ -279,14 +279,15 @@ if($user){
                         echo "</select>
                         
                         <label for='start'>Heure de début souhaitée</label>
+
+
                         <select name='start' class='' id='start' $enable>";
                             
                             $start = strtotime(Controls::getConvStart());
                             $end = strtotime(END_AT);
-                            
                             for($i = $start ; $i<$end ; $i+=3600){
                                 $l = (strftime("%d-%m-%Y %H", $i)) . ":00";
-                                $v = (strftime("%Y-%m-%d %H", $i)) . ":00:00";
+                                $v = (strftime("%Y-%m-%d %H", $i)) . ":00";
                                 $selected = ($v == $pv['start']) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             }
@@ -339,6 +340,8 @@ if($user){
                 
             </form>
             
+			<p class="center"><a href="?page=contact" id="create-help">Help!</a></p>
+			
             <?php
                 
             
