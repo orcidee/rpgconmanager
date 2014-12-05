@@ -196,9 +196,15 @@ if($isListShowable){
 						$sqlUsers = "SELECT Distinct Users.userId, Users.firstname, Users.lastname FROM Users".
 									" JOIN Parties ON Users.userId = Parties.UserId".
 									$join;
-						if(count($where) > 0) {
-							$sqlUsers .= ' WHERE ' . implode(" AND ",$where);
-						}
+
+                        if($filterYear && is_numeric($_POST['year'])){
+                            $sqlUsers .= " WHERE Parties.year = ".$_POST['year'];
+                        }
+
+                        if(@$_POST['typeId'] != "" && is_numeric($_POST['typeId'])){
+                            $sqlUsers .= ($filterYear?" AND ":" WHERE ") . "Parties.typeId = ".$_POST['typeId'];
+                        }
+
 						$sqlUsers .= " order by Users.firstname, Users.lastname";
 						$resUsers = mysql_query ( $sqlUsers );
 						while ($rowUser = mysql_fetch_assoc($resUsers)) {
