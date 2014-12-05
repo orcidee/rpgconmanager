@@ -22,8 +22,8 @@ if(!$db){
 			header("Content-type: application/vnd.ms-excel");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
-            $startDate = new DateTime(Controls::getConvStart());
-            $start = strtotime(Controls::getConvStart());
+            $startDate = new DateTime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
+            $start = strtotime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
             $end = strtotime(END_AT);
 			$startHour = $startDate->format("H");
 			$duration = ($end - $start) / 3600;
