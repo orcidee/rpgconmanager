@@ -67,7 +67,7 @@ class Party {
                 $this->description = $data['description'];
                 $this->note = $data['note'];
                 $this->language = $data['language'];
-                $this->year = THIS_YEAR;
+                $this->year = Controls::getDate(Controls::CONV_START, "Y");
                 $this->state = "created";
                 $this->isFake = true;
                 

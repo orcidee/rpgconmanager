@@ -31,11 +31,12 @@ if($user){
 					<td>Table</td>
 				</tr>
 <?php
+                $thisYear = Controls::getDate(Controls::CONV_START, "Y");
 				$sql = "SELECT Parties.*, Types.name as typeName, Users.* FROM Parties".
 						" JOIN Types on Parties.typeId = Types.typeId".
 						" JOIN Users on Parties.userId = Users.userId".
 						" WHERE Parties.state in ('validated', 'verified')".
-						" AND Parties.year = ".THIS_YEAR.
+						" AND Parties.year = ".$thisYear.
 						" ORDER BY Parties.start ASC";
 				$res = mysql_query ( $sql );
 

@@ -95,7 +95,8 @@ if(@$_POST['formFiltered']){
 		$where[] = "Parties.state = '".$_POST['partyState']."'";
 	}
 }
-if(!$filterYear) $where[] = "Parties.year = ".THIS_YEAR;
+$thisYear = Controls::getDate(Controls::CONV_START, "Y");
+if(!$filterYear) $where[] = "Parties.year = ".$thisYear;
 
 $sortType = "Parties.start";
 if (isset($_POST['sortType'])){
