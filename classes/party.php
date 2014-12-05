@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/../conf/bd.php');
 require_once(dirname(__FILE__).'/user.php');
 require_once(dirname(__FILE__).'/orcimail.php');
 require_once(dirname(__FILE__).'/inscription.php');
@@ -67,7 +66,7 @@ class Party {
                 $this->description = $data['description'];
                 $this->note = $data['note'];
                 $this->language = $data['language'];
-                $this->year = Controls::getDate(Controls::CONV_START, "Y");
+                $this->year = Controls::getDate(Controls::CONV_START, '%Y');
                 $this->state = "created";
                 $this->isFake = true;
                 

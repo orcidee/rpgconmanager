@@ -1,6 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/../conf/bd.php');
-require_once(dirname(__FILE__).'/../conf/conf.php');
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
 

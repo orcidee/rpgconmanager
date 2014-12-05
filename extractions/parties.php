@@ -19,7 +19,8 @@ if(!$db){
 	if($user){
 		
 		if($user->getRole() == "administrator"){
-            $thisYear = Controls::getDate(Controls::CONV_START, "Y");
+            $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
+            var_dump($thisYear);
 			$sql = "SELECT Parties.*, Users.lastname, Users.firstname FROM Parties join Users on Parties.userId = Users.userId WHERE Parties.state in ('validated', 'verified') AND Parties.year = ".$thisYear." order by Parties.partyId ASC";
 			$res = mysql_query ( $sql );
 

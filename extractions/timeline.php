@@ -66,7 +66,7 @@ if(!$db){
 					}
 				echo "</tr>";
 
-                $thisYear = Controls::getDate(Controls::CONV_START, "Y");
+                $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
 				$sql = "SELECT Parties.*, Types.name as typeName FROM Parties join Types on Parties.typeId = Types.typeId WHERE Parties.state in ('validated', 'verified') AND Parties.year = ".$thisYear." order by Parties.start ASC";
 				$res = mysql_query ( $sql );
 

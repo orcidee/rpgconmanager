@@ -1,6 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/../conf/bd.php');
-require_once(dirname(__FILE__).'/../conf/conf.php');
 
 /**
 * Cette classe contient une série de méthode static qui servent à controler l'état de l'application,
@@ -249,9 +247,9 @@ class Controls {
         }*/
         $pageURL .= "://";
         if ($_SERVER["SERVER_PORT"] != "80") {
-            $pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"]."/".MODULE_PATH."/";
+            $pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"]."/".MODULE_PATH;
         } else {
-            $pageURL .= $_SERVER["HTTP_HOST"]."/orcidee/".MODULE_PATH."/";
+            $pageURL .= $_SERVER["HTTP_HOST"]."/".MODULE_PATH;
         }
         return $pageURL;
     }

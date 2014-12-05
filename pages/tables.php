@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__).'/../conf/bd.php');
-require_once(dirname(__FILE__).'/../conf/conf.php');
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
 require_once(dirname(__FILE__).'/../classes/party.php');
@@ -31,7 +29,7 @@ if($user){
 					<td>Table</td>
 				</tr>
 <?php
-                $thisYear = Controls::getDate(Controls::CONV_START, "Y");
+                $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
 				$sql = "SELECT Parties.*, Types.name as typeName, Users.* FROM Parties".
 						" JOIN Types on Parties.typeId = Types.typeId".
 						" JOIN Users on Parties.userId = Users.userId".

@@ -64,7 +64,7 @@ if(!$db){
 <?php
 					}
 
-                $thisYear = Controls::getDate(Controls::CONV_START, "Y");
+                $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
 				$sql = "SELECT Parties.* FROM Parties WHERE Parties.state in ('validated', 'verified') and Parties.table is not null AND Parties.year = ".$thisYear." order by Parties.table, Parties.start ASC";
 				$res = mysql_query ( $sql );
 

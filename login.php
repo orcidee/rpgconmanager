@@ -9,7 +9,7 @@ $head = "
 <html lang='fr' >
     <head>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
-        <meta name='description' lang='fr' content='Module de gestion des parties Orc'Idee'>
+        <meta name='description' lang='fr' content='Module de gestion des parties OrcIdee'>
         <meta name='keywords' lang='fr' content='orcidee'>
 		<link rel='stylesheet' type='text/css' href='css/jquery-ui.css' />
         <link rel='stylesheet' type='text/css' href='css/styles.css' />
@@ -18,13 +18,12 @@ $head = "
     </head>
     <body>
 ";
+require_once(dirname(__FILE__).'/conf/conf.php');
 
-require_once(dirname(__FILE__).'/conf/bd.php');
 $dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());;
 $db = (mysql_select_db(DB));
 mysql_query("SET NAMES 'utf8'");
 
-require_once(dirname(__FILE__).'/conf/conf.php');
 require_once(dirname(__FILE__).'/classes/controls.php');
 require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
@@ -33,9 +32,8 @@ if(!$db){
     echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
 }else{
 
-    
     $user = User::getFromSession();
-    
+
     include "menu.php";
     
     if($user && $user->getRole() != "player") {

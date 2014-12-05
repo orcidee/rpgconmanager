@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__).'/../conf/bd.php');
-require_once(dirname(__FILE__).'/../conf/conf.php');
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
 require_once(dirname(__FILE__).'/../classes/party.php');
@@ -95,7 +93,7 @@ if(@$_POST['formFiltered']){
 		$where[] = "Parties.state = '".$_POST['partyState']."'";
 	}
 }
-$thisYear = Controls::getDate(Controls::CONV_START, "Y");
+$thisYear = Controls::getDate(Controls::CONV_START, '%Y');
 if(!$filterYear) $where[] = "Parties.year = ".$thisYear;
 
 $sortType = "Parties.start";

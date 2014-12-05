@@ -30,13 +30,11 @@ require_once(dirname(__FILE__).'/conf/conf.php');
     <body>
 
 <?php
-require_once(dirname(__FILE__).'/conf/bd.php');
-$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());;
+$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());
 $db = (mysql_select_db(DB));
 mysql_query("SET NAMES 'utf8'");
 
 require_once(dirname(__FILE__).'/classes/controls.php');
-
 require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
