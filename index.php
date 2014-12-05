@@ -13,7 +13,7 @@ require_once(dirname(__FILE__).'/conf/conf.php');
 		<link rel="stylesheet" type="text/css" href="css/2014.css?_<?php echo CACHE_KILL;?>"/>
         <link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC|Playfair+Display:400,400italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
 
-        <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
+        <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
         <script type="text/javascript">
             tinymce.init({
                 selector: "textarea.tiny-mce",
