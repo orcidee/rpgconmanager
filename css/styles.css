@@ -419,3 +419,16 @@ margin-left: 200px;
 margin-right: 200px;
 font-weight:bold;
 }
+
+.dates-controls .info{
+    height: 3em;
+}
+
+.dates-controls .info span{
+    background: none repeat scroll 0 0 #e5e5e5;
+    border: 2px groove #e5e5e5;
+    font-family: "HelveticaNeueLTStd47LtCn", "arial Narrow", helvetica, sans-serif;
+    font-weight: bold;
+    margin: 0 5px;
+    padding: 2px 20px 3px;
+}

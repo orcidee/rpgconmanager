@@ -7,6 +7,17 @@ require_once(dirname(__FILE__).'/../conf/conf.php');
 * ainsi que quelques méthodes transversales utiles au fonctionnement de l'application.
 */
 class Controls {
+
+
+    const CONV_START = "convStart";
+    const CONV_END = "convEnd";
+    const APP_OPEN = "appOpenDate";
+    const APP_CLOSE = "appCloseDate";
+    const MJ_OPEN = "mjOpenDate";
+    const MJ_CLOSE = "mjCloseDate";
+    const PLAYER_OPEN = "playerOpenDate";
+    const PLAYER_CLOSE = "playerCloseDate";
+
     
     /**
     * Retourne TRUE si l'application est ouverte, FALSE sinon.
@@ -99,58 +110,28 @@ class Controls {
         }
         return false;
     }
-    
+
+
     /**
-    * Retourne la date (timestamp) de la prochaine convention.
-    */
-    public static function getConvDate($pattern = null){
-        return self::getDatesOfKey($pattern, "convDate");
+     * Retourne le timestamp ou la date formattée selon $pattern, d'une date identifiée par $dateIdentifier.
+     *
+     * @param string $dateIdentifier L'identifiant de la date. Devrait se baser sur une constant de Controls.
+     * @param null $pattern Le pattern de formattage pour retourner la date en String.
+     * @return bool|int|string
+     */
+    public static function getDate($dateIdentifier, $pattern = null){
+        return self::getDatesOfKey($pattern, $dateIdentifier);
     }
-    
+
     /**
-    * Retourne la date et heure de la prochaine convention.
-    */
-	// TODO L'heure devrait être définie via la page de contrôles...
-    public static function getConvStart(){
-        return self::getConvDate("%Y-%m-%d") . " 11:00:00";
+     * @param $dateIdentifier
+     * @param $stamp
+     * @return bool
+     */
+    public static function setDate($dateIdentifier, $stamp){
+        return self::setDatesOfKey($stamp, $dateIdentifier);
     }
-    /**
-    * Retourne la date (timestamp) d'ouverture de l'application, ou False si inconnue.
-    */
-    public static function getAppOpenDate($pattern = null){
-        return self::getDatesOfKey($pattern, "appOpenDate");
-    }
-    /**
-    * Retourne la date (timestamp) de fermeture de l'application, ou False si inconnue.
-    */
-    public static function getAppCloseDate($pattern = null){
-        return self::getDatesOfKey($pattern, "appCloseDate");
-    }
-    /**
-    * Retourne la date (timestamp) d'ouverture des services MJ, ou False si inconnue.
-    */
-    public static function getMjOpenDate($pattern = null){
-        return self::getDatesOfKey($pattern, "mjOpenDate");
-    }
-    /**
-    * Retourne la date (timestamp) de fermeture des services MJ, ou False si inconnue.
-    */
-    public static function getMjCloseDate($pattern = null){
-        return self::getDatesOfKey($pattern, "mjCloseDate");
-    }
-    /**
-    * Retourne la date (timestamp) d'ouverture des services Joueur, ou False si inconnue.
-    */
-    public static function getPlayerOpenDate($pattern = null){
-        return self::getDatesOfKey($pattern, "playerOpenDate");
-    }
-    /**
-    * Retourne la date (timestamp) de fermeture des services Joueur, ou False si inconnue.
-    */
-    public static function getPlayerCloseDate($pattern = null){
-        return self::getDatesOfKey($pattern, "playerCloseDate");
-    }
-    
+
     /**
     * Defini en BD la date (timestamp) de la prochaine convention. Retourne true réussi.
     */

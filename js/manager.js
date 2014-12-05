@@ -482,60 +482,62 @@ orcidee.manager = {
         init: function() {
             var me = this;
             // bind buttons events
-            $("input#conv-date").click(function(){
+            $("#conv-date").click(function(){
                 me.saveNewDates(this, $(".convention-date .conv-date")[0]);
             });
-            $("input#open-app").click(function(){
+            $("#app-dates").click(function(){
                 me.saveNewDates(this, $(".application-controls .open-date")[0]);
             });
-            $("input#close-app").click(function(){
-                me.saveNewDates(this, $(".application-controls .close-date")[0]);
-            });
-            $("input#open-mj").click(function(){
+            $("#mj-dates").click(function(){
                 me.saveNewDates(this, $(".mj-controls .open-date")[0]);
             });
-            $("input#close-mj").click(function(){
-                me.saveNewDates(this, $(".mj-controls .close-date")[0]);
-            });
-            $("input#open-player").click(function(){
+            $("#player-dates").click(function(){
                 me.saveNewDates(this, $(".player-controls .open-date")[0]);
-            });
-            $("input#close-player").click(function(){
-                me.saveNewDates(this, $(".player-controls .close-date")[0]);
             });
         },
         // Server request to save new dates
-        saveNewDates: function(btn, view){
+        saveNewDates: function(btn){
         
-            var action = $(btn).attr("id");
-        
-            $(view).append("<img src='img/ajax-loader.gif' class='loader' />");
-                
-            var dp = $(btn).siblings(".datepicker")[0];
-            var hours = $(btn).siblings("select")[0];
-            
-            var hoursValue = (typeof(hours) == 'undefined')?'00:00':$(hours).val();
-            
-            var date = $(dp).datepicker("getDate");
-            
-            var y = date.getFullYear(),
-                m = (date.getMonth() + 1).toString(),
-                d = (date.getDate()).toString();
-            
-            // prepared to PHP pattern: %Y/%m/%d %H:%M
-            var stamp = y + "/" + ((m.length==1)?"0":"") + m + "/" + ((d.length==1)?"0":"") + d + " " + hoursValue;
-            
-            $.ajax({
-                data:{"stamp": stamp, "action": action},
-                url:"actions/controls.php",
-                method: "GET",
-                dataType: "json",
-                success: function(msg, s, xhr){
-                    if(msg.status == "ok"){
-                        $(view).html(msg.newDate).fadeIn();
+            var $dates = $(btn).siblings(".row").find("[data-dateid]");
+
+            $dates.each(function(){
+
+                var date = $(this).find(".datepicker").datepicker("getDate");
+
+                var year  = date.getFullYear(),
+                    month = (date.getMonth() + 1).toString(),
+                    day   = (date.getDate()).toString();
+
+                var hours = $(this).find("select")[0],
+                    hoursValue = (typeof(hours) == 'undefined')?'00:00':$(hours).val(),
+                    dateId = $(this).data("dateid");
+
+                var phpStamp = year + "/" + ((month.length==1)?"0":"") + month + "/" + ((day.length==1)?"0":"") + day + " " + hoursValue;
+
+                $('.info-'+dateId).html("<img src='img/ajax-loader.gif' class='loader' />");
+
+                $.ajax({
+                    data:{
+                        "stamp": phpStamp,
+                        "action": dateId
+                    },
+                    url:"actions/controls.php",
+                    method: "GET",
+                    dataType: "json",
+                    success: function(msg, s, xhr){
+                        if(msg.status == "ok"){
+                            $('.info-'+dateId).html(msg.newDate).fadeIn();
+
+                            if(dateId == 'appOpenDate' || dateId == 'appCloseDate'){
+                                window.location.reload();
+                            }
+
+                        }
                     }
-                }
+                });
+
             });
+
         }
     },
     dbg: function(){
