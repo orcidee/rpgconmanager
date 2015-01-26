@@ -39,18 +39,25 @@ require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
 if(!$db){
-    echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
+    if($isDebug){
+        echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
+    }
 }else{
-
-    echo "<p class='dbg'>Connexion BD ok</p>";
 
     $view = new View();
     $user = User::getFromSession();
-    
-    echo "<div class='dbg'>User:";
-    echo ($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0" ;
-    echo "</div>";
-    
+
+    if($isDebug){
+        echo "<div class='dbg'>
+            <p>Database</p>
+             <ul>
+                <li>Connexion ok</li>
+                <li>Using ".DB."</li>
+                </ul>
+            <p>User: ". (($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0");
+        echo "</p></div>";
+    }
+
     $title = null;
     
     switch (@$_GET['page']){

@@ -281,8 +281,8 @@ if($user){
 
                         <select name='start' class='' id='start' $enable>";
                             
-                            $start = strtotime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
-                            $end = strtotime(END_AT);
+                            $start  = Controls::getDate(Controls::CONV_START);
+                            $end    = Controls::getDate(Controls::CONV_END);
                             for($i = $start ; $i<$end ; $i+=3600){
                                 $l = (strftime("%d-%m-%Y %H", $i)) . ":00";
                                 $v = (strftime("%Y-%m-%d %H", $i)) . ":00";

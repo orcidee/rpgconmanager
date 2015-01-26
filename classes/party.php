@@ -354,11 +354,10 @@ class Party {
         $result = array();
         $result["status"] = "ok";
         
-        // Constantes (pattern BD)
-        $start = strtotime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
-        $end = strtotime(END_AT);
+        $start = Controls::getDate(Controls::CONV_START);
+        $end = Controls::getDate(Controls::CONV_END);
         $nb = ($end - $start) / 60 / 60 ;
-        
+
         // Slots[partyId's]
         $slots = array();
         for($i=0;$i<$nb;$i++){
@@ -366,7 +365,8 @@ class Party {
         }
         
         // Initialisation des slots
-        $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused')";
+        $year = Controls::getDate(Controls::CONV_START, "Y");
+        $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused') AND year('start') = $year";
         $res = mysql_query ( $sql );
         
         while ($row = mysql_fetch_assoc($res)) {
@@ -397,7 +397,7 @@ class Party {
                         }
                     }
                 }
-                
+
                 // Ajoute une charge aux slots souhaités
                 for($i=$wishStart;$i<($wishDuration+$wishStart);$i++){
                     $slots[$i][] = (!is_null($existingId) && $existingId != "") ? $existingId : "new";
@@ -620,7 +620,7 @@ class Party {
 	
     private static function dateToSlot($date){
     
-        $start = strtotime(START_AT);
+        $start = Controls::getDate(Controls::CONV_START);
         $d = strtotime($date);
         
         $nb = ($d - $start) / 60 / 60 ;
