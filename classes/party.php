@@ -368,14 +368,16 @@ class Party {
         $year = Controls::getDate(Controls::CONV_START, "Y");
         $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused') AND year('start') = $year";
         $res = mysql_query ( $sql );
-        
-        while ($row = mysql_fetch_assoc($res)) {
-            $start = self::dateToSlot($row['start']);
-            $duration = $row['duration'];
-            $partyId = $row['partyId'];
-                        
-            for($i=$start;$i<($duration+$start);$i++){
-                $slots[$i][] = $partyId;
+
+        if($res) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $start = self::dateToSlot($row['start']);
+                $duration = $row['duration'];
+                $partyId = $row['partyId'];
+
+                for ($i = $start; $i < ($duration + $start); $i++) {
+                    $slots[$i][] = $partyId;
+                }
             }
         }
         

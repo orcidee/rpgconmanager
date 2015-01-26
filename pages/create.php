@@ -22,8 +22,9 @@ if($user){
         // AFFICHAGE DES DONNEES SAISIES - DEMANDE DE CONFIRMATION
         if (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
             
-
-			echo "<div class='dbg'>demande de confirmation (".@$_POST['action'].")</div>";
+            if(IS_DEBUG) {
+                echo "<div class='dbg'>demande de confirmation (" . @$_POST['action'] . ")</div>";
+            }
 		
             // create a fake party
             $data = $_POST;
@@ -121,9 +122,11 @@ if($user){
             $p = unserialize($_SESSION['party']);
             $edit = (!is_null($p->getId()) && strlen($p->getId()) > 0);
 
-			echo "<div class='dbg'>sauvegarde";
-			echo is_null($p->getId()) ? " (création)" : " (édition partie n°".$p->getId().")";
-			echo "</div>";
+            if(IS_DEBUG) {
+                echo "<div class='dbg'>sauvegarde";
+                echo is_null($p->getId()) ? " (création)" : " (édition partie n°" . $p->getId() . ")";
+                echo "</div>";
+            }
             
             if($p->isValid){
                 unset($_SESSION['party']);
@@ -182,9 +185,11 @@ if($user){
 				}
             }
 
-			echo "<div class='dbg'>";
-			echo $editExisting ? "édition partie n°".$pv['partyId'] : "création (?)";
-			echo "</div>";
+            if(IS_DEBUG) {
+                echo "<div class='dbg'>";
+                echo $editExisting ? "édition partie n°" . $pv['partyId'] : "création (?)";
+                echo "</div>";
+            }
             
             // Avoid reediting critical fields when the party has been validated already
             $enable = "";

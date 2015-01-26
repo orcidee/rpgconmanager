@@ -39,7 +39,7 @@ require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
 if(!$db){
-    if($isDebug){
+    if(IS_DEBUG){
         echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
     }
 }else{
@@ -47,7 +47,7 @@ if(!$db){
     $view = new View();
     $user = User::getFromSession();
 
-    if($isDebug){
+    if(IS_DEBUG){
         echo "<div class='dbg'>
             <p>Database</p>
              <ul>
