@@ -7,13 +7,18 @@ class View {
     public function __construct () {
         $this->content = null;
     }
-	
-	public static function MultilineFormat($str, $isTextArea = false ) {
-		if($isTextArea) {
-			return htmlentities($str, ENT_COMPAT, "utf-8");
-		} else {
-			return nl2br(htmlentities($str, ENT_COMPAT, "utf-8"));
-		}
+
+    /**
+     * @param String $str The text to display
+     * @param bool $isRTF Set to true if $str is Rich Text Format
+     * @return string The text ready for display
+     */
+	public static function MultilineFormat($str, $isRTF = false) {
+        if($isRTF){
+            return "<div class='rtf'>$str</div>";
+        }else{
+            return nl2br(htmlentities($str, ENT_COMPAT, "utf-8"));
+        }
 	}
     
     public function html (){

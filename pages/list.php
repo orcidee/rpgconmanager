@@ -381,7 +381,7 @@ if($isListShowable){
 							</div>
 							<div class="more clear">
 							<span>Description:</span>
-										<?php echo View::MultilineFormat($row['description']);?>
+										<?php echo View::MultilineFormat($row['description'], true);?>
 							</div>
 							<div class="more clear">
 								<div class='left'>

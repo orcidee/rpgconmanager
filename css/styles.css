@@ -430,3 +430,10 @@ font-weight:bold;
     margin: 0 5px;
     padding: 2px 20px 3px;
 }
+.rtf table{
+    width:auto;
+}
+.rtf ul, .rtf li, .list .rtf li{
+    margin: auto;
+    list-style: inside none disc;
+}
