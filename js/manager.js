@@ -1,16 +1,9 @@
-function log (msg){
-    if(typeof(console.info) == 'function'){
-        console.info(msg);
-    } else if(typeof(console.log) == 'function') {
-        console.log(msg);
-    }
-}
-
 if (typeof(orcidee) != 'object'){
     orcidee = {};
 }
 
 orcidee.manager = {
+    isDebug: false,
     init: function(){
     
         this.additionalCss = "t2012";
@@ -373,16 +366,7 @@ orcidee.manager = {
         }
     },
     createParty: {
-        /*
-        Constantes définies dans /scripts.php
-        options: {
-            // nombre d'heure durant la conv
-            slots: 31,
-            // nombre max de partie par slot (nb de table)
-            max: 50,
-            // heure de debut
-            start:10
-        }, */
+
         init: function(){
             var me = this;
             // bind events
@@ -420,8 +404,7 @@ orcidee.manager = {
 
                             var i = 0;
                             for( var slotId in msg.slots){
-                                i++;
-                                
+
                                 // Current slot (inscriptions in 1 hour)
                                 var slot = msg.slots[slotId];
                                 
@@ -447,6 +430,7 @@ orcidee.manager = {
                                 html += "<li class='"+flip+"'><div class='h'>"+label+"</div>" +
                                 "<div class='bar'><div style='width:"+charge+"%' class='"+state+"'>"+
                                 "</div></div></li>";
+                                i++;
                             }
                             html += "</ul>"
                         }else{
@@ -567,3 +551,13 @@ orcidee.manager = {
 $(document).ready(function(){
     orcidee.manager.init();
 });
+
+function log (msg){
+    if(orcidee.manager.isDebug) {
+        if (typeof(console.info) == 'function') {
+            console.info(msg);
+        } else if (typeof(console.log) == 'function') {
+            console.log(msg);
+        }
+    }
+}
