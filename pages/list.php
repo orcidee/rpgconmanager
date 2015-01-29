@@ -77,28 +77,28 @@ if($user && $user->getRole() == 'administrator'){
 }
 
 $filterYear = false;
-if(@$_POST['formFiltered']){
-    if(@$_POST['year'] != "")
+if(@$_GET['formFiltered']){
+    if(@$_GET['year'] != "")
 	{
 		$filterYear = true;
-		if (is_numeric($_POST['year'])) $where[] = "Parties.year = ".$_POST['year'];
+		if (is_numeric($_GET['year'])) $where[] = "Parties.year = ".$_GET['year'];
 	}
-	if(@$_POST['typeId'] != "" && is_numeric($_POST['typeId'])){
-		$where[] = "Parties.typeId = ".$_POST['typeId'];
+	if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
+		$where[] = "Parties.typeId = ".$_GET['typeId'];
 	}
-	if(@$_POST['animId'] != "" && is_numeric($_POST['animId'])){
-		$where[] = "Parties.userId = ".$_POST['animId'];
+	if(@$_GET['animId'] != "" && is_numeric($_GET['animId'])){
+		$where[] = "Parties.userId = ".$_GET['animId'];
 	}
-	if(isset($_POST['partyState']) && $_POST['partyState'] != "" && strlen($stateLabels[$_POST['partyState']]) > 0){
-		$where[] = "Parties.state = '".$_POST['partyState']."'";
+	if(isset($_GET['partyState']) && $_GET['partyState'] != "" && strlen($stateLabels[$_GET['partyState']]) > 0){
+		$where[] = "Parties.state = '".$_GET['partyState']."'";
 	}
 }
 $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
 if(!$filterYear) $where[] = "Parties.year = ".$thisYear;
 
 $sortType = "Parties.start";
-if (isset($_POST['sortType'])){
-	switch ($_POST['sortType']){
+if (isset($_GET['sortType'])){
+	switch ($_GET['sortType']){
 		case "duration":
 			$sortType = "Parties.duration";
 			break;
@@ -110,7 +110,7 @@ if (isset($_POST['sortType'])){
 	}
 }
 $sortOrder = "ASC";
-if(isset($_POST['sortOrder']) && $_POST['sortOrder'] == "desc"){
+if(isset($_GET['sortOrder']) && $_GET['sortOrder'] == "desc"){
 	$sortOrder = "DESC";
 }
 $order = " ORDER BY ".$sortType." ".$sortOrder;
@@ -164,8 +164,9 @@ if($isListShowable){
     </div>
 
 	<!-- Form to filter and sort results -->
-	<form id="filteringForm" action="" method="POST">
+	<form id="filteringForm" action="" method="GET">
 		<input type='hidden' name="formFiltered" value="true">
+		<input type='hidden' name="page" value="list">
 		<div>
 			<fieldset>
 				<legend>Filtrer par :</legend>
@@ -174,7 +175,7 @@ if($isListShowable){
                     <?php
                     $years = Party::getYears();
                     foreach($years as $year){
-                        echo "<option ".((@$_POST['year']==$year) ? "selected='selected'" : "")." value='".$year."' >".$year."</option>";
+                        echo "<option ".((@$_GET['year']==$year) ? "selected='selected'" : "")." value='".$year."' >".$year."</option>";
                     } ?>
                     <option value='all'>Toutes</option>
                 </select>
@@ -184,7 +185,7 @@ if($isListShowable){
 					<?php
 						// Get the types from DB
 						foreach(Party::getTypes() as $typeId => $type){
-							echo "<option ".((@$_POST['typeId']==$typeId) ? "selected='selected'" : "")." value='".$typeId."' title='".$type['description']."'>".stripslashes($type['name'])."</option>";
+							echo "<option ".((@$_GET['typeId']==$typeId) ? "selected='selected'" : "")." value='".$typeId."' title='".$type['description']."'>".stripslashes($type['name'])."</option>";
 						}
 					?>
 				</select>
@@ -197,18 +198,19 @@ if($isListShowable){
 									" JOIN Parties ON Users.userId = Parties.UserId".
 									$join;
 
-                        if($filterYear && is_numeric($_POST['year'])){
-                            $sqlUsers .= " WHERE Parties.year = ".$_POST['year'];
+                        $year = is_numeric($_GET['year'])?$_GET['year']:2015;
+                        if($filterYear && $year){
+                            $sqlUsers .= " WHERE Parties.year = ".$_GET['year'];
                         }
 
-                        if(@$_POST['typeId'] != "" && is_numeric($_POST['typeId'])){
-                            $sqlUsers .= ($filterYear?" AND ":" WHERE ") . "Parties.typeId = ".$_POST['typeId'];
+                        if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
+                            $sqlUsers .= ($filterYear?" AND ":" WHERE ") . "Parties.typeId = ".$_GET['typeId'];
                         }
 
 						$sqlUsers .= " order by Users.firstname, Users.lastname";
 						$resUsers = mysql_query ( $sqlUsers );
 						while ($rowUser = mysql_fetch_assoc($resUsers)) {
-							echo "<option ".((@$_POST['animId']==$rowUser['userId']) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
+							echo "<option ".((@$_GET['animId']==$rowUser['userId']) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
 						}
 					?>
 				</select>
@@ -218,11 +220,11 @@ if($isListShowable){
 						<label for="partyState">Status</label>
 						<select name='partyState'>
 							<option value=''>---</option>
-							<option value='created' <?php echo (@$_POST['partyState']=="created") ? "selected='selected'" : "" ?>><?= $stateLabels['created'] ?></option>
-							<option value='verified' <?php echo (@$_POST['partyState']=="verified") ? "selected='selected'" : "" ?>><?= $stateLabels['verified'] ?></option>
-							<option value='validated' <?php echo (@$_POST['partyState']=="validated") ? "selected='selected'" : "" ?>><?= $stateLabels['validated'] ?></option>
-							<option value='refused' <?php echo (@$_POST['partyState']=="refused") ? "selected='selected'" : "" ?>><?= $stateLabels['refused'] ?></option>
-							<option value='canceled' <?php echo (@$_POST['partyState']=="canceled") ? "selected='selected'" : "" ?>><?= $stateLabels['canceled'] ?></option>
+							<option value='created' <?php echo (@$_GET['partyState']=="created") ? "selected='selected'" : "" ?>><?= $stateLabels['created'] ?></option>
+							<option value='verified' <?php echo (@$_GET['partyState']=="verified") ? "selected='selected'" : "" ?>><?= $stateLabels['verified'] ?></option>
+							<option value='validated' <?php echo (@$_GET['partyState']=="validated") ? "selected='selected'" : "" ?>><?= $stateLabels['validated'] ?></option>
+							<option value='refused' <?php echo (@$_GET['partyState']=="refused") ? "selected='selected'" : "" ?>><?= $stateLabels['refused'] ?></option>
+							<option value='canceled' <?php echo (@$_GET['partyState']=="canceled") ? "selected='selected'" : "" ?>><?= $stateLabels['canceled'] ?></option>
 						</select>
 				<?PHP
 					}
@@ -231,14 +233,14 @@ if($isListShowable){
 			<fieldset>
 				<legend>Trier par :</legend>
 				<select name='sortType'>
-					<option value='startTime' <?php echo (@$_POST['sortType']=="startTime") ? "selected='selected'" : "" ?>>Heure de début</option>
-					<option value='duration' <?php echo (@$_POST['sortType']=="duration") ? "selected='selected'" : "" ?>>Durée</option>
-					<option value='partyName' <?php echo (@$_POST['sortType']=="partyName") ? "selected='selected'" : "" ?>>Nom du jeu</option>
-					<option value='partyId' <?php echo (@$_POST['sortType']=="partyId") ? "selected='selected'" : "" ?>>Numéro de partie</option>
+					<option value='startTime' <?php echo (@$_GET['sortType']=="startTime") ? "selected='selected'" : "" ?>>Heure de début</option>
+					<option value='duration' <?php echo (@$_GET['sortType']=="duration") ? "selected='selected'" : "" ?>>Durée</option>
+					<option value='partyName' <?php echo (@$_GET['sortType']=="partyName") ? "selected='selected'" : "" ?>>Nom du jeu</option>
+					<option value='partyId' <?php echo (@$_GET['sortType']=="partyId") ? "selected='selected'" : "" ?>>Numéro de partie</option>
 				</select>
 				<select name='sortOrder'>
-					<option value='asc' <?php echo (@$_POST['sortOrder']=="asc") ? "selected='selected'" : "" ?>>croissant</option>
-					<option value='desc' <?php echo (@$_POST['sortOrder']=="desc") ? "selected='selected'" : "" ?>>décroissant</option>
+					<option value='asc' <?php echo (@$_GET['sortOrder']=="asc") ? "selected='selected'" : "" ?>>croissant</option>
+					<option value='desc' <?php echo (@$_GET['sortOrder']=="desc") ? "selected='selected'" : "" ?>>décroissant</option>
 				</select>
 			</fieldset>
 			<input type="submit" class="submit" value="Filter et Trier" />
@@ -265,8 +267,8 @@ if($isListShowable){
 			$pageSize = 10;
 			$max = ceil($total / $pageSize);
 			$currentP = 1;
-			if(isset($_POST['pageNb']) && is_numeric($_POST['pageNb']) && $_POST['pageNb'] > 0 && $_POST['pageNb'] <= $max){
-				$currentP = $_POST['pageNb'];
+			if(isset($_GET['pageNb']) && is_numeric($_GET['pageNb']) && $_GET['pageNb'] > 0 && $_GET['pageNb'] <= $max){
+				$currentP = $_GET['pageNb'];
 			}
 			$limit = " LIMIT ". (($currentP-1)* $pageSize) ."," . $pageSize;
 
@@ -516,7 +518,7 @@ if($isListShowable){
 		<form action='' method='GET'>
 			<input type="hidden" name="page" value="list" />
 			<input type="hidden" name="filter" value="mail" />
-			<?php echo $emailText; ?><input type="text" name='email' value='<?php echo @$_POST['email']; ?>' />
+			<?php echo $emailText; ?><input type="text" name='email' value='<?php echo @$_GET['email']; ?>' />
             <input type='submit' value="Voir mes parties" class='submit' />
 		</form>
 	</div>
