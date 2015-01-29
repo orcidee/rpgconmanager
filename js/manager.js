@@ -51,6 +51,47 @@ orcidee.manager = {
         actions: function(){
 			log("initialise les actions");
 
+            $("#filteringForm select[name='year']").change(function(){
+
+                var year = $(this).val();
+                var $animsSelect = $(this).siblings('select[name=animId]');
+                log("Change anim list with"+year);
+
+                $.ajax({
+                    data:{
+                        year: year
+                    },
+                    url:"actions/animators.php",
+                    type:"GET",
+                    dataType:"json",
+                    success:function(json, s, xhr){
+                        log(json);
+                        if(json.status == "ok"){
+                            // update select
+                            $animsSelect.empty();
+                            $animsSelect
+                                .append($("<option></option>")
+                                .attr("value",'')
+                                .text('---'));
+                            for(i in json.list){
+                                var user = json.list[i];
+                                $animsSelect
+                                    .append($("<option></option>")
+                                    .attr("value",user.id)
+                                    .text(user.firstName +' '+user.lastName));
+                            }
+
+                        } else {
+                            log("erreur lors de la récupération des animateur de "+year+" : " + s);
+                        }
+                    },
+                    error: function(xhr, s, e){
+                        log("erreur lors de la récupération des animateur de "+year+" : " + s);
+                    }
+                });
+
+            });
+
             $(".actions a.cancel").click(function(){
                 
                 var btn = this;

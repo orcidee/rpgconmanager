@@ -71,10 +71,35 @@ class User {
         }else{
             $sql = "SELECT * FROM Users";
         }
-        
+
         if(!is_null($sort) && ""!=$sort){
             $sql .= " ORDER BY $sort";
         }
+        return mysql_query ( $sql );
+    }
+
+    public static function getUsersByYear($role = 'all', $year=null, $sort = null){
+        if( ! is_numeric($year)){
+            return self::getUsers($role, $sort);
+        }
+
+        $sql = 'SELECT DISTINCT u.* FROM Users u ';
+
+        if($role == 'player'){
+            $sql .= 'WHERE u.userId not in (select a.userId FROM Animators a)';
+        }elseif($role == 'animator'){
+            $sql .= 'INNER JOIN Animators a ON u.userId = a.userId';
+        }elseif($role == 'administrator'){
+            $sql .= 'INNER JOIN Administrators a ON u.userId=a.userId';
+        }
+
+        $sql .= " JOIN Parties ON u.userId = Parties.UserId".
+            " WHERE Parties.year = ".$year;
+
+        if(!is_null($sort) && ""!=$sort){
+            $sql .= " ORDER BY u.$sort";
+        }
+
         return mysql_query ( $sql );
     }
     
