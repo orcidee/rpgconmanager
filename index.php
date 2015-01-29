@@ -24,9 +24,7 @@ require_once(dirname(__FILE__).'/conf/conf.php');
                     "link hr bullist numlist | alignleft aligncenter alignright | removeformat | preview"
                 ],
                 init_instance_callback: function(editor) {
-                    console.log("tinyMCE CB");
                     setTimeout(function(){
-                        console.log("tinyMCE CB after timoeut");
                         orcidee.manager.adaptHeight();
                     }, 200);
                 }
