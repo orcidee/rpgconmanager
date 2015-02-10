@@ -29,12 +29,34 @@ $isListShowable = $isListShowable && (@$_GET['action'] != 'unsubscribe') ;
 // filters
 $filtered = false;
 $addTitle = "";
-$sql = "SELECT Parties.* FROM Parties";
-$sqlCount = "SELECT COUNT(Parties.partyId) AS NumberOfParties FROM Parties";
+$sql = "SELECT p.* FROM Parties p";
+$sqlCount = "SELECT COUNT(p.partyId) AS NumberOfParties FROM Parties as p";
 $join = "";
 $where = array();
 $limit = "";
 $order = "";
+
+$freeSpaceOnly = false;
+if(isset($_GET['free-space-only']) && $_GET['free-space-only'] == "on" ){
+	$freeSpaceOnly = true;
+	$sql = "SELECT distinct (p.partyId), p.* FROM Parties p
+			where (
+				p.partyId not in (
+					select i.partyId from Inscriptions i where i.partyId = p.partyId
+				) or p.playerMax > (
+					SELECT count(i.partyId) from Inscriptions i WHERE i.partyId = p.partyId
+				)
+			) ";
+	$sqlCount = "SELECT count(distinct (p.partyId)) AS NumberOfParties, p.* FROM Parties p
+				where (
+					p.partyId not in (
+						select i.partyId from Inscriptions i where i.partyId = p.partyId
+					) or p.playerMax > (
+						SELECT count(i.partyId) from Inscriptions i WHERE i.partyId = p.partyId
+					)
+				) ";
+}
+
 if(isset($_GET['filter'])){
     switch ($_GET['filter']){
         
@@ -45,8 +67,8 @@ if(isset($_GET['filter'])){
             }
             if($user){
                 $_SESSION["userEmail"] = $user->getEmail();
-                $join = " JOIN Inscriptions ON Parties.partyId=Inscriptions.partyId ";
-				$where[] = "Inscriptions.userId=".$user->getId();
+                $join = " JOIN Inscriptions i ON p.partyId=i.partyId ";
+				$where[] = "i.userId=".$user->getId();
 				$filtered = true;
 				$addTitle = " auxquelles je participe";
             }else{
@@ -70,10 +92,10 @@ if($user && $user->getRole() == 'administrator'){
     // Admin: Take all parties
 }elseif($user && $user->getRole() == 'animator'){
     // MJ: Take all state except canceled, then filter on animated by me or state is validated or verified.
-    $where[] = "Parties.state NOT LIKE 'canceled' AND (Parties.state in ('validated', 'verified') OR Parties.userId = ".$user->getId().")";
+    $where[] = "p.state NOT LIKE 'canceled' AND (p.state in ('validated', 'verified') OR p.userId = ".$user->getId().")";
 }else{
     // Others: Take only verified or validated parties
-    $where[] = "Parties.state in ('validated', 'verified')";
+    $where[] = "p.state in ('validated', 'verified')";
 }
 
 $filterYear = false;
@@ -81,32 +103,32 @@ if(@$_GET['formFiltered']){
     if(@$_GET['year'] != "")
 	{
 		$filterYear = true;
-		if (is_numeric($_GET['year'])) $where[] = "Parties.year = ".$_GET['year'];
+		if (is_numeric($_GET['year'])) $where[] = "p.year = ".$_GET['year'];
 	}
 	if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
-		$where[] = "Parties.typeId = ".$_GET['typeId'];
+		$where[] = "p.typeId = ".$_GET['typeId'];
 	}
 	if(@$_GET['animId'] != "" && is_numeric($_GET['animId'])){
-		$where[] = "Parties.userId = ".$_GET['animId'];
+		$where[] = "p.userId = ".$_GET['animId'];
 	}
 	if(isset($_GET['partyState']) && $_GET['partyState'] != "" && strlen($stateLabels[$_GET['partyState']]) > 0){
-		$where[] = "Parties.state = '".$_GET['partyState']."'";
+		$where[] = "p.state = '".$_GET['partyState']."'";
 	}
 }
 $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
-if(!$filterYear) $where[] = "Parties.year = ".$thisYear;
+if(!$filterYear) $where[] = "p.year = ".$thisYear;
 
-$sortType = "Parties.start";
+$sortType = "p.start";
 if (isset($_GET['sortType'])){
 	switch ($_GET['sortType']){
 		case "duration":
-			$sortType = "Parties.duration";
+			$sortType = "p.duration";
 			break;
 		case "partyName":
-			$sortType = "Parties.name";
+			$sortType = "p.name";
 			break;
 		case "partyId":
-			$sortType = "Parties.partyId";
+			$sortType = "p.partyId";
 	}
 }
 $sortOrder = "ASC";
@@ -190,29 +212,28 @@ if($isListShowable){
 					?>
 				</select>
 				<label for="animId">Animateur</label>
+
+				<?php
+				// ANIMATOR FILTER
+
+				$defaultYear = Controls::getDate(Controls::CONV_START, "%Y");
+				$year = is_numeric($_GET['year'])?$_GET['year']:$defaultYear;
+
+				$sqlUsers = "SELECT Distinct Users.userId, Users.firstname, Users.lastname FROM Users".
+				" JOIN Parties ON Users.userId = Parties.UserId".$join.
+				" WHERE Parties.year = ".$year;
+
+				if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
+					$sqlUsers .= " AND Parties.typeId = ".$_GET['typeId'];
+				}
+				$sqlUsers .= " order by Users.firstname, Users.lastname";
+				$resUsers = mysql_query ( $sqlUsers ); ?>
+
 				<select name='animId'>
 					<option value=''>---</option>
-					<?php
-						// Get the users from DB
-						$sqlUsers = "SELECT Distinct Users.userId, Users.firstname, Users.lastname FROM Users".
-									" JOIN Parties ON Users.userId = Parties.UserId".
-									$join;
-
-                        $year = is_numeric($_GET['year'])?$_GET['year']:2015;
-                        if($filterYear && $year){
-                            $sqlUsers .= " WHERE Parties.year = ".$_GET['year'];
-                        }
-
-                        if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
-                            $sqlUsers .= ($filterYear?" AND ":" WHERE ") . "Parties.typeId = ".$_GET['typeId'];
-                        }
-
-						$sqlUsers .= " order by Users.firstname, Users.lastname";
-						$resUsers = mysql_query ( $sqlUsers );
-						while ($rowUser = mysql_fetch_assoc($resUsers)) {
-							echo "<option ".((@$_GET['animId']==$rowUser['userId']) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
-						}
-					?>
+					<?php while ($rowUser = mysql_fetch_assoc($resUsers)) {
+						echo "<option ".((@$_GET['animId']==$rowUser['userId']) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
+					} ?>
 				</select>
 				<?PHP
 					if($user && $user->getRole() == 'administrator'){
@@ -229,6 +250,10 @@ if($isListShowable){
 				<?PHP
 					}
 				?>
+				<div class="free-space-only clear">
+					<label for="free-space-only">Seulement les parties avec de la place disponible</label>
+					<input type="checkbox" name="free-space-only" id="free-space-only" />
+				</div>
 			</fieldset>
 			<fieldset>
 				<legend>Trier par :</legend>
@@ -252,7 +277,11 @@ if($isListShowable){
 		// PAGINATION
 		$sqlCount .= $join;
 		if(count($where) > 0) {
-			$sqlCount .= ' WHERE ' . implode(" AND ",$where);
+			if($freeSpaceOnly){
+				$sqlCount .= ' AND ' . implode(" AND ", $where);
+			}else {
+				$sqlCount .= ' WHERE ' . implode(" AND ", $where);
+			}
 		}   
 
 		echo "<div class='dbg'>SQL count: $sqlCount</div>";
@@ -275,9 +304,13 @@ if($isListShowable){
 			// construction de la requete
 			$sql .= $join;
 			if(count($where) > 0) {
-				$sql .= ' WHERE ' . implode(" AND ",$where);
+				if($freeSpaceOnly){
+					$sql .= ' AND ' . implode(" AND ",$where);
+				}else{
+					$sql .= ' WHERE ' . implode(" AND ",$where);
+				}
 			}
-			
+
 			$sql .= $order . $limit;
 			
 			echo "<div class='dbg'>total: $total. <br/>SQL paginé: $sql</div>";
