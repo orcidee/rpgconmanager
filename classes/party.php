@@ -365,8 +365,8 @@ class Party {
         }
         
         // Initialisation des slots
-        $year = Controls::getDate(Controls::CONV_START, "Y");
-        $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused') AND year('start') = $year";
+        $year = Controls::getDate(Controls::CONV_START, "%Y");
+        $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused') AND YEAR(`start`) = $year";
         $res = mysql_query ( $sql );
 
         if($res) {
