@@ -169,7 +169,7 @@ if(!$db){
     if(!is_null($view->content)){
         $view->html();
     } else {
-		echo "<br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>";
+		echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>";
 	}
     
 
