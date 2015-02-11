@@ -243,6 +243,9 @@ td.application-controls{
 .list li div.more{
     border-bottom: 1px solid #000;
 }
+.list li div.more span.clear{
+    display: block;
+}
 .list li div.main .right,
 .list li div.main .right div{
     width:200px;
