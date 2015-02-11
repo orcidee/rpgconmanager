@@ -10,4 +10,4 @@ if(isset($_SESSION["userId"])){
     header("Location:".Controls::currentURI());
 }
 
-echo "<p class='message'>Vous avez été déconnecté</p>";
+echo "<p class='message'><br/><br/><br/>Vous avez été déconnecté</p>";
