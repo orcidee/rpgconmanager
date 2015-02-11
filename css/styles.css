@@ -316,8 +316,16 @@ ul.pagination li a:hover{
     border:1px solid;
     padding: 3px 5px;
 }
-
-
+.party-create fieldset{
+    text-align: left;
+}
+.party-create fieldset label{
+    width: 300px;
+}
+.party-create fieldset label.tableAmount .small{
+    font-size: 0.9em;
+    color: #555;
+}
 .ui-dialog.ui-widget{
     font-size:0.8em;
 }
@@ -447,4 +455,7 @@ font-weight:bold;
 .rtf ul, .rtf li, .list .rtf li{
     margin: auto;
     list-style: inside none disc;
+}
+.admin-table-form input[type=text]{
+    width: 50px;
 }

@@ -16,7 +16,7 @@ if($user){
     if($user->getRole() == "administrator"){
 ?>
 		<h1>Définition des numéros de table</h1>
-		<form id="tablesForm" action="" method="POST">
+		<form id="tablesForm" action="" method="POST" class="admin-table-form">
 			<table border='1' width='100%' cellspacing='3' cellpadding='3'>
 				<tr>
 					<td>N°</td>
@@ -26,6 +26,7 @@ if($user){
 					<td>Début</td>
 					<td>Fin</td>
 					<td>Nb joueurs min/max</td>
+					<td>Nb de table(s)</td>
 					<td>Table</td>
 				</tr>
 <?php
@@ -43,14 +44,19 @@ if($user){
 
 				while($row = mysql_fetch_array($res))
 				{
-					$partyTable = $row['table'];
-					if(isset($_POST['table-'.$row["partyId"]])){
-						$partyTable = trim($_POST['table-'.$row["partyId"]]);
-						if ($partyTable != $row['table']){
-							if (Party::setTableForParty($row["partyId"], $partyTable))
-								$updatedParties[] = $row["partyId"];
-							else
-								$errorParties[] = $row["partyId"];
+					$tables = $row['table'];
+					// Save new table(s)
+					if(isset($_POST['table-0-'.$row["partyId"]])){
+						$tables = $_POST['table-0-'.$row["partyId"]];
+						for($i=1;$i<=3;$i++){
+							if(isset($_POST["table-$i-".$row["partyId"]])){
+								$tables .= ','.$_POST["table-$i-".$row["partyId"]];
+							}
+						}
+						if(Party::setTableForParty($row["partyId"], $tables)){
+							$updatedParties[] = $row["partyId"];
+						}else{
+							$errorParties[] = $row["partyId"];
 						}
 					}
 ?>
@@ -62,7 +68,18 @@ if($user){
 					<td><?= strftime("%d.%m.%Y à %H:%M", strtotime($row['start'])) ?></td>
 					<td><?= strftime("%d.%m.%Y à %H:%M", strtotime($row['start'])+($row['duration']*3600))?></td>
 					<td><?= $row['playerMin']."/".$row['playerMax'] ?></td>
-					<td><input type='text' name='table-<?= $row["partyId"] ?>' value='<?= $partyTable ?>' maxlength="20" /></td>
+					<td><?= $row['tableAmount'] ?></td>
+					<td>
+						<?php $tablesArray = explode(',', $tables); ?>
+						<input type='text' name='table-0-<?= $row["partyId"] ?>' value='<?= $tablesArray[0]?>'
+							   maxlength="20" />
+						<?php
+						$tableAmount = intval($row['tableAmount']);
+						for($i = 1; $i < $tableAmount; $i++) {
+							?><input type='text' name='table-<?= $i .'-'. $row["partyId"] ?>' value='<?= $tablesArray[$i]?>'
+									 maxlength="20" /><?php
+						}?>
+					</td>
 				</tr>
 <?php
 				}
@@ -77,10 +94,10 @@ if($user){
 		if(count($updatedParties) > 0) echo "<p>Mis à jour les ".count($updatedParties)." parties suivantes : ".join(", ", $updatedParties)."</p>";
 		if(count($errorParties) > 0) echo "<p><font color='red'><b>Pas pu mettre à jour les ".count($errorParties)." parties suivantes : ".join(", ", $errorParties)." !</b></font></p>";
 	}else{
-        echo "<p>Acces restreint à l'administrateur</p>";
-    }
-    
+		echo "<p>Acces restreint à l'administrateur</p>";
+	}
+
 }else{
-    echo "<p>Vous n'êtes pas authentifié.</p>";
+	echo "<p>Vous n'êtes pas authentifié.</p>";
 }
 ?>

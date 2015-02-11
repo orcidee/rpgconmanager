@@ -1,6 +1,5 @@
 ﻿<?php
 
-require_once(dirname(__FILE__).'/../conf/bd.php');
 require_once(dirname(__FILE__).'/../conf/conf.php');
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
@@ -22,9 +21,9 @@ if(!$db){
 			header("Content-type: application/vnd.ms-excel");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
-            $startDate = new DateTime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
-            $start = strtotime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
-            $end = strtotime(END_AT);
+			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
+			$start = Controls::getDate(Controls::CONV_START);
+			$end = Controls::getDate(Controls::CONV_END);
 			$startHour = $startDate->format("H");
 			$duration = ($end - $start) / 3600;
 

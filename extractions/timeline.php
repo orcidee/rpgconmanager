@@ -1,6 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__).'/../conf/bd.php');
 require_once(dirname(__FILE__).'/../conf/conf.php');
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
@@ -17,14 +16,15 @@ if(!$db){
 	$user = User::getFromSession();
 
 	if($user){
-		
+
 		if($user->getRole() == "administrator"){
+
 			header("Content-type: application/vnd.ms-excel");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
-            $startDate = new DateTime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
-            $start = strtotime(Controls::getDate(Controls::CONV_START, "%Y-%m-%d %H:%i:%s"));
-            $end = strtotime(END_AT);
+			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
+			$start = Controls::getDate(Controls::CONV_START);
+			$end = Controls::getDate(Controls::CONV_END);
 			$startHour = $startDate->format("H");
 			$duration = ($end - $start) / 3600;
 
@@ -81,7 +81,7 @@ if(!$db){
 					$partyDate = strtotime($ligne["start"]);
 					$partyOffset = ($partyDate - $start) / 3600;
 					$partyDuration = $ligne["duration"];
-					
+
 					for ($index=0; $index<$duration; $index++) {
 						if ($index >= $partyOffset && $index < $partyOffset + $partyDuration) {
 							echo "<td align='center' bgcolor='gold'>&nbsp</td>";
@@ -95,7 +95,7 @@ if(!$db){
 		}else{
 			echo "<p>Acces restreint à l'administrateur</p>";
 		}
-		
+
 	}else{
 		echo "<p>Vous n'êtes pas authentifié.</p>";
 

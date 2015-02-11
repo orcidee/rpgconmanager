@@ -15,9 +15,9 @@ $user = User::getFromSession();
 if($user){
     
     if($user->getRole() == "administrator" or $user->getRole() == "animator"){
-    	
-		// Indicate if the intial creation/edition form should be used
-		$createOrEdit = false;
+
+        // Indicate if the intial creation/edition form should be used
+        $createOrEdit = false;
 
         // AFFICHAGE DES DONNEES SAISIES - DEMANDE DE CONFIRMATION
         if (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
@@ -25,22 +25,22 @@ if($user){
             if(IS_DEBUG) {
                 echo "<div class='dbg'>demande de confirmation (" . @$_POST['action'] . ")</div>";
             }
-		
+
             // create a fake party
             $data = $_POST;
-			if(!isset($data["userId"]) || strlen($data['userId']) == 0){
-				$data["userId"] = $user->getUserId();
-			}
-            
-            if(@$data["validatedParty"] == 'true'){
-				$party = new Party($data['partyId'], false);
-				$party->setDescription($data['description']);
-				$party->setNote($data['note']);
-			}else{
-			    $party = new Party($data);
-			}
+            if(!isset($data["userId"]) || strlen($data['userId']) == 0){
+                $data["userId"] = $user->getUserId();
+            }
 
-			if($party->isValid){
+            if(@$data["validatedParty"] == 'true'){
+                $party = new Party($data['partyId'], false);
+                $party->setDescription($data['description']);
+                $party->setNote($data['note']);
+            }else{
+                $party = new Party($data);
+            }
+
+            if($party->isValid){
             
                 // Display the party & talk about validity & ask confirmation
                 $txt = "<div class='your-party'>" .
@@ -70,6 +70,7 @@ if($user){
                 }
                             
                 $txt .= "$lvl</td></tr>".
+                        "<tr><td>Nombre de tables</td><td>".$party->getTableAmount()."</td></tr>".
                         "<tr><td>Durée prévue</td><td>".$party->getDuration()." heure(s)</td></tr>".
                         "<tr><td>Heure de début souhaitée</td><td>".strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()))."</td></tr>".
                         "<tr><td>Description</td><td>".View::MultilineFormat($party->getDescription())."</td></tr>".
@@ -83,11 +84,11 @@ if($user){
                 }
 
                 $txt .= "</ul></tr></table>";
-				
-				$animator = $user;
-				if($user->getUserId() != $party->getUserId()){
-					$animator = new User($party->getUserId());
-				}
+
+                $animator = $user;
+                if($user->getUserId() != $party->getUserId()){
+                    $animator = new User($party->getUserId());
+                }
                 $txt .= "<p class='mj'>Jeu animé par: ".$animator->getFirstname()." ".$animator->getLastname()."</p></div>";
         
                 print $txt;
@@ -110,15 +111,15 @@ if($user){
                 "<li>que le nombre minimum de joueurs soit bien un nombre strictement positif</li>".
                 "<li>que le nombre maximum de joueurs soit bien un nombre ".
                 "égal ou supérieur au nombre minumum de joueurs</li></ul> ";
-                /*print_r($party->errors);
-                print_r($party->infos);*/
-				$createOrEdit = true;
+
+                $createOrEdit = true;
             }
         }
         
         // SAUVEGARDE DE LA PARTIE CONFIRMEE
         elseif(isset($_POST) and @$_POST['action'] == 'confirm' && isset($_SESSION['party'])) {
-        
+
+            /** @var Party $p */
             $p = unserialize($_SESSION['party']);
             $edit = (!is_null($p->getId()) && strlen($p->getId()) > 0);
 
@@ -149,40 +150,40 @@ if($user){
         elseif( ! isset($_POST) or @$_POST['action'] == 'undo' or count($_POST) == 0) {
         	$createOrEdit = true;
         }
-		
-		if($createOrEdit) {
+
+        if($createOrEdit) {
 
             // Default: Reedit form, before saving new party.
             // pv = previous values. No previous values by default.
             $editExisting = false;
             $pv = null;
             
-			if(@$_POST['action'] == 'undo' && isset($_SESSION['party'])) {
-				// Case of undo previous edition
-				$p = unserialize($_SESSION['party']);
+            if(@$_POST['action'] == 'undo' && isset($_SESSION['party'])) {
+                // Case of undo previous edition
+                $p = unserialize($_SESSION['party']);
                 $pv = $p->toArray();
                 $editExisting = true;
                 unset ($_SESSION['party']);
-				
-			}elseif (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
-				// Correcting invalid data
-				$pv = $_POST;
-				if(isset($_GET['partyId']) && $user) {
-					$editExisting = true;
-				}
-				
-			}elseif(isset($_GET['partyId']) && $user){
+
+            }elseif (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
+                // Correcting invalid data
+                $pv = $_POST;
+                if(isset($_GET['partyId']) && $user) {
+                    $editExisting = true;
+                }
+
+            }elseif(isset($_GET['partyId']) && $user){
                 // Edit an existing party by id
-				$p = new Party($_GET['partyId'], false);
+                $p = new Party($_GET['partyId'], false);
                 if ($user->animates($p->getId()) || $user->getRole() == 'administrator'){
                     if ($p->getState() == 'created' || $p->getState() == 'verified' || $p->getState() == 'refused' || $p->getState() == 'validated') {
                         unset ($_SESSION['postData']);
-						$pv = $p->toArray();
-						$editExisting = true;
+                        $pv = $p->toArray();
+                        $editExisting = true;
                     }
                 }else{
-					echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' !</strong></p>";
-				}
+                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' !</strong></p>";
+                }
             }
 
             if(IS_DEBUG) {
@@ -196,14 +197,14 @@ if($user){
             if($editExisting && isset($p) && $p->getState() == 'validated'){
                 echo "<p><strong>Votre partie a le status \"validée\". Cela implique que certains champs ne
                 sont plus éditables. Merci pour votre compréhension.</strong></p>";
-				$enable = "disabled='disabled'";
+                $enable = "disabled='disabled'";
             }
-			
-			// Display a message if party has been canceled
-			if(isset($p) && $p->getState() == 'canceled'){
-				echo "<p><strong>La partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' a été annulée et ne peut donc pas être éditée !</strong></p>";
-			}
-            
+
+            // Display a message if party has been canceled
+            if(isset($p) && $p->getState() == 'canceled'){
+                echo "<p><strong>La partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' a été annulée et ne peut donc pas être éditée !</strong></p>";
+            }
+
             ?>
             
             <form action="" method="POST">
@@ -215,13 +216,13 @@ if($user){
                     echo '<input type="hidden" id="partyId" name="partyId" value="'.$pv['partyId'].'" />';
                     echo '<input type="hidden" name="userId" value="'.$pv['userId'].'" />';
                     echo '<input type="hidden" name="action" value="edit" />';
-					if(isset($p) && $p->getState() == 'validated'){
-		                echo '<input type="hidden" name="validatedParty" value="true" />';
-					}
+                    if(isset($p) && $p->getState() == 'validated'){
+                        echo '<input type="hidden" name="validatedParty" value="true" />';
+                    }
                 } else {
                     echo '<input type="hidden" name="action" value="create" />';
                 }
-				
+
                 ?>
                 
                 <fieldset>
@@ -257,8 +258,17 @@ if($user){
                             echo "<option value='low' ".(($pv['level']=="low")?"selected='selected'" : "").">Débutant</option>";
                             echo "<option value='middle' ".(($pv['level']=="middle")?"selected='selected'" : "").">Initié</option>";
                             echo "<option value='high' ".(($pv['level']=="high")?"selected='selected'" : "").">Expert</option>";
-                            
+
                         echo "</select>
+                        <label for='tableAmount' class='tableAmount'>Nombre de table souhaitée <br/>
+                            <span class='small'>Si 0, merci de préciser dans la \"note aux orgas\" ci-dessous</span>
+                        </label>
+                        <select id='tableAmount' name='tableAmount'>
+                            <option name='0' value='0' ".(($pv['tableAmount']=='0')?"selected='selected'" : '').">0</option>
+                            <option name='1' value='1' ".((is_null($pv['tableAmount']) || $pv['tableAmount']=='1')?"selected='selected'" : '').">1</option>
+                            <option name='2' value='2' ".(($pv['tableAmount']=='2')?"selected='selected'" : '').">2</option>
+                            <option name='3' value='3' ".(($pv['tableAmount']=='3')?"selected='selected'" : '').">3</option>
+                        </select>
                         
                         <label for='description'>Description détaillée &#40;max. 1500 caractères&#41;</label>
                         <textarea name='description' class='clear tiny-mce' data-limit='1500'>".@$pv['description']."</textarea>
@@ -296,16 +306,6 @@ if($user){
                             }
 
                         echo "</select>";
-                        
-                        /* Utile avec l'algorythme de répartition des parties (inaboutit)
-                        <label for="flex">Créneau horaire souple</label>
-                        <select name="flex">
-                            <?php
-                            echo "<option value='yes' ".(($pv['flex']=="yes")?"selected='selected'" : "").">Oui</option>";
-                            echo "<option value='no' ".(($pv['flex']=="no")?"selected='selected'" : "").">Non</option>";
-                            ?>
-                        </select> */
-                        
                         echo "<input type='button' id='check-dispo' value='Tester la disponibilité' $enable />
                         
                         <div id='check-dispo-result'></div>
@@ -343,8 +343,8 @@ if($user){
                 
             </form>
             
-			<p class="center"><a href="?page=contact" id="create-help">Help!</a></p>
-			
+            <p class="center"><a href="?page=contact" id="create-help">Help!</a></p>
+
             <?php
                 
             

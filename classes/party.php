@@ -51,7 +51,9 @@ class Party {
                 0 < $data['playerMin'] && $data['playerMin'] <= $data['playerMax'] &&
                 isset($data['level']) && strlen($data['level']) > 0 &&
                 isset($data['start']) && strlen($data['start']) > 0 &&
-                isset($data['duration']) && strlen($data['duration']) > 0 ) {
+                isset($data['duration']) && strlen($data['duration']) > 0 &&
+                isset($data['tableAmount']) && in_array($data['tableAmount'], array(0,1,2,3))
+            ) {
                 
                 $this->userId = $data['userId'];
                 $this->typeId = $data['typeId'];
@@ -69,6 +71,7 @@ class Party {
                 $this->year = Controls::getDate(Controls::CONV_START, '%Y');
                 $this->state = "created";
                 $this->isFake = true;
+                $this->tableAmount = $data['tableAmount'];
                 
                 if(isset($data['partyId']) && @$data['action'] == 'edit'){
                     // Trying to update existing
@@ -96,8 +99,6 @@ class Party {
         }else{
             $this->isValid = false;
         }
-        
-        //print_r($this);
         
     }
     
@@ -142,8 +143,7 @@ class Party {
             
             if($nb === 1){
                 // user ok
-        
-        
+
                 // UPDATE PARTY
                 if(isset($this->partyId) && strlen($this->partyId) > 0){
                 
@@ -162,8 +162,9 @@ class Party {
                         "`description`='".addslashes($this->description)."',".
                         "`note`='".addslashes($this->note)."',".
                         "`language`='".addslashes($this->language)."',".
-						"`state`='".addslashes($this->state)."'".
-						" WHERE `partyId` = '".$this->partyId."'";
+                        "`state`='".addslashes($this->state)."'".
+                        "`tableAmount`='".addslashes($this->tableAmount)."'".
+                        " WHERE `partyId` = '".$this->partyId."'";
                     } elseif($this->state == 'validated') {
                         $sql = "UPDATE Parties SET ".
                         "`description`='".addslashes($this->description)."',".
@@ -181,7 +182,7 @@ class Party {
                 }else{
                     $sql =  "INSERT INTO Parties (`userId`,`typeId`,`name`,`kind`,`scenario`,".
                     "`playerMin`,`playerMax`,`level`,`duration`,`start`,`description`,`note`,".
-                    "`language`,`year`,`state`)".
+                    "`language`,`year`,`state`,`tableAmount`)".
                     "VALUES ('".addslashes($this->userId)."','".
                     addslashes($this->typeId)."','".
                     addslashes($this->name)."','".
@@ -196,7 +197,8 @@ class Party {
                     addslashes($this->note)."','".
                     addslashes($this->language)."','".
                     addslashes($this->year)."','".
-                    addslashes($this->state)."')";
+                    addslashes($this->state)."','".
+                    addslashes($this->tableAmount)."')";
                     
                     $res = mysql_query ($sql);
                 
@@ -339,7 +341,8 @@ class Party {
             "state"       => $this->state,
             "isValid"     => $this->isValid,
             "errors"      => $this->errors,
-            "infos"       => $this->infos
+            "infos"       => $this->infos,
+            "tableAmount" => $this->tableAmount,
         );
         
         return $res;
@@ -349,27 +352,28 @@ class Party {
     * Retourne un tableau associatif à deux dimensions, représentatif de la charge actuelle.
     * Ajoute la partie (start, duration) au tableau, si ces paramètres sont fournis.
     */
-    public static function getCurrentSlots($wishStart = null, $wishDuration = null, $existingId = null){
-        
+    public static function getCurrentSlots($wishStart = null, $wishDuration = null, $existingId = null, $tableAmount = 1)
+    {
+
         $result = array();
         $result["status"] = "ok";
-        
+
         $start = Controls::getDate(Controls::CONV_START);
         $end = Controls::getDate(Controls::CONV_END);
-        $nb = ($end - $start) / 60 / 60 ;
+        $nb = ($end - $start) / 60 / 60;
 
         // Slots[partyId's]
         $slots = array();
-        for($i=0;$i<$nb;$i++){
+        for ($i = 0; $i < $nb; $i++) {
             $slots[] = array();
         }
-        
+
         // Initialisation des slots
         $year = Controls::getDate(Controls::CONV_START, "%Y");
         $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused') AND YEAR(`start`) = $year";
-        $res = mysql_query ( $sql );
+        $res = mysql_query($sql);
 
-        if($res) {
+        if ($res) {
             while ($row = mysql_fetch_assoc($res)) {
                 $start = self::dateToSlot($row['start']);
                 $duration = $row['duration'];
@@ -380,20 +384,20 @@ class Party {
                 }
             }
         }
-        
-        if(!is_null($wishStart) && !is_null($wishDuration)){
+
+        if (!is_null($wishStart) && !is_null($wishDuration)) {
             $wishStart = self::dateToSlot($wishStart);
-            if(($wishStart+$wishDuration) > $nb){
+            if (($wishStart + $wishDuration) > $nb) {
                 $result["message"] = "Selon ces données, tu prévois de terminer après la fin de la convention, cela ne nous convient pas.";
                 $result["status"] = "ko";
-            }else{
-            
+            } else {
+
                 // Efface toutes les charges que représente existingId
-                if( !is_null($existingId) && $existingId != ""){
-                    foreach ($slots as $i => $slot){
+                if (!is_null($existingId) && $existingId != "") {
+                    foreach ($slots as $i => $slot) {
                         // FIXME: Maybe use array_filter($data, $callback) function, if possible.
-                        foreach ($slots[$i] as $j => $pId){
-                            if($pId == $existingId){
+                        foreach ($slots[$i] as $j => $pId) {
+                            if ($pId == $existingId) {
                                 unset ($pId);
                             }
                         }
@@ -401,122 +405,17 @@ class Party {
                 }
 
                 // Ajoute une charge aux slots souhaités
-                for($i=$wishStart;$i<($wishDuration+$wishStart);$i++){
-                    $slots[$i][] = (!is_null($existingId) && $existingId != "") ? $existingId : "new";
+                for ($i = $wishStart; $i < ($wishDuration + $wishStart); $i++) {
+                    for ($j = 0; $j < $tableAmount; $j++){
+                        $slots[$i][] = (!is_null($existingId) && $existingId != "") ? $existingId : "new";
+                    }
                 }
             }
         }
-        
+
         $result["slots"] = $slots;
-        
+
         return $result;
-    }
-    
-    /**
-    * @DEPRECATED
-    * Fonction pour proposer adapter l'heure de démarrage d'une partie.
-    * Propose automatiquement une heure de démarrage plus adaptée, par rapport à la charge actuelle.
-    * Ebauche. Non-utilisable en l'état.
-    * @param $flex Booleen pour indiquer si le MJ est d'accord de déplacer sa partie.
-    */
-    public function defineSlot($flex = true){
-        
-        if($this->pending){
-            
-            // Constantes (pattern BD)
-            $startAt = START_AT;
-            $endAt = END_AT;
-            
-            // + 1 heure de marge pour la duree
-            $wishStart = $this->start;
-            $wishDuration = $this->duration + 1;
-            $flex;
-            
-            // => Nb de slots: 31.
-            // TODO: 31 à dynamiquement grâce à l'objet date.
-            $nb = 31;
-            
-            $moveMax = ($flex) ? 5 : 3 ;
-            
-            // Slots[partyId's]
-            $slots = array();
-            for($i=0;$i<$nb;$i++){
-                $slots[] = array();
-            }
-            
-            // Initialisation des slots
-            $sql = "SELECT * FROM Parties";
-            $res = mysql_query ( $sql );
-            while ($row = mysql_fetch_assoc($res)) {
-                // yyyy.MM.dd.HH
-                $start = self::dateToSlot($row['start']);
-                $duration = $row['duration'];
-                $partyId = $row['partyId'];
-                for($i=$start;$i<$duration;$i++){
-                    array_push($slots[$i], $partyId);
-                }
-            }
-            
-            echo "Defined:";
-            print_r($slots);
-            echo "Charge max: "+ self::slotsCharge($slots);
-            
-            // Ajout de la nouvelle partie
-            $wishStart = self::dateToSlot($wishStart);
-            for($i=$wishStart; $i<$wishDuration; $i++){
-                array_push($slots[$i], $this->partyId);
-            }
-            $max = self::slotsCharge($slots);
-            $best = $wishStart;
-            
-            if(($max >= $critical) || $flex){
-                for($i=$wishStart; $i<$wishDuration; $i++){
-                    array_pop($slots[$i]);
-                }
-                for($move = 0; $move < $moveMax; $move++){
-                    
-                    // later
-                    for($i=($wishStart+$move); $i<$wishDuration; $i++){
-                        array_push($slots[$i], $this->partyId);
-                    }
-                    $newMax = self::slotsCharge($slots);
-                    if($newMax < $max){
-                        $best = $wishStart+$move ;
-                        $max = $newMax;
-                    }
-                    for($i=($wishStart+$move); $i<$wishDuration; $i++){
-                        array_pop($slots[$i]);
-                    }
-                    
-                    // earlier
-                    for($i=($wishStart-$move); $i<$wishDuration; $i++){
-                        array_push($slots[$i], $this->partyId);
-                    }
-                    $newMax = self::slotsCharge($slots);
-                    if($newMax < $max){
-                        $best = $wishStart+$move ;
-                        $max = $newMax;
-                    }
-                    for(($i=$wishStart-$move); $i<$wishDuration; $i++){
-                        array_pop($slots[$i]);
-                    }
-                }
-            }
-            
-            if($max >= $critical){
-                array_push($this->info, "Attention, le seuil critique du nombre de parties est atteint.");
-            }
-            
-            $this->start = self::slotToDate($best);
-            $this->pending = false;
-            
-        }else{
-            // Creneau deja fixé
-        }
-        
-        
-        
-        
     }
     
     public function getAnimator(){
@@ -581,11 +480,13 @@ class Party {
     public function getState(){
 		return $this->state;
 	}
+    public function getTableAmount(){
+        return $this->tableAmount;
+    }
     
 	public function accMail(){
 		$sql = 'SELECT * FROM Users WHERE userId = (SELECT userId FROM Parties where partyId = ' . $this->partyId . ')';
 		$result = mysql_query($sql);
-//return (mysql_num_rows($result) == 1);
 		$row = mysql_fetch_assoc($result);
 		if($row['accepteMail']){
 			return true;

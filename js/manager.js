@@ -416,7 +416,8 @@ orcidee.manager = {
                 me.checkDispo({
                     'duration':$('#duration').val(),
                     'start':$('#start').val(),
-                    'partyId':pId
+                    'partyId':pId,
+                    'tableAmount':$('#tableAmount').val()
                 }, "click");
             });
             this.checkDispo();

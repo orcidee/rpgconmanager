@@ -21,7 +21,7 @@ if(!$db){
         
             if(isset($_GET['duration']) && isset($_GET['start'])){
                 
-                $res = Party::getCurrentSlots($_GET['start'], $_GET['duration'], $_GET['partyId']);
+                $res = Party::getCurrentSlots($_GET['start'], $_GET['duration'], $_GET['partyId'], $_GET['tableAmount']);
                 
             }else{
             
