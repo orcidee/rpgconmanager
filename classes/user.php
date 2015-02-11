@@ -137,7 +137,7 @@ class User {
         $result['user'] = new User($this->userId);
         
         if($res && ($nb === 1)){
-            $result['msg'] = 'Tes données ont été mises à jours.';
+            $result['msg'] = 'Tes données ont été mises à jour.';
         }else{
             if($res && $nb == 0){
                 $result['msg'] = "Il semble que tu n'ais modifié aucune donnée.";
