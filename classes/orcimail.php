@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once(dirname(__FILE__).'/../classes/user.php');
 
 class Orcimail {
@@ -304,7 +304,7 @@ class Orcimail {
         
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
-        <p>Ceci est une confirmation ".(($edit)?"de mise à jour":"d'inscription")." de l'animation no ".$p->getId().".</p>
+        <p>Ceci est une confirmation ".(($edit)?"de mise à jour":"d'inscription")." de l'animation no ".$p->getId().". (Les n° des parties sont sujets à d'éventuels changements. Merci de ne pas trop vous y attacher ;-) )</p>
         <br/>
         <p><strong>Votre animation</strong></p>
         <table cellpadding='5' cellspacing='0' border='1'>
