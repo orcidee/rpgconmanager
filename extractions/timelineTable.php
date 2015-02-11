@@ -13,118 +13,156 @@ if(!$db){
     echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
 }else{
 
-	$user = User::getFromSession();
+    $user = User::getFromSession();
 
-	if($user){
-		
-		if($user->getRole() == "administrator"){
-			header("Content-type: application/vnd.ms-excel");
-			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
+    if($user){
 
-			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
-			$start = Controls::getDate(Controls::CONV_START);
-			$end = Controls::getDate(Controls::CONV_END);
-			$startHour = $startDate->format("H");
-			$duration = ($end - $start) / 3600;
+        if($user->getRole() == "administrator"){
+            header("Content-type: application/vnd.ms-excel");
+            header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
+            $startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
+            $start = Controls::getDate(Controls::CONV_START);
+            $end = Controls::getDate(Controls::CONV_END);
+            $startHour = $startDate->format("H");
+            $duration = ($end - $start) / 3600;
+
+
+            // TABLE HEADER
 ?>
-			<table border='1' width='100%' cellspacing='3' cellpadding='3'>
-				<tr>
-					<td align='center' valign='middle' colspan='<?= $duration + 1 ?>'>
-						<font size='+6'><b>TIMELINE DE LA CONVENTION PAR TABLE</b><br><br></font>
-					</td>
-				</tr>
-				<tr>
-					<td align='center' valign='middle'>
-						&nbsp;
-					</td>
-					<td align='center' valign='middle' colspan='<?= 24 - $startHour ?>'>
-						<font color=red size='+4'><br><b>S A M E D I</b></font><br><br>
-					</td>
-					<td align='center' valign='middle' colspan='<?= $duration + $startHour - 24 ?>'>
-						<font color=red size='+4'><br><b>D I M A N C H E</b></font><br><br>
-					</td>
-				</tr>
+            <table border='1' width='100%' cellspacing='3' cellpadding='3'>
+                <tr>
+                    <td align='center' valign='middle' colspan='<?= $duration + 1 ?>'>
+                        <font size='+6'><b>TIMELINE DE LA CONVENTION PAR TABLE</b><br><br></font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align='center' valign='middle'>
+                        &nbsp;
+                    </td>
+                    <td align='center' valign='middle' colspan='<?= 24 - $startHour ?>'>
+                        <font color=red size='+4'><br><b>S A M E D I</b></font><br><br>
+                    </td>
+                    <td align='center' valign='middle' colspan='<?= $duration + $startHour - 24 ?>'>
+                        <font color=red size='+4'><br><b>D I M A N C H E</b></font><br><br>
+                    </td>
+                </tr>
 
-				<tr>
-					<td align='left' WIDTH='300'><font size='-2'>&nbsp; <b>Table</b> &nbsp;</font></td>
+                <tr>
+                    <td align='left' WIDTH='300'><font size='-2'>&nbsp; <b>Table</b> &nbsp;</font></td>
 <?php
-					for ($timeline=$startHour; $timeline<=($startHour + $duration - 1); $timeline++){
-						if ($timeline<24){
-							$heure_a=$timeline;
-						}else{
-							$heure_a=$timeline-24;
-						}
-						$heure_b=$heure_a+1;
+                    for ($timeline=$startHour; $timeline<=($startHour + $duration - 1); $timeline++){
+                        if ($timeline<24){
+                            $heure_a=$timeline;
+                        }else{
+                            $heure_a=$timeline-24;
+                        }
+                        $heure_b=$heure_a+1;
 ?>
-						<td align='center' valign='middle' WIDTH='50'>
-							<font size='-2'><b>'<?= $heure_a."-".$heure_b ?></b></font>
-						</td>
+                        <td align='center' valign='middle' WIDTH='50'>
+                            <font size='-2'><b>'<?= $heure_a."-".$heure_b ?></b></font>
+                        </td>
 <?php
-					}
+                    }
 
-                $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
-				$sql = "SELECT Parties.* FROM Parties WHERE Parties.state in ('validated', 'verified') and Parties.table is not null AND Parties.year = ".$thisYear." order by Parties.table, Parties.start ASC";
-				$res = mysql_query ( $sql );
+            // FETCH & PREPARE DATA
 
-				$colorTypes = array();
-				$colorTypes[1] = "yellow";
-				$colorTypes[2] = "royalblue";
-				$colorTypes[3] = "green";
-				$colorTypes[4] = "orange";
-				$colorTypes[6] = "cyan";
+            $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
+            $sql = "SELECT Parties.* FROM Parties WHERE Parties.state in ('validated', 'verified') and Parties.table is not null AND Parties.year = ".$thisYear." order by Parties.start ASC";
+            $res = mysql_query ( $sql );
 
-				$currentTable = "";
-				$currentIndex = $duration;
-				while($row = mysql_fetch_array($res))
-				{
-					if ($currentTable != $row["table"]) {
-						// fini la ligne
-						for ($index=$currentIndex; $index<$duration; $index++) {
-								echo "<td align='center'>&nbsp</td>";
-						}
-						echo "</tr>";
-						
-						// démarre une nouvelle ligne
-						$currentTable = $row["table"];
-						$currentIndex = 0;
-						echo "<tr><td>".$currentTable."</td>";
-					}
+            $colorTypes = array();
+            $colorTypes[1] = "yellow";
+            $colorTypes[2] = "royalblue";
+            $colorTypes[3] = "green";
+            $colorTypes[4] = "orange";
+            $colorTypes[6] = "cyan";
 
-					$partyDate = strtotime($row["start"]);
-					$partyOffset = ($partyDate - $start) / 3600;
-					$partyDuration = $row["duration"];
+            $tableMatrix = array();
+            while($row = mysql_fetch_array($res)) {
+                $tables = explode(',', $row['table']);
+                foreach($tables as $t){
+                    if(!is_array($tableMatrix[$t])){
+                        $tableMatrix[$t] = array();
+                    }
+                    $tableMatrix[$t][] = array(
+                        'typeId' => intval($row['typeId']),
+                        'offset' => (strtotime($row["start"]) - $start) / 3600 ,
+                        'duration'=> intval($row['duration']),
+                        'partyId'=>$row['partyId'],
+                        'name'=>$row['name'],
+                        'rowspan' => count($tables),
+                        'start' => strftime('%H:%M', strtotime($row['start'])),
+                    );
+                }
+            }
 
-					// avance jusqu'à la prochaine partie
-					for ($index=$currentIndex; $index<$partyOffset; $index++) {
-							echo "<td align='center'>&nbsp</td>";
-					}
+            // Deals with bad planning (table overflow)
+            $backupOffset = 0;
+            // To deal with rawspan
+            $writtenParties = array();
 
-					// affiche la partie
-					echo "<td align='center' bgcolor='".$colorTypes[$row["typeId"]]."' colspan='".$partyDuration."'>";
-					echo "<b>P".($row["partyId"]<10 ? "0" : "").$row["partyId"]." - ".$row["name"]."</b>";
-					if ($partyOffset < $currentIndex) echo " <font color='red'>ATTENTION : devrait commencer plus tôt !!!</font>";
-					echo "</td>";
 
-					// met à jour l'index courant
-					$currentIndex = $partyOffset + $partyDuration;
-				}
-				// fini la dernière ligne
-				for ($index=$currentIndex; $index<$duration; $index++) {
-						echo "<td align='center'>&nbsp</td>";
-				}
-				echo "</tr>";
-			echo "</table>";
-		}else{
-			echo "<p>Acces restreint à l'administrateur</p>";
-		}
-		
-	}else{
-		echo "<p>Vous n'êtes pas authentifié.</p>";
+            // OUTPUT DATA
 
-		// Debug
-		echo "<div class='dbg'>User:";
-		echo ($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0" ;
-		echo "</div>";
-	}
+            foreach($tableMatrix as $table => $parties){
+
+                echo "<tr><td>".$table."</td>";
+                $currentIndex = 0;
+
+                foreach($parties as $p){
+
+                    // previous empty slots
+                    for($i = $currentIndex ; $i < $p['offset'] ; $i++){
+                        echo "<td align='center'>&nbsp</td>";
+                    }
+
+                    // party slots
+                    if( ! in_array($p['partyId'], $writtenParties)) { ?>
+                        <td align='center'
+                            colspan='<?=$p['duration']?>'
+                            rowspan='<?=$p['rowspan']?>'
+                            bgcolor='<?=$colorTypes[$p["typeId"]]?>'>
+                            <b>P<?= $p["partyId"]." - ".$p["name"]?></b>
+
+                            <?php if($p['offset'] < $currentIndex){?>
+                                <b><font color="red"> - PROBLEME: Commence a <?= $p['start']?></font></b>
+                                <?php $warning = true;
+                            } ?>
+
+                        </td>
+                    <?php }
+                    $currentIndex = $p['offset'] + $p['duration'];
+
+                    // Deals with bad planning (table overflow)
+                    if($warning){
+                        $currentIndex += ($p['duration'] + $backupOffset - $p['offset']);
+                        $warning = false;
+                    }
+                    $backupOffset = $p['offset'];
+
+                    // Deals with rowspans
+                    $writtenParties[] = $p['partyId'];
+
+                }
+
+                // Fill landing slots
+                for($i = $currentIndex ; $i < $duration ; $i++){
+                    echo "<td align='center'>&nbsp</td>";
+                }
+                echo "</tr>";
+            }
+            echo "</table>";
+        }else{
+            echo "<p>Acces restreint à l'administrateur</p>";
+        }
+
+    }else{
+        echo "<p>Vous n'êtes pas authentifié.</p>";
+
+        // Debug
+        echo "<div class='dbg'>User:";
+        echo ($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0" ;
+        echo "</div>";
+    }
 }
