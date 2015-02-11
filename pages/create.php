@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
@@ -270,7 +270,9 @@ if($user){
                             <option name='3' value='3' ".(($pv['tableAmount']=='3')?"selected='selected'" : '').">3</option>
                         </select>
                         
-                        <label for='description'>Description détaillée &#40;max. 1500 caractères&#41;</label>
+                        <label for='description'>Description détaillée <br/>
+                         <span class='small'>&#40;max. 1500 caractères&#41;</span>
+                         </label>
                         <textarea name='description' class='clear tiny-mce' data-limit='1500'>".@$pv['description']."</textarea>
                     
                     </fieldset>
@@ -279,8 +281,8 @@ if($user){
                     
                         <legend>Organisation</legend>
                         
-                        <div id='animation'>Nous informons nos très chers MJs qu'une table ronde sur le JDR sera organisée entre <strong>17h00 et 21h00</strong> le samedi soir. 
-                       Merci de prendre cela en compte pour agender votre partie!</div>
+                        <div id='animation'>Les traditionnelles conférences de JDR'idée auront lieu entre <strong>17h00 et 21h00</strong> le samedi soir. <br/>
+                       De plus, un atelier de création d'univers de JDR aura lieu <strong>dès 13h</strong> le samedi. Avis aux intéressés!</div>
                         
                         <label for='duration'>Durée prévue</label>
                         <select name='duration' id='duration' $enable>";
