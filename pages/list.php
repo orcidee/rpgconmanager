@@ -217,7 +217,7 @@ if($isListShowable){
 				// ANIMATOR FILTER
 
 				$defaultYear = Controls::getDate(Controls::CONV_START, "%Y");
-				$year = is_numeric($_GET['year'])?$_GET['year']:$defaultYear;
+				$year = is_numeric(@$_GET['year'])?@$_GET['year']:$defaultYear;
 
 				$sqlUsers = "SELECT Distinct Users.userId, Users.firstname, Users.lastname FROM Users".
 				" JOIN Parties ON Users.userId = Parties.UserId".$join.
