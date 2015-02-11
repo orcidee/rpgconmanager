@@ -71,6 +71,7 @@ if($light){
             <input type='password' name='confirm' />
             <input type='hidden' value='validPassword' name="action" />
             <input type='submit' value='Valider' class='submit' />
+            
         </form>
 		<form action="" method="POST">
 			<input type="submit" value="Annuler" class="submit"/>
@@ -131,7 +132,7 @@ if($light){
         echo '<li><label for="email">Email *</label>';
         echo '<input name="email" type="text" value="'.($validate ? @$_POST['email'] : $userDisplayed->getEmail()).'" '.$readonly.' /></li>';
         
-        echo '<li><label for="role">Role</label>';
+        echo '<li><label for="role">Rôle</label>';
         echo '<input name="role" type="text" value="'.($validate ? @$_POST['role'] : $userDisplayed->getRole()).'" readonly="readonly" class="info" /></li>';
         
         if($full){
