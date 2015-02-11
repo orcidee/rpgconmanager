@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/conf/conf.php');
+require_once(dirname(__FILE__) . '/conf/conf.php');
 
 /*
  * If you want to clean the partyId, just close this comment,
