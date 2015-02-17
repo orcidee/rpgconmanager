@@ -2,15 +2,22 @@ body{
     font-size: 0.9em;
     font-weight:normal;
     font-family: georgia, verdana, arial;
+    min-height: 300px;
 }
 nav#main-nav {
     margin: 0  0 20px 0;
+    width: 100%;
 }
 nav#bottom-nav {
     margin: 20px  0 0 0;
 }
 nav a{
     margin: 0 10px;
+}
+
+#main
+{
+width: 100%;
 }
 ul, li{
     list-style:none;
@@ -61,7 +68,7 @@ ul.profile label{
     padding: 5px;
     margin:20px 0;
     clear:both;
-    display:block;
+    display:none;
     font-family: monospace;
 }
 .dbg pre{
@@ -71,29 +78,29 @@ ul.profile label{
 
 label, input, select, textarea{
     float:left;
-    margin: 5px;
+    margin: 0.5%;
     text-align:left;
     font-family: verdana, arial;
 }
 input, fieldset{
-    float:none;
+
     clear:none;
     width:auto;
 }
 select{
-    width:150px;
+    width:24%;
 }
 select.small{
     width:70px;
 }
 textarea,input{
-    width:200px;
+    width:25%;
 }
 textarea{
     font-size:0.8em;
     float:none;
     clear:both;
-    width:400px;
+    width:85%;
     height: 100px;
 }
 input.subscribe{
@@ -104,7 +111,7 @@ input.subscribe{
 }
 label {
     clear:both;
-    width:200px;
+    width:40%;
 }
 
 form{
@@ -120,12 +127,12 @@ form input.submit
 fieldset{
     overflow:hidden;
     margin:10px auto;
-    padding:10px;
+    padding:1%;
     text-align:center;
-    width:474px;
+    width:95%;
 }
 fieldset fieldset{
-    width:450px;
+    width:93%;
 }
 legend{
     padding: 0 5px 3px;
@@ -152,11 +159,11 @@ td.application-controls{
 .login label{
     font-size:12px;
     font-weight:bold;
-    width:110px;
+    width:150px;
     margin:12px 0 0 0px;
 }
 .login input{
-    width:160px;
+    width:200px;
     font-size:12px;
     margin: 10px 0 10px 10px;
 }
@@ -183,13 +190,13 @@ td.application-controls{
 }
 .login .left{
     float:left;
-    width:286px;
+    width:400px;
     margin:auto;
     padding: 0 15px 0 0;
 }
 .login .right{
     float:left;
-    width:287px;
+    width:400px;
     padding: 0 0 0 15px;
    border-left: 1px solid #000;
 }
@@ -213,10 +220,10 @@ td.application-controls{
     display:block;
     margin: 10px auto;
 }
-
-.list{
-    width:600px;
-}
+ ul#game-list li div.main
+ {
+ width:98.5%;	
+ }
 .list li {
     margin: 0 0 20px 0;
 }
@@ -229,14 +236,18 @@ td.application-controls{
     float:left;
 	text-align:left;
 }
-.list li div.clear{
+.list li div.clear, 
+.list li div.top.clear{
     clear:both;
-    width:590px;
-    padding-left:10px;
+	width:97.5%;
+    padding-left:1%;
 }
 .list li div.clear div{
     padding:0;
 	text-align:left;
+}
+.list li div.more {
+width:97.5%;
 }
 .list li div.top,
 .list li div.main,
@@ -246,23 +257,29 @@ td.application-controls{
 .list li div.more span.clear{
     display: block;
 }
+
+
 .list li div.main .right,
 .list li div.main .right div{
-    width:200px;
     padding:0;
 	text-align:left;
+	
 }
 .list li div.main .left,
 .list li div.main .clear.left{
-    width:390px;
+    width:60%;
 	text-align:left;
+padding-top: 0.5%;
+padding-bottom: 0.5%;
+
 }
 .list li div.more .left,
 .list li div.more .clear.left{
-    width:390px;
+    width:60%;
 }
+.list li div.main .right,
 .list li div.more .right{
-    width:200px;
+   
 }
 .list li div.center{
     clear:both;
@@ -295,6 +312,7 @@ margin-top: 2px;
 }
 ul.pagination {
     text-align: center;
+    width: 100%;
 }
 ul.pagination li{
     display: inline;
@@ -319,13 +337,12 @@ ul.pagination li a:hover{
     border:1px solid;
     padding: 3px 5px;
 }
-.party-create fieldset{
-    text-align: left;
+.party-create fieldset.mandatory-fields select{
+    margin-left:18px;
 }
-.party-create fieldset label{
-    width: 300px;
-}
-.party-create fieldset label.tableAmount .small{
+.party-create fieldset label.tableAmount .small,
+.party-create fieldset label .small
+{
     font-size: 0.9em;
     color: #555;
 }
@@ -368,6 +385,11 @@ ul.pagination li a:hover{
 .ui-dialog p.partyTitle{
     font-weight:bold;
     margin:10px 0;
+}
+
+#check-dispo-result
+{
+clear:both;
 }
 
 #dispo-preview li{
@@ -418,7 +440,7 @@ margin-left: 0px;
 
 #filteringForm fieldset
 {
-width: 580px;
+width: 97.5%;
 margin-left: 0px;
 
 }
@@ -429,11 +451,11 @@ margin-right: 200px;
 font-weight:bold;
 }
 #filteringForm .free-space-only{
-    padding: 10px 0;
+    padding: 0.5% 0;
     text-align: left;
 }
 #filteringForm .free-space-only label{
-    width: 335px;
+    width: 40%;
 }
 #filteringForm .free-space-only input{
     width: auto;
