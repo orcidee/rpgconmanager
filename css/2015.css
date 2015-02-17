@@ -15,9 +15,6 @@ font-size: 14px;
 body
 {
 margin: 0;
-padding:7px;
-padding-left: 10px;
-padding-bottom: 35px;
 font-family: 'Merriweather', serif;
    
 }
@@ -28,14 +25,11 @@ text-decoration:underline;
 
 nav#main-nav {
 margin: 0  0 0 0;
-width:830px;
 min-height: 35px;
 padding-top: 10px;
-padding-left: 30px;
-padding-right: 30px;
 text-align:center;
 font-family: 'BooterFZ', serif;
-font-size: 22px;
+font-size: 23px;
 color:#704214;
 
 }
@@ -68,7 +62,7 @@ ul, li{
 }
 p
 {
-font-size: 15px;
+font-size: 13px;
 }
 h2
 {
@@ -197,10 +191,10 @@ padding-left: 0px;
 margin-top: 5px;
 margin-bottom: 5px;
 border: 1px solid #000000;
-text-align: justify;
-font-size: 1em;
+text-align: center;
+font-size: 1.1em;
 padding: 4px;
-
+width: 98%;
 	
 }
 
@@ -239,9 +233,7 @@ text-align: center;
 color: #704214;
 	
 }
-.list{
-    width:890px;
-}
+
 .list li {
     margin: 0 0 20px 0;
 }
@@ -256,8 +248,6 @@ color: #704214;
 }
 .list li div.clear{
     clear:both;
-	width:870px;
-    padding-left:10px;
 }
 .list li div.clear div{
     padding:0;
@@ -340,13 +330,6 @@ font-weight: bold;
 }
 
 
-.list li div.main .left, 
-.list li div.main .clear.left 
-{
-padding-top: 4px;
-padding-bottom: 5px;
-
-}
 .list li div.more
 {
 padding-top: 5px;
@@ -360,7 +343,7 @@ font-size: 0.9em;
 }
 .list li span.etat
 {
-   font-size: 13px;
+   font-size: 14px;
 font-family: 'Playfair Display', serif;
    text-decoration:none;
    font-weight: normal;
@@ -474,7 +457,7 @@ border-bottom-color: #000000;
 
 .Pactions
 {
-margin: 15px 220px 15px 220px;
+margin: 15px 235px 15px 235px;
 }
 
 ul.profile input.info {
@@ -550,6 +533,8 @@ clear: both;
 color: #704214;
 font-family: "BooterFZ",serif;
 font-size: 20px;
+margin: 0 38.5% 15px 38.5%;
+width: auto;
 }
 input#check-dispo:active {
 background-color: #704214;
@@ -573,7 +558,7 @@ margin-left: 0px;
 }
 #filteringForm input.submit
 {
-margin:7px 375px 0 375px;
+margin:7px 43% 0 43%;
 text-align: center;
 padding: 3px;
 background-color: transparent;
