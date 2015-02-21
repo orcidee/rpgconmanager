@@ -62,7 +62,7 @@ if($user){
 ?>
 				<tr>
 					<td><?= $row["partyId"] ?></td>
-					<td title="<?= stripslashes($row["description"]) ?>"><?= stripslashes($row["name"]) ?></td>
+					<td title=""><?= stripslashes($row["name"]) ?></td>
 					<td><?= stripslashes($row["firstname"])." ".stripslashes($row["lastname"]) ?></td>
 					<td><?= stripslashes($row["typeName"]) ?></td>
 					<td><?= strftime("%d.%m.%Y à %H:%M", strtotime($row['start'])) ?></td>
