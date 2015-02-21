@@ -239,8 +239,13 @@ td.application-controls{
 .list li div.clear, 
 .list li div.top.clear{
     clear:both;
-	width:97.5%;
     padding-left:1%;
+}
+.list li div.top.clear
+{
+	
+width:97.5%;
+
 }
 .list li div.clear div{
     padding:0;
@@ -483,4 +488,20 @@ font-weight:bold;
 }
 .admin-table-form input[type=text]{
     width: 50px;
+}
+
+table
+
+{
+width: 890px;
+font-size: 11px;
+	
+}
+table th
+{
+	font-size: 15px;
+}
+html body div#main form#tablesForm table tbody tr td input
+{
+width: 80px;
 }
