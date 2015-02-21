@@ -261,7 +261,6 @@ color: #704214;
 }
 .ui-dialog.t2012 .ui-dialog-titlebar{
     background:none repeat scroll 0 0 ;
-	background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
     color:#FFFfff;
 }
 .ui-dialog.ui-widget{
@@ -355,8 +354,7 @@ text-decoration: underline;
 }
 .list li div.top
 {
-/*background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
-background-color: #e9d88f;*/
+
 border: 3px double #000000;
 font-size: 20px;
 font-family: 'Playfair Display SC', serif;
@@ -607,21 +605,6 @@ color: red;
 padding: 0 10px 0 10px;	
 }
 
-table
-
-{
-width: 890px;
-font-size: 11px;
-	
-}
-table th
-{
-	font-size: 15px;
-}
-html body div#main form#tablesForm table tbody tr td input
-{
-width: 100px;
-}
 
 a.unsubscribeNow img
 
