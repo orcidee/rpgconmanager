@@ -271,9 +271,9 @@ if($user){
                         </select>
                         
                         <label for='description'>Description détaillée <br/>
-                         <span class='small'>&#40;max. 1500 caractères&#41;</span>
+                         <span class='small'>&#40;max. 2000 caractères&#41;</span>
                          </label>
-                        <textarea name='description' class='clear tiny-mce' data-limit='1500'>".@$pv['description']."</textarea>
+                        <textarea name='description' class='clear tiny-mce' data-limit='2000'>".@$pv['description']."</textarea>
                     
                     </fieldset>
                 
