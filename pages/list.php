@@ -268,7 +268,7 @@ if($isListShowable){
 					<option value='desc' <?php echo (@$_GET['sortOrder']=="desc") ? "selected='selected'" : "" ?>>décroissant</option>
 				</select>
 			</fieldset>
-			<input type="submit" class="submit" value="Filter et Trier" />
+			<input type="submit" class="submit" value="Filtrer et Trier" />
 		</div>
 		<div class='dbg'>SQL users : <?= $sqlUsers ?></div>
 	
