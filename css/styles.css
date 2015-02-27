@@ -484,7 +484,7 @@ font-weight:bold;
 }
 .rtf ul, .rtf li, .list .rtf li{
     margin: auto;
-    list-style: inside none disc;
+    list-style: disc inside;
 }
 .admin-table-form input[type=text]{
     width: 50px;
