@@ -77,7 +77,7 @@ class Orcimail {
     
         $body = "
         <p>Bonjour ".$u->getFirstname().",</p>
-        <p>'A y'est, votre animation (".$party->getId().") a été validée par le comité d'organisation.</p>
+        <p>Ça y est, votre animation (".$party->getId().") a été validée par le comité d'organisation.</p>
         
         <p>Vous pouvez encore <strong>éditer</strong> la description détaillée, à l'aide du lien suivant: 
         <a href='".Controls::home()."?page=edit&partyId=".$party->getId()."'>".
