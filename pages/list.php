@@ -252,7 +252,7 @@ if($isListShowable){
 				?>
 				<div class="free-space-only clear">
 					<label for="free-space-only">Seulement les parties avec de la place disponible</label>
-					<input type="checkbox" name="free-space-only" id="free-space-only" />
+					<input type="checkbox" name="free-space-only" id="free-space-only" <?php echo (@$_GET['free-space-only']=="on") ? "checked='checked'" : "" ?> />
 				</div>
 			</fieldset>
 			<fieldset>
