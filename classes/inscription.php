@@ -66,4 +66,3 @@ class Inscription {
         return $res && ($nb === 1);
     }
 }
-?>

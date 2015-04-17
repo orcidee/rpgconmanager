@@ -1,14 +1,14 @@
 ﻿<?php
-
-require_once(dirname(__FILE__).'/../conf/bd.php');
 require_once(dirname(__FILE__).'/../conf/conf.php');
+
+$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());
+$db = (mysql_select_db(DB));
+mysql_query("SET NAMES 'utf8'");
+
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
 require_once(dirname(__FILE__).'/../classes/party.php');
 require_once(dirname(__FILE__).'/../classes/inscription.php');
-
-$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());
-$db = (mysql_select_db(DB));
 
 if(!$db){
     echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
@@ -20,7 +20,7 @@ if(!$db){
 		
 		if($user->getRole() == "administrator"){
             $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
-            var_dump($thisYear);
+
 			$sql = "SELECT Parties.*, Users.lastname, Users.firstname FROM Parties join Users on Parties.userId = Users.userId WHERE Parties.state in ('validated', 'verified') AND Parties.year = ".$thisYear." order by Parties.partyId ASC";
 			$res = mysql_query ( $sql );
 
@@ -135,4 +135,3 @@ if(!$db){
 		echo "</div>";
 	}
 }
-?>
