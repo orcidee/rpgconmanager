@@ -82,7 +82,7 @@ if(!$db){
             while($row = mysql_fetch_array($res)) {
                 $tables = explode(',', $row['table']);
                 foreach($tables as $t){
-                    if(!is_array($tableMatrix[$t])){
+                    if(!array_key_exists($t, $tableMatrix) || !is_array($tableMatrix[$t])){
                         $tableMatrix[$t] = array();
                     }
                     $tableMatrix[$t][] = array(
@@ -135,7 +135,7 @@ if(!$db){
                     $currentIndex = $p['offset'] + $p['duration'];
 
                     // Deals with bad planning (table overflow)
-                    if($warning){
+                    if(@$warning){
                         $currentIndex += ($p['duration'] + $backupOffset - $p['offset']);
                         $warning = false;
                     }
