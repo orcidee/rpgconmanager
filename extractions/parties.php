@@ -103,7 +103,7 @@ if(!$db){
 				$PDF->SetFont('');
 				$PDF->Cell($Col2width + $Col3width + $Col4width,7,"","R",1);
 
-				$PDF->MultiCell($Col1width + $Col2width + $Col3width + $Col4width,7,$row['description'],"LR");
+				$PDF->MultiCell($Col1width + $Col2width + $Col3width + $Col4width,7, html_entity_decode(strip_tags($row['description'])),"LR");
 
 				$PDF->SetLineWidth(.1);
 				$PDF->Cell($Col1width + $Col2width + $Col3width + $Col4width,0,"","T",1);
