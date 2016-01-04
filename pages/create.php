@@ -281,8 +281,8 @@ if($user){
                     
                         <legend>Organisation</legend>
                         
-                        <div id='animation'>Les traditionnelles conférences de JDR'idée auront lieu entre <strong>18h00 et 21h30</strong> le samedi soir. <br/>
-                       De plus, un atelier de création d'univers de JDR aura lieu <strong>dès 13h</strong> le samedi. Avis aux intéressés!</div>
+                        <div id='animation'>Les traditionnelles conférences de JDR'idée auront lieu entre <strong>18h00 et 21h30</strong> le samedi soir.
+                 Avis aux intéressés!</div>
                         
                         <label for='duration'>Durée prévue</label>
                         <select name='duration' id='duration' $enable>";
