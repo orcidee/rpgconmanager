@@ -10,7 +10,7 @@ require_once(dirname(__FILE__).'/conf/conf.php');
         <meta name="keywords" lang="fr" content="orcidee">
 		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href="css/styles.css?_<?php echo CACHE_KILL;?>" />
-		<link rel="stylesheet" type="text/css" href="css/2015.css?_<?php echo CACHE_KILL;?>"/>
+		<link rel="stylesheet" type="text/css" href="css/2016.css?_<?php echo CACHE_KILL;?>"/>
         <link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC|Playfair+Display:400,400italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
 
         <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
