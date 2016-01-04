@@ -13,7 +13,7 @@ $head = "
         <meta name='keywords' lang='fr' content='orcidee'>
 		<link rel='stylesheet' type='text/css' href='css/jquery-ui.css' />
         <link rel='stylesheet' type='text/css' href='css/styles.css' />
-		<link rel='stylesheet' type='text/css' href='css/2015.css' />
+		<link rel='stylesheet' type='text/css' href='css/2016.css' />
 		
     </head>
     <body>
