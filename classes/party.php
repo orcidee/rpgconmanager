@@ -166,7 +166,6 @@ class Party {
                         "`tableAmount`='".addslashes($this->tableAmount)."'".
                         " WHERE `partyId` = '".$this->partyId."'";
 
-                        var_dump($sql);die();
                     } elseif($this->state == 'validated') {
                         $sql = "UPDATE Parties SET ".
                         "`description`='".addslashes($this->description)."',".
