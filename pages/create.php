@@ -294,8 +294,6 @@ if($user){
                         echo "</select>
                         
                         <label for='start'>Heure de début souhaitée</label>
-
-
                         <select name='start' class='' id='start' $enable>";
                             
                             $start  = Controls::getDate(Controls::CONV_START);
@@ -303,7 +301,7 @@ if($user){
                             for($i = $start ; $i<$end ; $i+=3600){
                                 $l = (strftime("%d-%m-%Y %H", $i)) . ":00";
                                 $v = (strftime("%Y-%m-%d %H", $i)) . ":00";
-                                $selected = ($v == $pv['start']) ? "selected='selected'" : "";
+                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             }
 
