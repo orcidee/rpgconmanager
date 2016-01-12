@@ -162,9 +162,11 @@ class Party {
                         "`description`='".addslashes($this->description)."',".
                         "`note`='".addslashes($this->note)."',".
                         "`language`='".addslashes($this->language)."',".
-                        "`state`='".addslashes($this->state)."'".
+                        "`state`='".addslashes($this->state)."',".
                         "`tableAmount`='".addslashes($this->tableAmount)."'".
                         " WHERE `partyId` = '".$this->partyId."'";
+
+                        var_dump($sql);die();
                     } elseif($this->state == 'validated') {
                         $sql = "UPDATE Parties SET ".
                         "`description`='".addslashes($this->description)."',".
