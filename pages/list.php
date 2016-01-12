@@ -488,7 +488,13 @@ if($isListShowable){
 							</div>
 							<?php if(!$animates && $p->accMail()){ ?>
 							<div class="more clear">
-								<span class="mailMJ" onClick="showElem('ctct_mj_<?php echo $row['partyId']; ?>')">>>Contacter le MJ<<</span>
+
+								<?php
+								if(Controls::isPlayerOpen() || ($user && $user->isAdmin())) { ?>
+									<span class="mailMJ" onClick="showElem('ctct_mj_<?php echo $row['partyId']; ?>')">
+										>>Contacter le MJ<<
+									</span>
+								<?php } ?>
 								<ul id="ctct_mj_<?php echo $row['partyId']; ?>" style="display:none">
 									
 									<div id="ret_ctct_mj_<?php echo $row['partyId']; ?>" style="width:100%"></div>
