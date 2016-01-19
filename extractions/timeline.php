@@ -19,7 +19,7 @@ if(!$db){
 
 		if($user->getRole() == "administrator"){
 
-			header("Content-type: application/vnd.ms-excel");
+			header("Content-type: application/vnd.ms-excel; charset=UTF-8");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
 			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
