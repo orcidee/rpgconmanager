@@ -48,6 +48,12 @@ if(!$db){
                 }
             }
     
+        }elseif(isset($_GET["value"]) && @$_GET["action"] == Controls::NB_TABLES){
+            echo '"action":"'.Controls::NB_TABLES.'", "status":';
+            $val = $_GET["value"];
+            echo (is_int($val) || ctype_digit($val)) ? '"ok"' : '"error"';
+            echo ', "oldValue": '.Controls::getNbTables().'}';
+            Controls::setNbTables($val);
         }
     }
 }

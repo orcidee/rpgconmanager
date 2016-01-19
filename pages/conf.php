@@ -12,6 +12,19 @@ if($user){
     
     if($user->getRole() == "administrator"){
 
+        echo "<h2>Nombre de tables à disposition</h2>";
+        $nbTables = Controls::getNbTables();
+        ?>
+        <div class="number-of-tables clearfix">
+            <div class="clear">
+                <input id="number-of-tables-text" data-concern="<?= Controls::NB_TABLES?>" type="text" value="<?= $nbTables ?>" />
+            </div>
+            <div class="clear">
+                <input type="button" value="Définir" id="number-of-tables-submit" style="margin:15px 0 20px;text-align:center;"/>
+            </div>
+        </div>
+        <?php
+
         echo "<h2>Dates de la convention</h2>";
         $convStartTime = Controls::getDate(Controls::CONV_START);
         $convStartDate = Controls::getDate(Controls::CONV_START, "%d.%m.%Y à %H:%M");
