@@ -15,8 +15,37 @@ class Controls {
     const MJ_CLOSE = "mjCloseDate";
     const PLAYER_OPEN = "playerOpenDate";
     const PLAYER_CLOSE = "playerCloseDate";
+    const NB_TABLES = "numberOfTables";
 
-    
+
+    public static function getNbTables(){
+
+        // TODO Change connexion mode globally, here is the right way to do.
+        // Create connection
+        $connexion = new mysqli(HOST, USER, PASSWORD, DB);
+        // Check connection
+        if ($connexion->connect_error) {
+            die("Connection failed: " . $connexion->connect_error);
+        }
+
+        $sql = "SELECT * FROM Controls WHERE `key` = '".self::NB_TABLES."'";
+        $result = $connexion->query($sql);
+        $connexion->close();
+
+        // var_dump($result->num_rows);die();
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            return intval($result->fetch_assoc()['value']);
+        } else {
+            return 0;
+        }
+    }
+
+    public static function setNbTables($nbTables){
+        return self::setProperty(self::NB_TABLES, $nbTables);
+    }
+
     /**
     * Retourne TRUE si l'application est ouverte, FALSE sinon.
     * Lorsque l'application est ouverte, tous les services sont disponibles,
@@ -201,15 +230,23 @@ class Controls {
     */
     private static function setDatesOfKey($stamp, $key = NULL) {
         $key = (is_null($key)) ? "appOpenDate" : $key;
+        return self::setProperty($key, $stamp);
+    }
+
+    /**
+     * Defini la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
+     * Retourne true si la nouvelle date a pu etre enregistree en BD.
+     */
+    private static function setProperty($key, $val) {
         $sql = "SELECT * FROM Controls WHERE `key` = '$key'";
         $res = mysql_query ( $sql );
         $nb = mysql_num_rows($res);
         $res = false;
         if ($nb == 0){
-            $sql = "INSERT INTO Controls (`key`,`value`) VALUES ('$key','$stamp')";
+            $sql = "INSERT INTO Controls (`key`,`value`) VALUES ('$key','$val')";
             $res = mysql_query ( $sql );
         }elseif($nb == 1){
-            $sql = "UPDATE Controls SET value = '$stamp' WHERE `key` = '$key'";
+            $sql = "UPDATE Controls SET value = '$val' WHERE `key` = '$key'";
             $res = mysql_query ( $sql );
         }
         return ($res)?true:false;

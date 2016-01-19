@@ -520,6 +520,28 @@ orcidee.manager = {
             $("#player-dates").click(function(){
                 me.saveNewDates(this, $(".player-controls .open-date")[0]);
             });
+            $("#number-of-tables-submit").click(function(){
+                me.saveNumberOfTables(this, $("#number-of-tables-text"));
+            });
+        },
+        saveNumberOfTables: function(btn, $valueInput){
+            $.ajax({
+                data:{
+                    "value": $valueInput.val(),
+                    "action": $valueInput.data("concern")
+                },
+                url:"actions/controls.php",
+                method: "GET",
+                dataType: "json",
+                success: function(msg, s, xhr){
+                    if(msg.status == "ok"){
+                        $valueInput.parent().append("New number successfully saved!<br/>");
+                    }else{
+                        $valueInput.val(msg.oldValue);
+                        $valueInput.parent().append("Failed to save new number!<br/>");
+                    }
+                }
+            });
         },
         // Server request to save new dates
         saveNewDates: function(btn){
