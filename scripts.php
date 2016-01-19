@@ -10,7 +10,7 @@ mysql_query("SET NAMES 'utf8'");
 ?>
 <script><!--
     orcidee.manager.createParty.options = {
-        max: <?php  echo TABLES; ?>,
+        max: <?php  echo Controls::getNbTables(); ?>,
         start: <?php echo Controls::getDate(Controls::CONV_START, "%H"); ?>
     };
     orcidee.manager.isDebug = <?php echo (IS_DEBUG)?'true':'false'; ?>;
