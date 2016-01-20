@@ -17,11 +17,15 @@ if($user){
 
     if($user->getRole() == "administrator"){
 
-        header("Content-type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
+
 
         $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
         $animators = User::getUsersByYear(User::ROLE_MJ, $thisYear);
+
+        ob_start();
+
+        header("Content-type: application/vnd.ms-excel; charset=iso-8859-1");
+        header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
         ?>
 
@@ -52,6 +56,11 @@ if($user){
         ?>
         </table>
     <?php
+
+        $output = mb_convert_encoding(ob_get_contents(),'iso-8859-1','utf-8');
+        ob_end_clean();
+        echo $output;
+
     }else{
         echo "<p>Acces restreint à l'administrateur</p>";
     }
