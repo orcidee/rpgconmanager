@@ -16,9 +16,10 @@ if($user){
 ?>
 		<h1>Extractions possibles</h1>
         <ul>
-			<li><a href="extractions/timeline.php" target="_blank">timeline par partie</a></li>
-			<li><a href="extractions/timelineTable.php" target="_blank">timeline par table</a></li>
-			<li><a href="extractions/parties.php" target="_blank">parties</a></li>
+			<li><a href="extractions/timeline.php" target="_blank">Timeline par partie</a></li>
+			<li><a href="extractions/timelineTable.php" target="_blank">Timeline par table</a></li>
+			<li><a href="extractions/parties.php" target="_blank">Parties</a></li>
+			<li><a href="extractions/mj.php" target="_blank">Animateurs</a></li>
 		</ul>
 <?php
 	}else{

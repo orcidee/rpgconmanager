@@ -2,6 +2,10 @@
 
 class User {
 
+    const ROLE_PJ = "player";
+    const ROLE_MJ = "animator";
+    const ROLE_ADMIN = "administrator";
+
     private $userId;
     private $lastname;
     private $firstname;
