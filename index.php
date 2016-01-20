@@ -20,8 +20,7 @@ require_once(dirname(__FILE__).'/conf/conf.php');
                 menubar: false,
                 plugins: "link hr code table textcolor preview",
                 toolbar: [
-                    "styleselect | bold italic underline forecolor | table | code",
-                    "link hr bullist numlist | alignleft aligncenter alignright | removeformat | preview"
+                    "bold italic underline forecolor | table | link bullist numlist | alignleft aligncenter alignright | removeformat | preview"
                 ],
                 init_instance_callback: function(editor) {
                     setTimeout(function(){
