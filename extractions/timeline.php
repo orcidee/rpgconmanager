@@ -19,7 +19,9 @@ if(!$db){
 
 		if($user->getRole() == "administrator"){
 
-			header("Content-type: application/vnd.ms-excel");
+			ob_start();
+
+			header("Content-type: application/vnd.ms-excel; charset=iso-8859-1");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
 			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
@@ -92,6 +94,11 @@ if(!$db){
 					echo "</tr>";
 				}
 			echo "</table>";
+
+			$output = mb_convert_encoding(ob_get_contents(),'iso-8859-1','utf-8');
+			ob_end_clean();
+			echo $output;
+
 		}else{
 			echo "<p>Acces restreint à l'administrateur</p>";
 		}
