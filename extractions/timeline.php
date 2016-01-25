@@ -19,12 +19,11 @@ if(!$db){
 
 		if($user->getRole() == "administrator"){
 
+
 			ob_start();
 
-            header('Content-Encoding: UTF-8');
-			header("Content-type: application/vnd.ms-excel; charset=UTF-8");
-			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
-            echo "\xEF\xBB\xBF"; // UTF-8 BOM
+            header("Content-type: application/vnd.ms-excel; charset=iso-8859-1");
+            header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
 			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
 			$start = Controls::getDate(Controls::CONV_START);
@@ -99,8 +98,7 @@ if(!$db){
 				}
 			echo "</table>";
 
-			//$output = mb_convert_encoding(ob_get_contents(),'UTF-8','UTF-8');
-            $output = ob_get_contents();
+			$output = mb_convert_encoding(ob_get_contents(),'iso-8859-1','UTF-8');
 			ob_end_clean();
 			echo $output;
 
