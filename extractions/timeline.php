@@ -21,8 +21,10 @@ if(!$db){
 
 			ob_start();
 
-			header("Content-type: application/vnd.ms-excel; charset=iso-8859-1");
+            header('Content-Encoding: UTF-8');
+			header("Content-type: application/vnd.ms-excel; charset=UTF-8");
 			header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
+            echo "\xEF\xBB\xBF"; // UTF-8 BOM
 
 			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
 			$start = Controls::getDate(Controls::CONV_START);
@@ -33,12 +35,12 @@ if(!$db){
 ?>
 			<table border='1' width='100%' cellspacing='3' cellpadding='3'>
 				<tr>
-					<td align='center' valign='middle' colspan='<?= $duration + 2 ?>'>
+					<td align='center' valign='middle' colspan='<?= $duration + 3 ?>'>
 						<font size='+6'><b>TIMELINE DE LA CONVENTION PAR PARTIE</b><br><br></font>
 					</td>
 				</tr>
 				<tr>
-					<td align='center' valign='middle' colspan='2'>
+					<td align='center' valign='middle' colspan='3'>
 						&nbsp;
 					</td>
 					<td align='center' valign='middle' colspan='<?= 24 - $startHour ?>'>
@@ -52,6 +54,7 @@ if(!$db){
 				<tr>
 					<td align='left' WIDTH='300'><font size='-2'>&nbsp; <b>Nom du Jeu:</b> &nbsp;</font></td>
 					<td align='left' WIDTH='100'><font size='-2'>&nbsp; <b>Type de Jeu:</b> &nbsp;</font></td>
+					<td align='left' WIDTH='100'><font size='-2'>&nbsp; <b>Table:</b> &nbsp;</font></td>
 <?php
 					for ($timeline=$startHour; $timeline<=($startHour + $duration - 1); $timeline++){
 						if ($timeline<24){
@@ -79,6 +82,7 @@ if(!$db){
 					echo "<tr><td align='left'><font size='2'>";
 					echo "&nbsp;<b>P".($num<10 ? "0" : "").$num." - ".$ligne["name"]."</b> &nbsp";
 					echo "</font></td><td>".stripslashes($ligne["typeName"])."</td>";
+					echo "<td align='left'>".stripslashes($ligne["table"])."</td>";
 
 					$partyDate = strtotime($ligne["start"]);
 					$partyOffset = ($partyDate - $start) / 3600;
@@ -95,7 +99,8 @@ if(!$db){
 				}
 			echo "</table>";
 
-			$output = mb_convert_encoding(ob_get_contents(),'iso-8859-1','utf-8');
+			//$output = mb_convert_encoding(ob_get_contents(),'UTF-8','UTF-8');
+            $output = ob_get_contents();
 			ob_end_clean();
 			echo $output;
 
