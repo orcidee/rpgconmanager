@@ -170,9 +170,13 @@ class Orcimail {
         ));
     }
 
+    /**
+     * @param Party $p
+     * @param User $user
+     * @return bool
+     */
     public static function subscribeToParty ($p, $user){
     
-        $type = $p->getType();
         $mj = $p->getAnimator();
     
         // Corps de l'email à l'inscription joueur, à une partie.
@@ -182,7 +186,7 @@ class Orcimail {
         <br/>
         <p><strong>Vous allez donc participer à l'animation suivante</strong></p>
         <table cellpadding='5' cellspacing='0' border='1'>
-            <tr><td>Type</td><td>".stripslashes($type['name'])."</td></tr>
+            <tr><td>Type</td><td>".$p->getTypeName()."</td></tr>
             <tr><td>Titre</td><td>".$p->getName()."</td></tr>
             <tr><td>Genre</td><td>".$p->getKind()."</td></tr>
             <tr><td>Scénario</td><td>".$p->getScenario()."</td></tr>
@@ -223,7 +227,7 @@ class Orcimail {
         <p>Bonjour ".$user->getFirstname().",</p>
 		<br/>
         <p>Vous avez demandé à être désinscrit de l'animation no ".$p->getId().",
-			intitulée '".stripslashes($p->getName())."',
+			intitulée '".$p->getName()."',
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>
 		<br/>";
 			        
@@ -250,7 +254,7 @@ class Orcimail {
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
         <p>Nous vous informons que vous avez été désinscrit de l'animation no ".$p->getId().",
-			intitulée '".stripslashes($p->getName())."',
+			intitulée '".$p->getName()."',
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>
         <p>N'hésitez pas à nous contacter si besoin de détails : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
         <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>";
@@ -276,7 +280,7 @@ class Orcimail {
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
         <p>Nous vous informons de l'annulation de l'animation no ".$p->getId().",
-			intitulée '".stripslashes($p->getName())."',
+			intitulée '".$p->getName()."',
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).". Vous avez été désinscrit.</p>
         <p>N'hésitez pas à nous contacter si besoin de détails : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
         <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>";
@@ -287,11 +291,15 @@ class Orcimail {
             'body' => $message
         ));
     }
-    
+
+    /**
+     * @param Party $p
+     * @param $edit
+     * @return bool
+     */
     public static function notifyCreate ($p, $edit){
         
         $user = $p->getAnimator();
-        $type = $p->getType();
         
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
@@ -299,7 +307,7 @@ class Orcimail {
         <br/>
         <p><strong>Votre animation</strong></p>
         <table cellpadding='5' cellspacing='0' border='1'>
-            <tr><td>Type</td><td>".stripslashes($type['name'])."</td></tr>
+            <tr><td>Type</td><td>".$p->getTypeName()."</td></tr>
             <tr><td>Titre</td><td>".$p->getName()."</td></tr>
             <tr><td>Genre</td><td>".$p->getKind()."</td></tr>
             <tr><td>Scénario</td><td>".$p->getScenario()."</td></tr>

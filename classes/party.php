@@ -432,6 +432,9 @@ class Party {
         $res = mysql_query ( $sql );
         return mysql_fetch_assoc($res);
     }
+    public function getTypeName() {
+        return stripslashes($this->getType()['name']);
+    }
     public function getName(){
 		return stripslashes($this->name);
 	}

@@ -50,11 +50,9 @@ if($user){
                 "confirmer ces données en cliquant sur le bouton \"Confirmer\". Si vous souhaitez ".
                 "corriger quelque chose, cliquez alors sur \"Corriger\".</p>".
                 "<p>Un mail de confirmation vous sera envoyé.</p>";
-                
-                $type = $party->getType();
-                
+
                 $txt .= "<table class='party-preview' cellspacing='0' cellpadding='0'>".
-                        "<tr><td>Type de jeu</td><td><strong>".stripslashes($type['name'])."</strong><br/>".$type['description']."</td></tr>".
+                        "<tr><td>Type de jeu</td><td><strong>".$party->getTypeName()."</strong><br/>".$party->getType()['description']."</td></tr>".
                         "<tr><td>Nom de la partie</td><td>".$party->getName()."</td></tr>".
                         "<tr><td>Genre</td><td>".$party->getKind()."</td></tr>".
                         "<tr><td>Scénario</td><td>".$party->getScenario()."</td></tr>".
@@ -168,7 +166,7 @@ if($user){
                         $editExisting = true;
                     }
                 }else{
-                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' !</strong></p>";
+                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".$p->getName()."' !</strong></p>";
                 }
             }
 
@@ -188,7 +186,7 @@ if($user){
 
             // Display a message if party has been canceled
             if(isset($p) && $p->getState() == 'canceled'){
-                echo "<p><strong>La partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' a été annulée et ne peut donc pas être éditée !</strong></p>";
+                echo "<p><strong>La partie no ".$p->getId()." nommée '".$p->getName()."' a été annulée et ne peut donc pas être éditée !</strong></p>";
             }
 
             ?>

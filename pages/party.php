@@ -19,7 +19,7 @@ $animator = $party->getAnimator();
 ?>
 
 <h1><?= $party->getName() ?></h1>
-<h2><?= $party->getType()['name'] ?></h2>
+<h2><?= $party->getTypeName() ?></h2>
 
 <div class="page-detail">
 
