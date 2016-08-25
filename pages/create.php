@@ -61,29 +61,15 @@ if($user){
                         "<tr><td>Nombre de joueur minimum</td><td>".$party->getPlayerMin()."</td></tr>".
                         "<tr><td>Nombre de joueur maximum</td><td>".$party->getPlayerMax()."</td></tr>".
                         "<tr><td>Niveau de jeu</td><td>";
-
-                $lvl = 'Peu importe';
-                switch ($party->getLevel()) {
-                    case 'low': $kind = 'Débutant';break;
-                    case 'middle': $kind = 'Initié';break;
-                    case 'high': $kind = 'Expert';break;
-                }
                             
-                $txt .= "$lvl</td></tr>".
+                $txt .= $p->getLevel()."</td></tr>".
                         "<tr><td>Nombre de tables</td><td>".$party->getTableAmount()."</td></tr>".
                         "<tr><td>Durée prévue</td><td>".$party->getDuration()." heure(s)</td></tr>".
                         "<tr><td>Heure de début souhaitée</td><td>".strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()))."</td></tr>".
                         "<tr><td>Description</td><td>".View::MultilineFormat($party->getDescription())."</td></tr>".
                         "<tr><td>Note aux orgas</td><td>".View::MultilineFormat($party->getNote())."</td></tr>".
                         "<tr><td>Langage</td><td>".$party->getLanguage()."</td></tr>".
-                        "<tr><td>Statut actuel</td><td>En cours de création</td></tr>".
-                        "<tr><td>Informations</td><td><ul>";
-                        
-                foreach ($party->infos as $v){
-                    $txt .= "<li>$v</li>";
-                }
-
-                $txt .= "</ul></tr></table>";
+                        "<tr><td>Statut actuel</td><td>En cours de création</td></tr></table>";
 
                 $animator = $user;
                 if($user->getUserId() != $party->getUserId()){

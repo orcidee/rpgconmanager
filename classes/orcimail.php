@@ -189,16 +189,7 @@ class Orcimail {
             <tr><td>Description</td><td>".$p->getDescription()."</td></tr>
             <tr><td>Niveau de jeu</td><td>";
             
-            $lvl = "Peu importe";
-            if($p->getLevel() == 'high'){
-                $lvl = "Expert";
-            }elseif($p->getLevel() == 'low'){
-                $lvl = "Débutant";
-            }elseif($p->getLevel() == 'middle'){
-                $lvl = "Initié";
-            }
-            
-            $message .= $lvl."</td></tr>
+            $message .= $p->getLevel()."</td></tr>
             <tr><td>Durée</td><td>".$p->getDuration()." heures</td></tr>
             <tr><td><strong>Date & Heure de début</strong></td><td><strong>";
             
@@ -317,16 +308,7 @@ class Orcimail {
             <tr><td>Nombre de joueurs maximum</td><td>".$p->getPlayerMax()."</td></tr>
             <tr><td>Niveau de jeu</td><td>";
             
-            $lvl = "Peu importe";
-            if($p->getLevel() == 'high'){
-                $lvl = "Expert";
-            }elseif($p->getLevel() == 'low'){
-                $lvl = "Débutant";
-            }elseif($p->getLevel() == 'middle'){
-                $lvl = "Initié";
-            }
-            
-            $message .= $lvl."</td></tr>
+            $message .= $p->getLevel()."</td></tr>
             <tr><td>Durée</td><td>".$p->getDuration()." heures</td></tr>
             <tr><td>Date & Heure de début</td><td>";
             

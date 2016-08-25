@@ -37,8 +37,7 @@ class Party {
         
         $this->isValid = true;
         $this->errors = array();
-        $this->infos = array();
-        
+
         // validate data
         if($new && is_array($arg)){
             $data = $arg;
@@ -342,7 +341,6 @@ class Party {
             "state"       => $this->state,
             "isValid"     => $this->isValid,
             "errors"      => $this->errors,
-            "infos"       => $this->infos,
             "tableAmount" => $this->tableAmount,
         );
         
@@ -450,7 +448,15 @@ class Party {
 		return $this->playerMax;
 	}
     public function getLevel(){
-		return $this->level;
+
+        $levels = array(
+            'low' => 'Débutant',
+            'middle' => 'Initié',
+            'high' => 'Expert',
+            'anyway' => 'Peu importe'
+        );
+
+		return $levels[$this->level];
 	}
     public function getDuration(){
 		return $this->duration;
