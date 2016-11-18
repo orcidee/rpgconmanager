@@ -69,6 +69,8 @@ if(!$db){
         break;
         case "edit": $title = "Editer une animation existante";
         break;
+        case "party": $title = "Détail de la partie";
+        break;
         case "profile": $title = "Editer mon profil";
         break;
         case "list": $title = "Liste des parties";
@@ -106,10 +108,10 @@ if(!$db){
             }
 
         }
-        
-        // Liste des parties (avec ou sans filtre)
-        if(@$_GET['page'] == "list"){
-                $view->content = "list";
+
+        // Open pages
+        if ( in_array (@$_GET['page'], array('list', 'party'))) {
+            $view->content = $_GET['page'];
         }
         
     }

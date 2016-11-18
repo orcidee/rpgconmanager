@@ -50,40 +50,24 @@ if($user){
                 "confirmer ces données en cliquant sur le bouton \"Confirmer\". Si vous souhaitez ".
                 "corriger quelque chose, cliquez alors sur \"Corriger\".</p>".
                 "<p>Un mail de confirmation vous sera envoyé.</p>";
-                
-                $type = $party->getType();
-                
+
                 $txt .= "<table class='party-preview' cellspacing='0' cellpadding='0'>".
-                        "<tr><td>Type de jeu</td><td><strong>".stripslashes($type['name'])."</strong><br/>".$type['description']."</td></tr>".
+                        "<tr><td>Type de jeu</td><td><strong>".$party->getTypeName()."</strong><br/>".$party->getType()['description']."</td></tr>".
                         "<tr><td>Nom de la partie</td><td>".$party->getName()."</td></tr>".
                         "<tr><td>Genre</td><td>".$party->getKind()."</td></tr>".
                         "<tr><td>Scénario</td><td>".$party->getScenario()."</td></tr>".
                         "<tr><td>Nombre de joueur minimum</td><td>".$party->getPlayerMin()."</td></tr>".
                         "<tr><td>Nombre de joueur maximum</td><td>".$party->getPlayerMax()."</td></tr>".
                         "<tr><td>Niveau de jeu</td><td>";
-
-                $lvl = 'Peu importe';
-                switch ($party->getLevel()) {
-                    case 'low': $kind = 'Débutant';break;
-                    case 'middle': $kind = 'Initié';break;
-                    case 'high': $kind = 'Expert';break;
-                }
                             
-                $txt .= "$lvl</td></tr>".
+                $txt .= $p->getLevel()."</td></tr>".
                         "<tr><td>Nombre de tables</td><td>".$party->getTableAmount()."</td></tr>".
                         "<tr><td>Durée prévue</td><td>".$party->getDuration()." heure(s)</td></tr>".
                         "<tr><td>Heure de début souhaitée</td><td>".strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()))."</td></tr>".
                         "<tr><td>Description</td><td>".View::MultilineFormat($party->getDescription())."</td></tr>".
                         "<tr><td>Note aux orgas</td><td>".View::MultilineFormat($party->getNote())."</td></tr>".
                         "<tr><td>Langage</td><td>".$party->getLanguage()."</td></tr>".
-                        "<tr><td>Statut actuel</td><td>En cours de création</td></tr>".
-                        "<tr><td>Informations</td><td><ul>";
-                        
-                foreach ($party->infos as $v){
-                    $txt .= "<li>$v</li>";
-                }
-
-                $txt .= "</ul></tr></table>";
+                        "<tr><td>Statut actuel</td><td>En cours de création</td></tr></table>";
 
                 $animator = $user;
                 if($user->getUserId() != $party->getUserId()){
@@ -182,7 +166,7 @@ if($user){
                         $editExisting = true;
                     }
                 }else{
-                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' !</strong></p>";
+                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".$p->getName()."' !</strong></p>";
                 }
             }
 
@@ -202,7 +186,7 @@ if($user){
 
             // Display a message if party has been canceled
             if(isset($p) && $p->getState() == 'canceled'){
-                echo "<p><strong>La partie no ".$p->getId()." nommée '".stripslashes($p->getName())."' a été annulée et ne peut donc pas être éditée !</strong></p>";
+                echo "<p><strong>La partie no ".$p->getId()." nommée '".$p->getName()."' a été annulée et ne peut donc pas être éditée !</strong></p>";
             }
 
             ?>
@@ -290,22 +274,46 @@ if($user){
                             for($i = 1 ; $i<=15 ; $i++){
                                 echo "<option value='$i' ".(($pv['duration']==$i)?"selected='selected'":"").">$i heure".(($i==1)?'':'s')."</option>";
                             }
+                        echo '</select>'
+                        ?>
 
-                        echo "</select>
-                        
-                        <label for='start'>Heure de début souhaitée</label>
-                        <select name='start' class='' id='start' $enable>";
-                            
+                        <label for='day-start'>Jour de début de la partie</label>
+                        <select     id='day-start' name='day-start'
+                                    data-start='<?= Controls::getDate(Controls::CONV_START)?>'
+                                    data-end='<?= Controls::getDate(Controls::CONV_END)?>'
+                                    <?=$enable?>>
+                            <option name='saturday'>Samedi</option>
+                            <option name='sunday'>Dimanche</option>
+                        </select>
+
+                        <label for="time-start-day1">Heure de début</label>
+                        <select id='time-start-day1' <?=$enable?>>
+                            <?php
                             $start  = Controls::getDate(Controls::CONV_START);
+                            $midnight = strtotime(Controls::getDate(Controls::CONV_END, '%Y-%m-%d 00:00'));
                             $end    = Controls::getDate(Controls::CONV_END);
-                            for($i = $start ; $i<$end ; $i+=3600){
-                                $l = (strftime("%d-%m-%Y %H", $i)) . ":00";
-                                $v = (strftime("%Y-%m-%d %H", $i)) . ":00";
+
+                            for($i = $start ; $i<$midnight ; $i+=1800){
+                                $l = strftime("%H:%M", $i);
+                                $v = strftime("%Y-%m-%d %H:%M", $i);
+                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
+                                echo "<option value='$v' $selected>$l</option>";
+                            } ?>
+
+                        </select>
+
+                        <label for="time-start-day2">Heure de début</label>
+                        <select id='time-start-day2' <?=$enable?>>
+                            <?php
+                            for($i = $midnight ; $i<$end ; $i+=1800){
+                                $l = strftime("%H:%M", $i);
+                                $v = strftime("%Y-%m-%d %H:%M", $i);
                                 $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             }
 
-                        echo "</select>";
+                            echo "</select>";
+
                         echo "<input type='button' id='check-dispo' value='Tester la disponibilité' $enable />
                         
                         <div id='check-dispo-result'></div>

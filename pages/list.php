@@ -10,13 +10,13 @@ If(!$user && isset($_SESSION["userEmail"])){
 	$user = User::pseudoAuth($_SESSION["userEmail"]);
 }
 
-	// Libellés des états de parties
-	$stateLabels = array();
-	$stateLabels['created'] = "Créée";
-	$stateLabels['verified'] = "Vérifiée";
-	$stateLabels['validated'] = "Validée";
-	$stateLabels['refused'] = "Refusée";
-	$stateLabels['canceled'] = "Annulée";
+// Libellés des états de parties
+$stateLabels = array();
+$stateLabels['created'] = "Créée";
+$stateLabels['verified'] = "Vérifiée";
+$stateLabels['validated'] = "Validée";
+$stateLabels['refused'] = "Refusée";
+$stateLabels['canceled'] = "Annulée";
 
 // Debug
 echo "<div class='dbg'>User:";

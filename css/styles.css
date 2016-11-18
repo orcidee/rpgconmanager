@@ -39,6 +39,11 @@ div.party-create textarea.clear
 overflow-y:scroll;
 }
 
+div.party-create label[for=time-start-day2],
+div.party-create #time-start-day2 {
+    display: none;
+}
+
 .w300{
     width:300px;
 }

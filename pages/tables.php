@@ -76,7 +76,8 @@ if($user){
 						<?php
 						$tableAmount = intval($row['tableAmount']);
 						for($i = 1; $i < $tableAmount; $i++) {
-							?><input type='text' name='table-<?= $i .'-'. $row["partyId"] ?>' value='<?= $tablesArray[$i]?>'
+							$value = array_key_exists($i, $tablesArray) ? $tablesArray[$i] : '';
+							?><input type='text' name='table-<?= $i .'-'. $row["partyId"] ?>' value='<?= $value ?>'
 									 maxlength="20" /><?php
 						}?>
 					</td>
