@@ -274,22 +274,46 @@ if($user){
                             for($i = 1 ; $i<=15 ; $i++){
                                 echo "<option value='$i' ".(($pv['duration']==$i)?"selected='selected'":"").">$i heure".(($i==1)?'':'s')."</option>";
                             }
+                        echo '</select>'
+                        ?>
 
-                        echo "</select>
-                        
-                        <label for='start'>Heure de début souhaitée</label>
-                        <select name='start' class='' id='start' $enable>";
-                            
+                        <label for='day-start'>Jour de début de la partie</label>
+                        <select     id='day-start' name='day-start'
+                                    data-start='<?= Controls::getDate(Controls::CONV_START)?>'
+                                    data-end='<?= Controls::getDate(Controls::CONV_END)?>'
+                                    <?=$enable?>>
+                            <option name='saturday'>Samedi</option>
+                            <option name='sunday'>Dimanche</option>
+                        </select>
+
+                        <label for="time-start-day1">Heure de début</label>
+                        <select id='time-start-day1' <?=$enable?>>
+                            <?php
                             $start  = Controls::getDate(Controls::CONV_START);
+                            $midnight = strtotime(Controls::getDate(Controls::CONV_END, '%Y-%m-%d 00:00'));
                             $end    = Controls::getDate(Controls::CONV_END);
-                            for($i = $start ; $i<$end ; $i+=3600){
-                                $l = (strftime("%d-%m-%Y %H", $i)) . ":00";
-                                $v = (strftime("%Y-%m-%d %H", $i)) . ":00";
+
+                            for($i = $start ; $i<$midnight ; $i+=1800){
+                                $l = strftime("%H:%M", $i);
+                                $v = strftime("%Y-%m-%d %H:%M", $i);
+                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
+                                echo "<option value='$v' $selected>$l</option>";
+                            } ?>
+
+                        </select>
+
+                        <label for="time-start-day2">Heure de début</label>
+                        <select id='time-start-day2' <?=$enable?>>
+                            <?php
+                            for($i = $midnight ; $i<$end ; $i+=1800){
+                                $l = strftime("%H:%M", $i);
+                                $v = strftime("%Y-%m-%d %H:%M", $i);
                                 $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             }
 
-                        echo "</select>";
+                            echo "</select>";
+
                         echo "<input type='button' id='check-dispo' value='Tester la disponibilité' $enable />
                         
                         <div id='check-dispo-result'></div>

@@ -28,6 +28,16 @@ orcidee.manager = {
                 });
             }
         });
+        $('#day-start').change(function(e){
+            var day = $('option:selected', this).attr('name');
+            if (day === 'saturday') {
+                $('label[for=time-start-day1], #time-start-day1').show();
+                $('label[for=time-start-day2], #time-start-day2').hide();
+            } else {
+                $('label[for=time-start-day2], #time-start-day2').show();
+                $('label[for=time-start-day1], #time-start-day1').hide();
+            }
+        });
     },
     adaptHeight: function(){
         var h = $("html").height() + 'px';
