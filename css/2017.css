@@ -519,17 +519,17 @@ div.profile ul.result
 
 input#check-dispo {
 background-color: transparent;
-border: 3px double #9d1923;
+border: 3px double #1aa8bc;
 clear: both;
-color: #9d1923;
+color: #1aa8bc;
 font-family: "Orbitron",serif;
 font-size: 20px;
 margin: 0 36% 15px 36%;
 width: auto;
 }
 input#check-dispo:active {
-background-color: #9d1923;
-border: 3px double #9d1923;
+background-color: #1aa8bc;
+border: 3px double #1aa8bc;
 clear: both;
 color: #ffffff;
 font-family: "Orbitron",serif;
