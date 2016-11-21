@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/conf/conf.php');
 ?>
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="fr" >
 
     <head>
@@ -12,6 +12,7 @@ require_once(dirname(__FILE__).'/conf/conf.php');
         <link rel="stylesheet" type="text/css" href="css/styles.css?_<?php echo CACHE_KILL;?>" />
 		<link rel="stylesheet" type="text/css" href="css/2017.css?_<?php echo CACHE_KILL;?>"/>
         <link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC|Playfair+Display:400,400italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700" rel="stylesheet">
 
         <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
         <script type="text/javascript">
@@ -63,7 +64,7 @@ if(!$db){
     }
 
     $title = null;
-    
+
     switch (@$_GET['page']){
         case "create": $title = "Proposer une partie ou une animation";
         break;
@@ -84,24 +85,24 @@ if(!$db){
         case "logout": $title = "Déconnexion";
         break;
     }
-    
-    
+
+
     if(Controls::isAppOpen()){
-        
+
         if($user && ($user->getRole() == "animator" || $user->getRole() == "administrator") ){
-        
+
             // Ajouter une partie / Editer une partie
             if(@$_GET['page'] == "create" || @$_GET['page'] == "edit"){
                 if(Controls::isMjOpen() || isset($_GET['partyId'])){
                     $view->content = "create";
                 }
             }
-            
+
             // Editer mon profil
             if(@$_GET['page'] == "profile"){
                 $view->content = "profile";
             }
-			
+
 			// Contacter l'équipe orc'idee
 			if(@$_GET['page'] == "contact"){
                 $view->content = "contact";
@@ -113,44 +114,44 @@ if(!$db){
         if ( in_array (@$_GET['page'], array('list', 'party'))) {
             $view->content = $_GET['page'];
         }
-        
+
     }
-    
+
     if($user && $user->getRole() == "administrator"){
-        
+
         // Impressions (plans)
         if(@$_GET['page'] == "print"){
             $view->content = "print";
         }
-        
+
         // Contrôles de l'application
         if(@$_GET['page'] == "conf"){
             $view->content = "conf";
         }
-        
+
         // Définition des numéros de table
         if(@$_GET['page'] == "tables"){
             $view->content = "tables";
         }
-        
+
         // Définition des numéros de table
         if(@$_GET['page'] == "users"){
             $view->content = "users";
         }
     }
-    
+
     if(@$_GET['page'] == "logout"){
         $view->content = "logout";
     }
 
     if(!$user){
-        
+
         // By default: No forward after authentification
         $forward = "";
-        
+
         // $title not null means we know the feature requested (see switch case, upper in this page)
         if(!is_null($title)){
-        
+
             $forwardValues = "";
             // Add here valid forward parameter
             if(isset($_GET['page']) && $_GET['page'] != 'logout'){
@@ -162,11 +163,11 @@ if(!$db){
             $forward = "?forward=".urlencode($forwardValues);
         }
     }
-    
+
 	if( ! @$_GET["modal"] == true ){
 		include("menu.php");
 	}
-    
+
     if(!is_null($view->content)){
         $view->html();
     } else {
@@ -174,7 +175,7 @@ if(!$db){
 		<br/><br/>
 		<div style='margin:auto; text-align:center;'><img src='http://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
 	}
-    
+
 
 }
 mysql_close($dbServer);
