@@ -313,6 +313,12 @@ if($user){
                             }
 
                             echo "</select>";
+                            echo " <br><br><br><br><br><br><br><br><br><br>";
+                             echo "<div style='width:30%;margin:auto;padding: 5px; border:1px solid black;'><p style='font-size:1.1em; font-weight:bold;margin-top:0px;'>Légende:</p>";
+                             echo "<p style='background-color:green;color:white;line-height: 1.4em;vertical-align:middle;'>moins de 50% de tables occupées</p>";
+                             echo "<p style='background-color:orange;color:white;line-height: 1.4em;vertical-align:middle;'>moins de 75% de tables occupées</p>";
+                             echo "<p style='background-color:red;color:white;line-height: 1.4em;vertical-align:middle;'>moins de 95% de tables occupées</p>";
+                             echo "<p style='background-color:black;color:white;line-height: 1.4em;vertical-align:middle;'>plus de 95% de tables occupées</p></div><br><br>";
 
                         echo "<input type='button' id='check-dispo' value='Tester la disponibilité' $enable />
                         
