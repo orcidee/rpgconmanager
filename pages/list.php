@@ -339,192 +339,55 @@ if($isListShowable){
 					while ($row = mysql_fetch_assoc($res)) {
 						
 						$p = new Party($row['partyId'], false);
-						
+
 						$isAdmin = $user && $user->getRole() == "administrator";
 						$animates = $user && $user->getRole() == "animator" && $user->animates($p->getId());
 						$participates = $user && $user->participatesTo($p->getId());
-						
-						$showable = $p->getState() != 'canceled' || $isAdmin || $animates;
-						
-						$type = $p->getType();
-						
-						if($showable){
-						
-						?>
-						<li>
-						
-							<div class='main'>
-								<div class="top clear">
-									<div class='left type'><?php echo stripslashes($type['name']); ?></div>
-									<div class='right'>
-										
-										<?php
-										
-										$allow = array(
-											'edit' => ($animates || $isAdmin) && ($p->getState() == 'created' || $p->getState() == 'verified' || $p->getState() == 'refused' || $p->getState() == 'validated'),
-											'cancel' => ($animates || $isAdmin) && $p->getState() !== 'canceled',
-											'refuse' => $isAdmin && ($p->getState() == 'created' || $p->getState() == 'verified' || $p->getState() == 'validated'),
-											'verify' => $isAdmin && ($p->getState() == "created" || $p->getState() == "refused"),
-											'validate' => $isAdmin && $p->getState() == "verified",
-											'subscribe' => !$animates && !$participates && $p->getState() == 'validated' && Controls::isPlayerOpen()
-										);
-										
-										if($user && ($user->getRole() == "administrator" || $user->getRole() == "animator")){ ?>
-										
-											<div class='state'>
-												<span>Status : </span><?php echo $stateLabels[$p->getState()]; ?>
-											</div>
-											
-										<?php }
-										
-										echo "<div class='actions clear' data-id='".$p->getId()."' data-state='".$p->getState()."'>";
-											echo ($allow['edit']) ? "<a href='?page=edit&partyId=".$p->getId()."' class='edit'><img src='http://www.orcidee.ch/orcidee/manager/img/edit.png' title='Éditer'/></a>" : "";
-											echo ($allow['cancel']) ? "<a href='actions/party.php' class='cancel'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Annuler'/></a>" : "";
-											echo ($allow['refuse']) ? "<a href='actions/party.php' class='refuse' ><img src='http://www.orcidee.ch/orcidee/manager/img/refuse.png'title='Refuser'/></a>" : "";
-											echo ($allow['verify']) ? "<a href='actions/party.php' class='verify'><img src='http://www.orcidee.ch/orcidee/manager/img/verify.png' title='Vérifier'/></a>" : "";
-											echo ($allow['validate']) ? "<a href='actions/party.php' class='validate'><img src='http://www.orcidee.ch/orcidee/manager/img/validate.png' title='Valider'/></a>" : "";
-										echo "</div>";
-										?>
-										
-										
-									</div>
-								</div>
-								<div class='clear name'>
-									<span class='partyId'><?php echo $p->getId();?> - </span>
-									<span class="partyName"><?php echo $p->getName();?></span>
-								</div>
-								
-								<div class="clear left">
-									<div class='scenario'>
-										<span>Scénario:</span>
-										<?php echo $row['scenario'];?>
-									</div>
-								</div>
-								<div class="right">
-									<div class='start'>
-										<span>Début:</span>
-										<?php
-										$date = strftime("%d.%m.%Y à %H:%M", strtotime($row['start']));
-										echo $date;
-										?>
-									</div>
-									<div class="clear duration">
-										<span>Durée:</span>
-										<?php echo $row['duration'];?>h
-									</div>
-								</div>
-							</div>
-							<div class="more clear">
-							<span class="clear">Description:</span>
-										<?php echo View::MultilineFormat($row['description'], true);?>
-							</div>
-							<div class="more clear">
-								<div class='left'>
-									<div class='kind'>
-										<span>Genre:</span>
-										<?php echo $row['kind'];?>
-									</div>
-									<div class='clear playerMin'>
-										<span>Joueurs min:</span>
-										<?php echo $row['playerMin'];?>
-									</div>
-									<div class='clear playerMax'>
-										<span>Joueurs max:</span>
-										<?php echo $row['playerMax'];?>
-									</div>
-								</div>
-								<div class="right border-left">
-									<div class='level'>
-										<span>Niveau de jeu: </span><?php 
-										if($row['level']=="low") {
-											$lvl = "Débutant";
-										} elseif ($row['level']=="middle") {
-											$lvl = "Initié";
-										} else {
-											$lvl = ($row['level']=="high") ? "Expert" : "Peu importe";
-										}
-										echo $lvl; ?>
-									</div>
-									<div class="clear language">
-										<span>Langue:</span>
-										<?php echo $row['language'];?>
-									</div>
-									<div class="clear animator">
-										<span>Animateur:</span>
-										<?php 
-										$animator = $p->getAnimator();
-										echo $animator->getFirstname() . " " . $animator->getLastname();
-										?>
-									</div>
-								</div>
-							</div>
-							<div class='more clear'>
-								<?php if($animates || $isAdmin){ ?>
-								<div class='clear note'>
-									<span>Note aux orgas:</span>
-									<?php echo View::MultilineFormat($row['note']);?>
-								</div>
-								<!--div class='clear year'>
-									<span>Année:</span>
-									<?php echo $row['year'];?>
-								</div-->
-								<?php } ?>
-							</div>
-							<div class="more clear">
-								<span>Inscrits:</span>
-								<ul class='players' data-partyId="<?php echo $row['partyId'];?>">
-									<?php
-									foreach($p->getPlayers() as $player){
-										echo "<li>".$player->getFirstname()." ".$player->getLastname();
-										if ($isAdmin) {
-											echo "<a href='actions/party.php' class='unsubscribeNow' player-code='".sha1($player->getId())."' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
-										}elseif($user && $user->getId() == $player->getId()){
-											echo "<a href='actions/party.php' class='unsubscribe' player-mail='".$player->getEmail()."' player-id='" . $user->getId() . "' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
-										}									
-										echo "</li>";
-									}
-									?>
-								</ul>
-							</div>
-							<?php if(!$animates && $p->accMail()){ ?>
-							<div class="more clear">
 
-								<?php
-								if(Controls::isPlayerOpen() || ($user && $user->isAdmin())) { ?>
-									<span class="mailMJ" onClick="showElem('ctct_mj_<?php echo $row['partyId']; ?>')">
-										>>Contacter le MJ<<
-									</span>
+						$showable = $p->getState() != 'canceled' || $isAdmin || $animates;
+
+						$type = $p->getType();
+						$date = strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart()));
+
+						if ($showable) { ?>
+						<li>
+
+							<div class="party-header">
+								<span class="name"><?= $p->getName() ?> :</span>
+								<span class="scenario"><?= $p->getScenario() ?></span>
+							</div>
+
+							<div class="type"><?= stripslashes($type['name']); ?></div>
+
+							<div class="planing">
+								<span class="start">Débute le: <?= $date ?>, durée: <?= $p->getDuration() ?>h.</span> &ndash;
+								<span class="free-space">
+									<?= (count($p->getPlayers()) < $p->getPlayerMax()) ? 'Complet' : 'Place disponible'?>
+								</span> &ndash; <a href="?page=party&partyId=<?= $p->getId() ?>">Détails & Inscription</a>
+							</div>
+
+							<div class="description">
+								<?= View::MultilineFormat($p->getDescription(), true);?>
+							</div>
+
+							<div class="admin">
+
+
+								<?php if ($isAdmin || $animates) { ?>
+
+									<div class='state'>
+										<span>Status : </span><?php echo $stateLabels[$p->getState()]; ?>
+									</div>
+
 								<?php } ?>
-								<ul id="ctct_mj_<?php echo $row['partyId']; ?>" style="display:none">
-									
-									<div id="ret_ctct_mj_<?php echo $row['partyId']; ?>" style="width:100%"></div>
-										<?php if($user){?>
-											<input type="text" value="<?php echo $user->getEmail();?>" id="mail_ctct_mj_<?php echo $row['partyId']; ?>">
-										<?php }else{?>
-											<span>Email:</span><input email="true" error_id="error_mail_<?php echo $row['partyId']; ?>" require="true" onBlur="testInput(this)" type="text" value="" id="mail_ctct_mj_<?php echo $row['partyId']; ?>"><br /><div id="error_mail_<?php echo $row['partyId']; ?>"></div><br />
-										<?php }?>
-									
-										<p><span>Message:</span></p>
-										<textarea id="txt_ctc_mj_<?php echo $row['partyId']; ?>" rows="10" cols="50"></textarea>
-										<input class="submit" type="button" onClick="sendMailAdmin('<?php echo $row['partyId']; ?>')" value="Envoyer">
-								</ul>
+
 							</div>
-							<?php } ?>
-							<div class="center">
-								<?php if ($allow['subscribe']) { 
-										if (count($p->getPlayers()) < $row['playerMax']) {?>
-								<input type="button" class="subscribe" value="Je veux m'inscrire à cette partie !" data-partyId="<?php echo $row['partyId'];?>" />
-								<?php 	} else {?>
-								<span>C'est complet !</span>
-								<?php 	}
-									  }?>
-							</div>
+
 							<div class="separator"></div>
 						</li>
 						<?php
 						}
-					}
-						?>
+					} ?>
 				</ul>
 				
 				<ul class='pagination'>

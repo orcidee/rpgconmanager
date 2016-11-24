@@ -209,9 +209,9 @@ orcidee.manager = {
                 }
                 return false;
             });
-            $(".actions a.validate").click(function(){
+            $(".actions a.validate").on('click', function(e){
                 
-                var btn = this;
+                e.preventDefault();
                 var pId = $(this).parent().attr("data-id");
                 
                 log("Validation de " + pId );
@@ -238,15 +238,16 @@ orcidee.manager = {
                         }
                     });
                 }
-                return false;
             });
-            $("ul.players li a.unsubscribe").click(function(){
-                
-                var btn = this;
-                var pId = $(this).parent().parent().attr("data-partyid");
+            $(".players a.unsubscribe").on('click', function(e){
+
+                e.preventDefault();
+
+                var pId = $('.party-detail').attr("data-id");
 				var playerId = $(this).attr("player-id");
 				var playerMail = $(this).attr("player-mail");
 				var playerName = $(this).attr("player-name");
+
                 log("désinscription de la partie " + pId + " de l'utilisateur " + playerName + " avec l'email " + playerMail);
                 
                 if (confirm("Voulez-vous désinscrire " + playerName + " de la partie " + pId + " ?\n(un mail sera envoyé pour confirmer)")) {
@@ -273,15 +274,15 @@ orcidee.manager = {
                         }
                     });
                 }
-                return false;
             });
-            $("ul.players li a.unsubscribeNow").click(function(){
-                
-                var btn = this;
-				var liItem = $(this).parent();
-                var pId = $(this).parent().parent().attr("data-partyid");
+            $(".players a.unsubscribeNow").on('click', function(e){
+
+                e.preventDefault();
+
+                var pId = $('.party-detail').attr("data-id");
 				var playerCode = $(this).attr("player-code");
 				var playerName = $(this).attr("player-name");
+
                 log("désinscription forcée de la partie " + pId + " de l'utilisateur " + playerName);
                 
                 if (confirm("Etes-vous bien sûr de vouloir désinscrire immédiatement " + playerName + " de la partie " + pId + " ?\n(un mail lui sera envoyé pour l'informer)")) {
@@ -298,8 +299,6 @@ orcidee.manager = {
                             log(json);
                             if(json.status != "ok"){
 								alert("Le joueur n'a pas bien été désinscrit\n("+s+")");
-							}else{
-								liItem.replaceWith("");
 							}
                         },
 						error: function(xhr, s, e){
@@ -307,7 +306,6 @@ orcidee.manager = {
                         }
                     });
                 }
-                return false;
             });
         },
         // FIXME: Centrer la lightbox par à la fenetre globale (et non l'iframe)

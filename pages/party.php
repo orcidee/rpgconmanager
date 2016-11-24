@@ -22,15 +22,16 @@ $participates = $user && $user->participatesTo($partyId);
 $contactable = Controls::isPlayerOpen() || $isAdmin;
 $subscribable = !$animates && !$participates && $party->getState() == 'validated' && Controls::isPlayerOpen();
 
+$date = strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()));
 $nbPlayers = $party->getPlayerMin() == $party->getPlayerMax() ?
     $party->getPlayerMin() : $party->getPlayerMin()." à ".$party->getPlayerMax();
 
 ?>
 
-<div class="party-detail">
+<div class="party-detail" data-id="<?= $party->getId()?>">
 
     <h1>
-        <span class="title"><?= $party->getName() ?> : </span>
+        <span class="name"><?= $party->getName() ?> : </span>
         <span class="scenario"><?= $party->getScenario() ?></span>
     </h1>
 
@@ -40,7 +41,7 @@ $nbPlayers = $party->getPlayerMin() == $party->getPlayerMax() ?
     </h2>
 
     <div class="planing">
-        Début: <?= $party->getStart() ?>, durée: <?= $party->getDuration() ?>h. &ndash;
+        Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h. &ndash;
         Nombre de joueurs: <?= $nbPlayers ?> &ndash; Niveau de jeu: <?= $party->getLevel() ?> &ndash;
         Langue: <?= $party->getLanguage() ?>
     </div>
@@ -78,7 +79,7 @@ $nbPlayers = $party->getPlayerMin() == $party->getPlayerMax() ?
     </div>
 
     <div class="description">
-        <?= $party->getDescription() ?>
+        <?= View::MultilineFormat($party->getDescription(), true);?>
     </div>
 
     <div class="players">
@@ -88,6 +89,12 @@ $nbPlayers = $party->getPlayerMin() == $party->getPlayerMax() ?
             foreach ($party->getPlayers() as $player) {
                 echo (!$isFirst ? ', ':'').$player->getFirstname().' '.$player->getLastname();
                 $isFirst = false;
+
+                if ($isAdmin) {
+                    echo "<a href='actions/party.php' class='unsubscribeNow' player-code='".sha1($player->getId())."' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
+                }elseif($user && $user->getId() == $player->getId()){
+                    echo "<a href='actions/party.php' class='unsubscribe' player-mail='".$player->getEmail()."' player-id='" . $user->getId() . "' player-name='".$player->getFirstname()." ".$player->getLastname()."'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Désinscrire'/></a>";
+                }
             }
         ?>
     </div>
