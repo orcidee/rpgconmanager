@@ -24,7 +24,7 @@ if($_SERVER['HTTP_HOST'] == "www.orcidee.ch"){
 define("MAIL_FROM", "inscription@orcidee.ch");
 define("MAIL_CC", "moduleparties@orcidee.ch");
 
-define("CACHE_KILL", "20160119T21:00");
+define("CACHE_KILL", "20161118T17:30");
 
 
 if(ENV == "test"){
