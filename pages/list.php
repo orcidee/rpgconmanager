@@ -426,50 +426,6 @@ if($isListShowable){
 	</div>
 <?php
 
-// A player want to unsubscribe from a party
-} elseif(@$_GET['action'] == 'unsubscribe'){
-	if(isset($_GET['partyId']) && isset($_GET['u']) ) {
-		
-		echo "<h1>Désincription</h1>";
-
-		$p = new Party($_GET['partyId'], false);
-		if($p && $p->isValid){
-		
-			$players = $p->getPlayers();
-			foreach($players as $player){
-				if(sha1($player->getId()) == $_GET['u']){
-					// This player want to unsubscribe
-					$res = Inscription::unsubscribe($p->getId(), $player->getId());
-					Orcimail::notifyUnsubscribtion($p, $player);
-					break;
-				}
-			}
-		
-			if(!isset($res)){
-				echo "<p>Ce joueur n'est pas (plus ?) inscrit sur la partie numéro ".$p->getId()." \"".$p->getName()."\".</p>";
-			}elseif($res){
-				echo    "<p>Le joueur ".$player->getFirstname()." ".$player->getLastname()." a correctement 
-						été désincrit de la partie numéro ".$p->getId()." \"".$p->getName()."\".</p>";
-
-				// If admin is unsubscribing a player, send a mail to this player !
-				if ($user && $user->getRole() == 'administrator'){
-					$isMailOk = Orcimail::unsubscribedToParty($p, $player);
-					if($isMailOk){
-						echo "<p>Et un mail lui a été envoyé pour l'en informer.</p>";
-					}else{
-						echo "<p>Mais le mail pour l'en informer n'a pas pu être envoyé.</p>";
-					}
-				}
-			}else{
-				echo "<p>Erreur lors de la désinscription.</p>";
-			}
-		}else{
-			echo "<p>Partie '".$_GET['partyId']."' introuvable !</p>";
-		}
-	}else{
-		echo "<p>Impossible de désinscrire un joueur sans connaitre son ID et la partie !</p>";
-	}
-
 } else {
 
     echo "<p>Impossible d'afficher cette page pour le moment.</p>";

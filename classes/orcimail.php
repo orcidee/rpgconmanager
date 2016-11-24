@@ -203,12 +203,13 @@ class Orcimail {
         </table>
         
         <br/>
-        <p>Au cas où vous auriez besoin de contacter l'animateur de cette partie, vous pouvez utiliser le formulaire sur la <a href='".Controls::home()."?page=list'>liste des parties</a></p>
+        <p>Au cas où vous auriez besoin de contacter l'animateur de cette partie, vous pouvez utiliser le formulaire sur 
+        la <a href='".Controls::home()."?page=party&partyId=".$p->getId()."'>page de la partie</a></p>
 		<br/>";
         
-        $unlink = Controls::home()."?page=list&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
+        $unlink = Controls::home()."?page=party&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
         
-        $message .= "<p>Cliquez là <strong><a href='".$unlink."'>vous désinscrire</a></strong></p>
+        $message .= "<p>Cliquez ici pour <strong><a href='".$unlink."'>vous désinscrire</a></strong></p>
         <br />
         <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
 		<br/>
@@ -231,7 +232,7 @@ class Orcimail {
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>
 		<br/>";
 			        
-        $unlink = Controls::home()."?page=list&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
+        $unlink = Controls::home()."?page=party&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
         
         $message .= "<p><strong>Veuillez confirmer</strong> en cliquant sur le lien suivant :
 			<a href='".$unlink."'>".$unlink."</a></p>
