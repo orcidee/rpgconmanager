@@ -510,3 +510,13 @@ html body div#main form#tablesForm table tbody tr td input
 {
 width: 80px;
 }
+.party-detail{
+    margin: 0 50px;
+}
+.party-detail .description{
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #cfcfcf;
+    margin: 20px 0;
+    padding: 20px 0;
+}

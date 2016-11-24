@@ -8,6 +8,7 @@ orcidee.manager = {
     
         this.additionalCss = "t2012";
         this.list.init();
+        this.partyDetails.init();
         this.datePickers();
         this.appControls.init();
         this.dbg();
@@ -16,6 +17,13 @@ orcidee.manager = {
         }
         this.fields();
         this.adaptHeight();
+    },
+    partyDetails: {
+        init: function (){
+            var me = this;
+            orcidee.manager.list.dialogBox.init();
+            orcidee.manager.list.actions();
+        }
     },
     fields: function(){
         $("textarea").each(function(){
@@ -401,18 +409,16 @@ orcidee.manager = {
                         me.obj.parent().find(".ui-dialog-buttonpane button").show();
                     }
                 });
-                
+
                 // Bind subscribtion buttons
                 $("input.subscribe").click(function() {
                     var pId = $(this).attr("data-partyId");
-                    var title = $(this).closest("li").find(".main .partyName").html();
-                    $(".partyTitle", me.obj).html("Partie ["+pId+"] - &laquo;" +title+"&raquo;");
-                    
+
                     me.obj.dialog("option","pId",pId).dialog( "option", "position", ['center','100'] )
                         .dialog( "option", "modal", true ).dialog("open");
-                    
+
                 });
-                
+
             }
         }
     },
