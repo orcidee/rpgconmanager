@@ -98,8 +98,6 @@ cursor: pointer;
 
 }
 
-}
-
 input.subscribe
 {
 margin:auto;
@@ -228,31 +226,6 @@ color: #704214;
 
 }
 
-.list li {
-    margin: 0 0 20px 0;
-}
-.list ul.players li {
-    margin: 2px 0;
-}
-.list li div{
-    display:block;
-    overflow:hidden;
-    float:left;
-	text-align:left;
-}
-.list li div.clear{
-    clear:both;
-}
-.list li div.clear div{
-    padding:0;
-	text-align:left;
-}
-
-.list li div.top,
-.list li div.main,
-.list li div.more{
-    border-bottom: 1px solid #000000;
-}
 .ui-dialog.t2012 .ui-dialog-titlebar{
     background:none repeat scroll 0 0 ;
     color:#FFFfff;
@@ -296,11 +269,6 @@ color: #704214;
     margin:15px 0 5px;
 	color: #000000;
 }
-.list li span.partyName {
-    font-size: 20px;
-    text-align: left;
-		/**font-family: 'menu';*/
-}
 .ui-dialog p.partyTitle{
     font-weight:bold;
     margin:10px 0;
@@ -322,51 +290,6 @@ cursor: pointer;
 font-weight: bold;
 }
 
-
-.list li div.more
-{
-padding-top: 5px;
-padding-bottom: 5px;
-
-}
-.list li span{
-    color:#000000;
-}
-.list li span.etat
-{
-   font-size: 14px;
-font-family: 'Playfair Display', serif;
-   text-decoration:none;
-   font-weight: normal;
-
-}
-.list li span.partyName
-{
-text-decoration: underline;
-}
-.list li div.top
-{
-/*background-image: url("http://www.orcidee.ch/templates/western/images/bois.png");
-background-color: #e9d88f;*/
-border: 3px double #000000;
-font-size: 20px;
-font-family: 'Playfair Display SC', serif;
-}
-
-.list li div.type{
-
-    font-size: 20px;
-    padding:13px 0 0 0;
-}
-
-.list li div.name
-{
-}
-.list li div.more span.mailMJ
-{
-	cursor: pointer;
-}
-
 #ctct_mj_13000
 {
 padding-top: 10px;
@@ -386,7 +309,7 @@ ul.pagination li a{
     text-decoration:none;
     font-weight:normal;
 }
-ul.pagination li a:activ{
+ul.pagination li a:active{
     color:#000;
     font-weight:bold;
 }
@@ -477,45 +400,6 @@ div.profile ul.result
 {
 	margin: 0px 20px 15px 20px;
 }
-#dispo-preview li
-{
-    display:block;
-    height:12px;
-    margin:0;
-    padding:0;
-    font-size:0.6em;
-    background-color:#efefef;
-}
-#dispo-preview li.flip{
-    background-color:#f7f7f7;
-}
-#dispo-preview li div{
-    margin: 0;
-    height:8px;
-}
-#dispo-preview li div.bar{
-    margin: 2px 0 0 80px;
-    height:10px;
-}
-#dispo-preview li div.h{
-    width: 70px;
-    margin:0 0 1px 10px;
-    height:12px;
-    float:left;
-    text-align:left;
-}
-#dispo-preview li .green{
-    background-color:green;
-}
-#dispo-preview li .orange{
-    background-color:orange;
-}
-#dispo-preview li .red{
-    background-color:red;
-}
-#dispo-preview li .black{
-    background-color:black;
-}
 
 input#check-dispo {
 background-color: transparent;
@@ -575,16 +459,6 @@ font-family: "Orbitron",serif;
 cursor: pointer;
 
 }
-.separator
-{
-clear:both;
-width:100%;
-height:60px;
-margin:auto;
-background-position: center center;
-background-image: url("http://www.orcidee.ch/templates/surson31/images/separateur.png");
-background-repeat: no-repeat;
-}
 
 .register-result
 {
@@ -603,10 +477,4 @@ a.unsubscribeNow img
 
 {
 margin-left: 3px;
-}
-
-
-html body div#main form#filteringForm div.list ul#game-list li div.main div.clear.name span.partyId
-{
-display: none;
 }

@@ -225,101 +225,43 @@ td.application-controls{
     display:block;
     margin: 10px auto;
 }
- ul#game-list li div.main
- {
- width:98.5%;	
- }
-.list li {
+
+ /* Party list */
+.game-list {
+    margin: 30px 20px;
+}
+.game-list > li {
     margin: 0 0 20px 0;
 }
-.list ul.players li {
-    margin: 2px 0;
+.game-list li .party-header {
+    font-size: 1.2em;
+    font-weight: bold;
 }
-.list li div{
-    display:block;
-    overflow:hidden;
-    float:left;
-	text-align:left;
+.game-list li .party-header .name {}
+.game-list li .party-header .scenario {}
+.game-list li .type {
+    color: #555;
 }
-.list li div.clear, 
-.list li div.top.clear{
+.game-list li .planning {
+    margin-top: 8px;
+}
+.game-list li .description {
+
+}
+.game-list li .admin {
+
+}
+.game-list li .admin .actions{
+    margin: 15px 0 0;
+}
+.game-list li .separator {
     clear:both;
-    padding-left:1%;
-}
-.list li div.top.clear
-{
-	
-width:97.5%;
-
-}
-.list li div.clear div{
-    padding:0;
-	text-align:left;
-}
-.list li div.more {
-width:97.5%;
-}
-.list li div.top,
-.list li div.main,
-.list li div.more{
-    border-bottom: 1px solid #000;
-}
-.list li div.more span.clear{
-    display: block;
+    height:1px;
+    margin:30px 0;
+    border-bottom: 1px solid #CFCFCF;
 }
 
 
-.list li div.main .right,
-.list li div.main .right div{
-    padding:0;
-	text-align:left;
-	
-}
-.list li div.main .left,
-.list li div.main .clear.left{
-    width:60%;
-	text-align:left;
-padding-top: 0.5%;
-padding-bottom: 0.5%;
-
-}
-.list li div.more .left,
-.list li div.more .clear.left{
-    width:60%;
-}
-.list li div.main .right,
-.list li div.more .right{
-   
-}
-.list li div.center{
-    clear:both;
-    width:100%;
-    text-align:center;
-}
-.list li span{
-    font-size:0.8em;
-    font-weight:bold;
-    color:#4c1f5b;
-}
-.list li span.partyName{
-    font-size:1.1em;
-	text-align:left;
-}
-.list li div.top{
-}
-.list li div.type{
-    font-size:1em;
-    font-weight:bold;
-    padding:13px 0 0 0;
-}
-.list li div.name{
-    font-size:1.3em;
-    font-weight:bold;
-}
-.list div.state
-{
-margin-top: 2px;	
-}
 ul.pagination {
     text-align: center;
     width: 100%;
@@ -404,28 +346,29 @@ clear:both;
 
 #dispo-preview li{
     display:block;
-    height:12px;
+    height:10px;
     margin:0;
     padding:0;
     font-family:verdana;
-    font-size:0.6em;
+    font-size:0.9em;
     background-color:#efefef;
+    overflow: visible;
 }
 #dispo-preview li.flip{
     background-color:#f7f7f7;
 }
-#dispo-preview li div{
+#dispo-preview li .bar div{
     margin: 0;
-    height:8px;
+    height:9px;
 }
 #dispo-preview li div.bar{
-    margin: 2px 2px 0 80px;
+    margin: 0 0 0 80px;
     height:10px;
 }
 #dispo-preview li div.h{
     width: 70px;
-    margin:0 0 1px 10px;
-    height:12px;
+    margin:0 0 0 10px;
+    height:10px;
     float:left;
     text-align:left;
 }

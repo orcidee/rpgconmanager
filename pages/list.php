@@ -321,7 +321,7 @@ if($isListShowable){
 			$res = mysql_query ( $sql );
 
 			?>
-			<div class='list'>							
+			<div class='game-list'>
 				<input type='hidden' name="pageNb" value="1">
 
 				<?php include('includes/pagination.php'); ?>
