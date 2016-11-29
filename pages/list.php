@@ -18,10 +18,6 @@ $stateLabels['validated'] = "Validée";
 $stateLabels['refused'] = "Refusée";
 $stateLabels['canceled'] = "Annulée";
 
-// Debug
-echo "<div class='dbg'>User:";
-echo ($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0" ;
-echo "<br/>Adresse en session : ".@$_SESSION["userEmail"]."</div>";
 
 $isListShowable = Controls::isAppOpen() || ($user && $user->getRole() == 'administrator');
 $isListShowable = $isListShowable && (@$_GET['action'] != 'unsubscribe') ;
@@ -137,12 +133,6 @@ if(isset($_GET['sortOrder']) && $_GET['sortOrder'] == "desc"){
 }
 $order = " ORDER BY ".$sortType." ".$sortOrder;
 
-// Debug
-echo "<div class='dbg'>User:";
-echo ($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0" ;
-echo "<br/>Is list showable: $isListShowable";
-echo "<br/>sql: $sql</div>";
-
 
 if($isListShowable){
     
@@ -250,10 +240,22 @@ if($isListShowable){
 				<?PHP
 					}
 				?>
+
+				<div class="elements-per-page clear">
+					<label for="elements-per-page">Nombre de parties affichées par page</label>
+					<select name='elements-per-page'>
+						<option value='10' <?= (@$_GET['elements-per-page']=='10')?'selected="selected"':''?>>10</option>
+						<option value='20' <?= (@$_GET['elements-per-page']=='20')?'selected="selected"':''?>>20</option>
+						<option value='50' <?= (@$_GET['elements-per-page']=='50')?'selected="selected"':''?>>50</option>
+						<option value='all' <?= ! in_array(@$_GET['elements-per-page'], ['10', '20', '50'])?'selected="selected"':''?>>tout</option>
+					</select>
+				</div>
+
 				<div class="free-space-only clear">
 					<label for="free-space-only">Seulement les parties avec de la place disponible</label>
 					<input type="checkbox" name="free-space-only" id="free-space-only" <?php echo (@$_GET['free-space-only']=="on") ? "checked='checked'" : "" ?> />
 				</div>
+
 			</fieldset>
 			<fieldset>
 				<legend>Trier par :</legend>
@@ -270,8 +272,7 @@ if($isListShowable){
 			</fieldset>
 			<input type="submit" class="submit" value="Filtrer et Trier" />
 		</div>
-		<div class='dbg'>SQL users : <?= $sqlUsers ?></div>
-	
+
 		<?php
 		
 		// PAGINATION
@@ -284,8 +285,6 @@ if($isListShowable){
 			}
 		}   
 
-		echo "<div class='dbg'>SQL count: $sqlCount</div>";
-
 		$res = mysql_query ( $sqlCount );
 		$row = mysql_fetch_assoc($res);
 		$total = $row['NumberOfParties'];
@@ -293,13 +292,19 @@ if($isListShowable){
 		if ($total > 0){
 
 			// Pagination's stuff
-			$pageSize = 10;
-			$max = ceil($total / $pageSize);
+			$limit = '';
+			$pageSize = $total;
+			$pageSizeParam = @$_GET['elements-per-page'];
+			$max = 1;
 			$currentP = 1;
-			if(isset($_GET['pageNb']) && is_numeric($_GET['pageNb']) && $_GET['pageNb'] > 0 && $_GET['pageNb'] <= $max){
-				$currentP = $_GET['pageNb'];
+			if (in_array($pageSizeParam, ['10', '20', '50'])) {
+				$pageSize = intval($pageSizeParam);
+				$max = ceil($total / $pageSize);
+				if (isset($_GET['pageNb']) && is_numeric($_GET['pageNb']) && $_GET['pageNb'] > 0 && $_GET['pageNb'] <= $max) {
+					$currentP = $_GET['pageNb'];
+				}
+				$limit = " LIMIT " . (($currentP - 1) * $pageSize) . "," . $pageSize;
 			}
-			$limit = " LIMIT ". (($currentP-1)* $pageSize) ."," . $pageSize;
 
 			// construction de la requete
 			$sql .= $join;
@@ -312,23 +317,14 @@ if($isListShowable){
 			}
 
 			$sql .= $order . $limit;
-			
-			echo "<div class='dbg'>total: $total. <br/>SQL paginé: $sql</div>";
 
 			$res = mysql_query ( $sql );
-			
-			echo "<div>Parties ".((($currentP-1)* $pageSize) + 1)." à ".min($currentP * $pageSize, $total)." sur ".$total."</div>";
 
 			?>
 			<div class='list'>							
 				<input type='hidden' name="pageNb" value="1">
-				<ul class='pagination'>
-					<?php
-					for($i = 1 ; $i <= $max ; $i++){
-						echo "<li><a href=\"#\" onclick=\"document.forms['filteringForm'].pageNb.value='".$i."';document.forms['filteringForm'].submit();\" ".(($i == $currentP)? "class='activ'" : "").">$i</a></li>";
-					}
-					?>
-				</ul>
+
+				<?php include('includes/pagination.php'); ?>
 
 				<ul id='game-list' cellspacing='0' cellpadding='0'>
 
@@ -380,14 +376,8 @@ if($isListShowable){
 						}
 					} ?>
 				</ul>
-				
-				<ul class='pagination'>
-					<?php
-					for($i = 1 ; $i <= $max ; $i++){
-						echo "<li><a href=\"#\" onclick=\"document.forms['filteringForm'].pageNb.value='".$i."';document.forms['filteringForm'].submit();\" ".(($i == $currentP)? "class='activ'" : "").">$i</a></li>";
-					}
-					?>
-				</ul>
+
+				<?php include('includes/pagination.php'); ?>
 			
 			</div>
 			<?php
