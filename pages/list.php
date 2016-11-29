@@ -349,13 +349,16 @@ if($isListShowable){
 						<li>
 
 							<div class="party-header">
-								<span class="name"><?= $party->getName() ?> :</span>
+								<span class="name">
+									<?= $party->getName() ?>
+									<?= strlen($party->getScenario()) > 0 ? ':':'' ?>
+								</span>
 								<span class="scenario"><?= $party->getScenario() ?></span>
 							</div>
 
 							<div class="type"><?= stripslashes($type['name']); ?></div>
 
-							<div class="planing">
+							<div class="planning">
 								<span class="start">Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h.</span> &ndash;
 								<span class="free-space">
 									<?= (count($party->getPlayers()) < $party->getPlayerMax()) ? 'Complet' : 'Place disponible'?>

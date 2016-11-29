@@ -37,14 +37,9 @@ orcidee.manager = {
             }
         });
         $('#day-start').change(function(e){
-            var day = $('option:selected', this).attr('name');
-            if (day === 'saturday') {
-                $('label[for=time-start-day1], #time-start-day1').show();
-                $('label[for=time-start-day2], #time-start-day2').hide();
-            } else {
-                $('label[for=time-start-day2], #time-start-day2').show();
-                $('label[for=time-start-day1], #time-start-day1').hide();
-            }
+            var day = $(this).val();
+            $('.time-start-day').hide()
+            $('label[for=time-start-day'+day+'], #time-start-day'+day).show();
         });
     },
     adaptHeight: function(){
@@ -426,20 +421,27 @@ orcidee.manager = {
             var me = this;
             // bind events
             $("#check-dispo").click(function(){
-                var pId = ($('#partyId').size() > 0) ? $('#partyId').val() : "";
+                var pId = ($('#partyId').size() > 0) ? $('#partyId').val() : "",
+                    day = $('#day-start').val();
+
                 me.checkDispo({
                     'duration':$('#duration').val(),
-                    'start':$('#start').val(),
+                    'start': $('#time-start-day'+day).val(),
                     'partyId':pId,
                     'tableAmount':$('#tableAmount').val()
                 }, "click");
             });
             this.checkDispo();
+            this.preSubmit();
+        },
+        preSubmit: function(e) {
+            $('form').submit(function(e){
+                var day = $('#day-start').val();
+                $('<input name="start" type="hidden" />').val($('#time-start-day'+day).val()).appendTo(this);
+            });
         },
         checkDispo: function(data, event){
             var me = this;
-            log(me);
-            log(me.options);
             $.ajax({
                 data:data,
                 url:"actions/check-dispo.php",
@@ -447,16 +449,12 @@ orcidee.manager = {
                 dataType: "json",
                 success: function(msg, s, xhr){
                     if(msg){
+                        var html;
                         if(msg.status == "ok"){
-                            log(msg);
-                            
-                            var html = "<ul id='dispo-preview'>",
-                                jour = " 1 - ",
-                                time = 0,
-                                label = "",
-                                charge=0,
-                                flip="",
-                                state="";
+
+                            html = "<ul id='dispo-preview'>";
+                            var day = " 1 - ", previousCharge = 0, previousState = "green",
+                                time, label, charge, flip, state;
 
                             var i = 0;
                             for( var slotId in msg.slots){
@@ -465,24 +463,19 @@ orcidee.manager = {
                                 var slot = msg.slots[slotId];
                                 
                                 // Current hour label
-                                time = i + me.options.start;
+                                time = (i/2) + me.options.start;
                                 
                                 // flipflap is just a css stuff
                                 flip = (i % 2 == 0) ? "flip" : "flap";
                                 if(time >= 24){
-                                    jour = " 2 - ";
+                                    day = " 2 - ";
                                     time -= 24;
                                 }
-                                
-                                // Current label
-                                label = jour + time + "h";
-                                
-                                // Slot's charge in %
+
+                                label = (flip=='flip') ? day + time + "h" : '';
                                 charge = slot.length * 100 / me.options.max ;
-                                
-                                // State of the slot
                                 state = (charge > 50) ? ((charge > 75) ? ((charge > 95) ? "black" : "red") : "orange") : "green";
-                                
+
                                 html += "<li class='"+flip+"'><div class='h'>"+label+"</div>" +
                                 "<div class='bar'><div style='width:"+charge+"%' class='"+state+"'>"+
                                 "</div></div></li>";
@@ -490,7 +483,7 @@ orcidee.manager = {
                             }
                             html += "</ul>"
                         }else{
-                            var html = "<p>" + msg.message +"</p>";
+                            html = "<p>" + msg.message +"</p>";
                         }
                         $("#check-dispo-result").html(html);
                     }

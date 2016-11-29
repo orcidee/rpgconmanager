@@ -60,7 +60,7 @@ if($user){
                         "<tr><td>Nombre de joueur maximum</td><td>".$party->getPlayerMax()."</td></tr>".
                         "<tr><td>Niveau de jeu</td><td>";
                             
-                $txt .= $p->getLevel()."</td></tr>".
+                $txt .= $party->getLevel()."</td></tr>".
                         "<tr><td>Nombre de tables</td><td>".$party->getTableAmount()."</td></tr>".
                         "<tr><td>Durée prévue</td><td>".$party->getDuration()." heure(s)</td></tr>".
                         "<tr><td>Heure de début souhaitée</td><td>".strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()))."</td></tr>".
@@ -74,8 +74,8 @@ if($user){
                     $animator = new User($party->getUserId());
                 }
                 $txt .= "<p class='mj'>Jeu animé par: ".$animator->getFirstname()." ".$animator->getLastname()."</p></div>";
-        
-                print $txt;
+
+                echo $txt;
                 
                 $_SESSION['party'] = serialize($party); ?>
                 
@@ -103,25 +103,25 @@ if($user){
         // SAUVEGARDE DE LA PARTIE CONFIRMEE
         elseif(isset($_POST) and @$_POST['action'] == 'confirm' && isset($_SESSION['party'])) {
 
-            /** @var Party $p */
-            $p = unserialize($_SESSION['party']);
-            $edit = (!is_null($p->getId()) && strlen($p->getId()) > 0);
+            /** @var Party $party */
+            $party = unserialize($_SESSION['party']);
+            $edit = (!is_null($party->getId()) && strlen($party->getId()) > 0);
 
             if(IS_DEBUG) {
                 echo "<div class='dbg'>sauvegarde";
-                echo is_null($p->getId()) ? " (création)" : " (édition partie n°" . $p->getId() . ")";
+                echo is_null($party->getId()) ? " (création)" : " (édition partie n°" . $party->getId() . ")";
                 echo "</div>";
             }
             
-            if($p->isValid){
+            if($party->isValid){
                 unset($_SESSION['party']);
-                $saveOK = $p->save();
+                $saveOK = $party->save();
                 if($saveOK) {
                     echo "<p>Partie <strong>".(($edit)?'éditée':'créée')."</strong> avec succès.</p>".
                     "<p>Vous allez recevoir un mail de confirmation sous peu!</p>";
                 
                     // Send congratulation's mail
-                    $isMailOk = Orcimail::notifyCreate($p, $edit);
+                    $isMailOk = Orcimail::notifyCreate($party, $edit);
                     
                 }else{
                     // Display errors
@@ -144,8 +144,8 @@ if($user){
             
             if(@$_POST['action'] == 'undo' && isset($_SESSION['party'])) {
                 // Case of undo previous edition
-                $p = unserialize($_SESSION['party']);
-                $pv = $p->toArray();
+                $party = unserialize($_SESSION['party']);
+                $pv = $party->toArray();
                 $editExisting = true;
                 unset ($_SESSION['party']);
 
@@ -158,15 +158,15 @@ if($user){
 
             }elseif(isset($_GET['partyId']) && $user){
                 // Edit an existing party by id
-                $p = new Party($_GET['partyId'], false);
-                if ($user->animates($p->getId()) || $user->getRole() == 'administrator'){
-                    if ($p->getState() == 'created' || $p->getState() == 'verified' || $p->getState() == 'refused' || $p->getState() == 'validated') {
+                $party = new Party($_GET['partyId'], false);
+                if ($user->animates($party->getId()) || $user->getRole() == 'administrator'){
+                    if ($party->getState() == 'created' || $party->getState() == 'verified' || $party->getState() == 'refused' || $party->getState() == 'validated') {
                         unset ($_SESSION['postData']);
-                        $pv = $p->toArray();
+                        $pv = $party->toArray();
                         $editExisting = true;
                     }
                 }else{
-                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$p->getId()." nommée '".$p->getName()."' !</strong></p>";
+                    echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$party->getId()." nommée '".$party->getName()."' !</strong></p>";
                 }
             }
 
@@ -178,15 +178,15 @@ if($user){
             
             // Avoid reediting critical fields when the party has been validated already
             $enable = "";
-            if($editExisting && isset($p) && $p->getState() == 'validated'){
+            if($editExisting && isset($party) && $party->getState() == 'validated'){
                 echo "<p><strong>Votre partie a le status \"validée\". Cela implique que certains champs ne
                 sont plus éditables. Merci pour votre compréhension.</strong></p>";
                 $enable = "disabled='disabled'";
             }
 
             // Display a message if party has been canceled
-            if(isset($p) && $p->getState() == 'canceled'){
-                echo "<p><strong>La partie no ".$p->getId()." nommée '".$p->getName()."' a été annulée et ne peut donc pas être éditée !</strong></p>";
+            if(isset($party) && $party->getState() == 'canceled'){
+                echo "<p><strong>La partie no ".$party->getId()." nommée '".$party->getName()."' a été annulée et ne peut donc pas être éditée !</strong></p>";
             }
 
             ?>
@@ -200,7 +200,7 @@ if($user){
                     echo '<input type="hidden" id="partyId" name="partyId" value="'.$pv['partyId'].'" />';
                     echo '<input type="hidden" name="userId" value="'.$pv['userId'].'" />';
                     echo '<input type="hidden" name="action" value="edit" />';
-                    if(isset($p) && $p->getState() == 'validated'){
+                    if(isset($party) && $party->getState() == 'validated'){
                         echo '<input type="hidden" name="validatedParty" value="true" />';
                     }
                 } else {
@@ -282,12 +282,12 @@ if($user){
                                     data-start='<?= Controls::getDate(Controls::CONV_START)?>'
                                     data-end='<?= Controls::getDate(Controls::CONV_END)?>'
                                     <?=$enable?>>
-                            <option name='saturday'>Samedi</option>
-                            <option name='sunday'>Dimanche</option>
+                            <option value='1'>Samedi</option>
+                            <option value='2'>Dimanche</option>
                         </select>
 
-                        <label for="time-start-day1">Heure de début</label>
-                        <select id='time-start-day1' <?=$enable?>>
+                        <label for="time-start-day1" class="time-start-day">Heure de début</label>
+                        <select id='time-start-day1' name="time-start-day1" <?=$enable?> class="time-start-day">
                             <?php
                             $start  = Controls::getDate(Controls::CONV_START);
                             $midnight = strtotime(Controls::getDate(Controls::CONV_END, '%Y-%m-%d 00:00'));
@@ -296,19 +296,19 @@ if($user){
                             for($i = $start ; $i<$midnight ; $i+=1800){
                                 $l = strftime("%H:%M", $i);
                                 $v = strftime("%Y-%m-%d %H:%M", $i);
-                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
+                                $selected = (strpos($pv['time-start-day1'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             } ?>
 
                         </select>
 
-                        <label for="time-start-day2">Heure de début</label>
-                        <select id='time-start-day2' <?=$enable?>>
+                        <label for="time-start-day2" class="time-start-day">Heure de début</label>
+                        <select id='time-start-day2' name="time-start-day2" <?=$enable?> class="time-start-day">
                             <?php
                             for($i = $midnight ; $i<$end ; $i+=1800){
                                 $l = strftime("%H:%M", $i);
                                 $v = strftime("%Y-%m-%d %H:%M", $i);
-                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
+                                $selected = (strpos($pv['time-start-day2'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             }
 

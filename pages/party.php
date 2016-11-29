@@ -89,7 +89,7 @@ if(@$_GET['action'] == 'unsubscribe') {
         <span class="kind"><?= $party->getKind() ?></span>
     </h2>
 
-    <div class="planing">
+    <div class="planning">
         Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h. &ndash;
         Nombre de joueurs: <?= $nbPlayers ?> &ndash; Niveau de jeu: <?= $party->getLevel() ?> &ndash;
         Langue: <?= $party->getLanguage() ?>

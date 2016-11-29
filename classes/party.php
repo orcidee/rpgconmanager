@@ -359,7 +359,7 @@ class Party {
 
         $start = Controls::getDate(Controls::CONV_START);
         $end = Controls::getDate(Controls::CONV_END);
-        $nb = ($end - $start) / 60 / 60;
+        $nb = ($end - $start) / 60 / 30;
 
         // Slots[partyId's]
         $slots = array();
@@ -386,6 +386,8 @@ class Party {
 
         if (!is_null($wishStart) && !is_null($wishDuration)) {
             $wishStart = self::dateToSlot($wishStart);
+            // Convert half-hours to hours
+            $wishDuration = 2 * $wishDuration;
             if (($wishStart + $wishDuration) > $nb) {
                 $result["message"] = "Selon ces données, tu prévois de terminer après la fin de la convention, cela ne nous convient pas.";
                 $result["status"] = "ko";
@@ -402,7 +404,6 @@ class Party {
                         }
                     }
                 }
-
                 // Ajoute une charge aux slots souhaités
                 for ($i = $wishStart; $i < ($wishDuration + $wishStart); $i++) {
                     for ($j = 0; $j < $tableAmount; $j++){
@@ -536,7 +537,7 @@ class Party {
         $start = Controls::getDate(Controls::CONV_START);
         $d = strtotime($date);
         
-        $nb = ($d - $start) / 60 / 60 ;
+        $nb = ($d - $start) / 60 / 30 ;
         return $nb;
     }
     private static function slotsCharge($slots){
