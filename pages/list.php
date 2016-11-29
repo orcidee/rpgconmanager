@@ -338,50 +338,41 @@ if($isListShowable){
 					
 					while ($row = mysql_fetch_assoc($res)) {
 						
-						$p = new Party($row['partyId'], false);
+						$party = new Party($row['partyId'], false);
 
-						$isAdmin = $user && $user->getRole() == "administrator";
-						$animates = $user && $user->getRole() == "animator" && $user->animates($p->getId());
-						$participates = $user && $user->participatesTo($p->getId());
+						$isAdmin = $user && $user->isAdmin();
+						$animates = $user && $user->animates($party->getId());
+						$participates = $user && $user->participatesTo($party->getId());
 
-						$showable = $p->getState() != 'canceled' || $isAdmin || $animates;
+						$showable = $party->getState() != 'canceled' || $isAdmin || $animates;
 
-						$type = $p->getType();
-						$date = strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart()));
+						$type = $party->getType();
+						$date = strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()));
 
 						if ($showable) { ?>
 						<li>
 
 							<div class="party-header">
-								<span class="name"><?= $p->getName() ?> :</span>
-								<span class="scenario"><?= $p->getScenario() ?></span>
+								<span class="name"><?= $party->getName() ?> :</span>
+								<span class="scenario"><?= $party->getScenario() ?></span>
 							</div>
 
 							<div class="type"><?= stripslashes($type['name']); ?></div>
 
 							<div class="planing">
-								<span class="start">Débute le: <?= $date ?>, durée: <?= $p->getDuration() ?>h.</span> &ndash;
+								<span class="start">Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h.</span> &ndash;
 								<span class="free-space">
-									<?= (count($p->getPlayers()) < $p->getPlayerMax()) ? 'Complet' : 'Place disponible'?>
-								</span> &ndash; <a href="?page=party&partyId=<?= $p->getId() ?>">Détails & Inscription</a>
+									<?= (count($party->getPlayers()) < $party->getPlayerMax()) ? 'Complet' : 'Place disponible'?>
+								</span> &ndash; <a href="?page=party&partyId=<?= $party->getId() ?>">Détails & Inscription</a>
 							</div>
 
 							<div class="description">
-								<?= View::MultilineFormat($p->getDescription(), true);?>
+								<?= View::MultilineFormat($party->getDescription(), true);?>
 							</div>
 
-							<div class="admin">
-
-
-								<?php if ($isAdmin || $animates) { ?>
-
-									<div class='state'>
-										<span>Status : </span><?php echo $stateLabels[$p->getState()]; ?>
-									</div>
-
-								<?php } ?>
-
-							</div>
+							<?php
+							include('includes/moderation.php');
+							?>
 
 							<div class="separator"></div>
 						</li>

@@ -159,57 +159,7 @@ if(@$_GET['action'] == 'unsubscribe') {
     </div>
 
     <?php
-    if ($isAdmin || $animates) {
-
-        // Libellés des états de parties
-        $stateLabels = array();
-        $stateLabels['created'] = "Créée";
-        $stateLabels['verified'] = "Vérifiée";
-        $stateLabels['validated'] = "Validée";
-        $stateLabels['refused'] = "Refusée";
-        $stateLabels['canceled'] = "Annulée";
-
-        $allow = array(
-            'edit' => ($animates || $isAdmin) && ($party->getState() == 'created' || $party->getState() == 'verified' || $party->getState() == 'refused' || $party->getState() == 'validated'),
-            'cancel' => ($animates || $isAdmin) && $party->getState() !== 'canceled',
-            'refuse' => $isAdmin && ($party->getState() == 'created' || $party->getState() == 'verified' || $party->getState() == 'validated'),
-            'verify' => $isAdmin && ($party->getState() == "created" || $party->getState() == "refused"),
-            'validate' => $isAdmin && $party->getState() == "verified",
-            'subscribe' => !$animates && !$participates && $party->getState() == 'validated' && Controls::isPlayerOpen()
-        );
-
-        ?>
-
-        <div class="admin">
-            <ul>
-                <li>Status: <?php echo $stateLabels[$party->getState()]; ?></li>
-                <li>Nb de tables: <?= $party->getTableAmount() ?></li>
-                <li>Note aux orgas: <?= $party->getNote()?></li>
-            </ul>
-
-
-            <div class='actions'>
-                <p>Actions: </p>
-
-                <?php
-                echo "<div class='actions clear' data-id='".$party->getId()."' data-state='".$party->getState()."'>";
-                echo ($allow['edit']) ? "<a href='?page=edit&partyId=".$party->getId()."' class='edit'><img src='http://www.orcidee.ch/orcidee/manager/img/edit.png' title='Éditer'/></a>" : "";
-                echo ($allow['cancel']) ? "<a href='actions/party.php' class='cancel'><img src='http://www.orcidee.ch/orcidee/manager/img/cancel.png' title='Annuler'/></a>" : "";
-                echo ($allow['refuse']) ? "<a href='actions/party.php' class='refuse' ><img src='http://www.orcidee.ch/orcidee/manager/img/refuse.png'title='Refuser'/></a>" : "";
-                echo ($allow['verify']) ? "<a href='actions/party.php' class='verify'><img src='http://www.orcidee.ch/orcidee/manager/img/verify.png' title='Vérifier'/></a>" : "";
-                echo ($allow['validate']) ? "<a href='actions/party.php' class='validate'><img src='http://www.orcidee.ch/orcidee/manager/img/validate.png' title='Valider'/></a>" : "";
-                echo "</div>";
-                ?>
-
-            </div>
-
-
-        </div>
-
-        <?php
-    }
-
-
+    include('includes/moderation.php');
 
     // Lightbox qui apparaît au clic sur "Je veux m'inscrire à cette partie"
     // Cf. javascript: orcidee.manager.list.dialogBox
