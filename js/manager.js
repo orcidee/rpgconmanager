@@ -26,6 +26,7 @@ orcidee.manager = {
         }
     },
     fields: function(){
+        var me = this;
         $("textarea").each(function(){
             var limit = parseInt($(this).attr("data-limit"));
             if(typeof limit != 'undefined'){
@@ -36,11 +37,15 @@ orcidee.manager = {
                 });
             }
         });
-        $('#day-start').change(function(e){
-            var day = $(this).val();
-            $('.time-start-day').hide()
-            $('label[for=time-start-day'+day+'], #time-start-day'+day).show();
+        var $dayField = $('#day-start');
+        me.updateStartHours($dayField.val());
+        $dayField.change(function(){
+            me.updateStartHours($(this).val());
         });
+    },
+    updateStartHours: function(day){
+        $('.time-start-day').hide();
+        $('label[for=time-start-day'+day+'], #time-start-day'+day).show();
     },
     adaptHeight: function(){
         var h = $("html").height() + 'px';

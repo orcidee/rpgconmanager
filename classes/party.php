@@ -334,6 +334,7 @@ class Party {
             "level"       => $this->level,
             "duration"    => $this->duration,
             "start"       => $this->start,
+            "startDay"    => $this->getStartDay(),
             "description" => $this->description,
             "note"        => $this->note,
             "language"    => $this->language,
@@ -468,6 +469,9 @@ class Party {
     public function getStart(){
 		return $this->start;
 	}
+    public function getStartDay(){
+        return intval(strftime('%d', strtotime($this->start))) - Controls::getDate(Controls::CONV_START, '%d') + 1;
+    }
     public function getDescription(){
         return $this->description;
     }

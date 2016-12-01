@@ -247,7 +247,7 @@ if($user){
                         <label for='tableAmount' class='tableAmount'>Nombre de table souhaitée <br/>
                             <span class='small'>Si 0, merci de préciser dans la \"note aux orgas\" ci-dessous</span>
                         </label>
-                        <select id='tableAmount' name='tableAmount'>
+                        <select id='tableAmount' name='tableAmount' $enable>
                             <option name='0' value='0' ".(($pv['tableAmount']=='0')?"selected='selected'" : '').">0</option>
                             <option name='1' value='1' ".((is_null($pv['tableAmount']) || $pv['tableAmount']=='1')?"selected='selected'" : '').">1</option>
                             <option name='2' value='2' ".(($pv['tableAmount']=='2')?"selected='selected'" : '').">2</option>
@@ -274,16 +274,17 @@ if($user){
                             for($i = 1 ; $i<=15 ; $i++){
                                 echo "<option value='$i' ".(($pv['duration']==$i)?"selected='selected'":"").">$i heure".(($i==1)?'':'s')."</option>";
                             }
-                        echo '</select>'
+                        echo '</select>';
+                        $party->getStartDay();
                         ?>
 
                         <label for='day-start'>Jour de début de la partie</label>
-                        <select     id='day-start' name='day-start'
+                        <select     id='day-start' name='startDay'
                                     data-start='<?= Controls::getDate(Controls::CONV_START)?>'
                                     data-end='<?= Controls::getDate(Controls::CONV_END)?>'
                                     <?=$enable?>>
-                            <option value='1'>Samedi</option>
-                            <option value='2'>Dimanche</option>
+                            <option value='1' <?= $pv['startDay'] == 1 ? "selected='selected'" : '' ?>>Samedi</option>
+                            <option value='2' <?= $pv['startDay'] == 2 ? "selected='selected'" : '' ?>>Dimanche</option>
                         </select>
 
                         <label for="time-start-day1" class="time-start-day">Heure de début</label>
@@ -296,7 +297,7 @@ if($user){
                             for($i = $start ; $i<$midnight ; $i+=1800){
                                 $l = strftime("%H:%M", $i);
                                 $v = strftime("%Y-%m-%d %H:%M", $i);
-                                $selected = (strpos($pv['time-start-day1'], $v) === 0) ? "selected='selected'" : "";
+                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             } ?>
 
@@ -308,7 +309,7 @@ if($user){
                             for($i = $midnight ; $i<$end ; $i+=1800){
                                 $l = strftime("%H:%M", $i);
                                 $v = strftime("%Y-%m-%d %H:%M", $i);
-                                $selected = (strpos($pv['time-start-day2'], $v) === 0) ? "selected='selected'" : "";
+                                $selected = (strpos($pv['start'], $v) === 0) ? "selected='selected'" : "";
                                 echo "<option value='$v' $selected>$l</option>";
                             }
 
