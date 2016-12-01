@@ -407,9 +407,6 @@ font-weight:bold;
     padding: 0.5% 0;
     text-align: left;
 }
-#filteringForm .free-space-only label{
-    width: 40%;
-}
 #filteringForm .free-space-only input{
     width: auto;
     margin-top: 7px;
