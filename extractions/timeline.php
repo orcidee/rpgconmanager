@@ -28,47 +28,34 @@ if(!$db){
 			$startDate = new DateTime(Controls::getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
 			$start = Controls::getDate(Controls::CONV_START);
 			$end = Controls::getDate(Controls::CONV_END);
-			$startHour = $startDate->format("H");
-			$duration = ($end - $start) / 3600;
+			$startHour = intval($startDate->format("H"));
+			$duration = intval($end - $start) / 3600;
+
+			$saturdayColumns = 48 - $startHour * 2;
+			$sundayColumns = $duration * 2 - $saturdayColumns;
+			$tableName = "TIMELINE DE LA CONVENTION PAR PARTIE";
 
 ?>
 			<table border='1' width='100%' cellspacing='3' cellpadding='3'>
+
 				<tr>
-					<td align='center' valign='middle' colspan='<?= $duration + 3 ?>'>
-						<font size='+6'><b>TIMELINE DE LA CONVENTION PAR PARTIE</b><br><br></font>
+					<td align='center' valign='middle' colspan='<?= $duration * 2 + 3 ?>'>
+						<font size='+6'><b><?= $tableName ?></b><br><br></font>
 					</td>
 				</tr>
 				<tr>
 					<td align='center' valign='middle' colspan='3'>
 						&nbsp;
 					</td>
-					<td align='center' valign='middle' colspan='<?= 24 - $startHour ?>'>
-						<font color=red size='+4'><br><b>S A M E D I</b></font><br><br>
-					</td>
-					<td align='center' valign='middle' colspan='<?= $duration + $startHour - 24 ?>'>
-						<font color=red size='+4'><br><b>D I M A N C H E</b></font><br><br>
-					</td>
+					<?php include '_days.php' ?>
 				</tr>
 
 				<tr>
 					<td align='left' WIDTH='300'><font size='-2'>&nbsp; <b>Nom du Jeu:</b> &nbsp;</font></td>
 					<td align='left' WIDTH='100'><font size='-2'>&nbsp; <b>Type de Jeu:</b> &nbsp;</font></td>
-					<td align='left' WIDTH='100'><font size='-2'>&nbsp; <b>Table:</b> &nbsp;</font></td>
-<?php
-					for ($timeline=$startHour; $timeline<=($startHour + $duration - 1); $timeline++){
-						if ($timeline<24){
-							$heure_a=$timeline;
-						}else{
-							$heure_a=$timeline-24;
-						}
-						$heure_b=$heure_a+1;
-?>
-						<td align='center' valign='middle' WIDTH='50'>
-							<font size='-2'><b>'<?= $heure_a."-".$heure_b ?></b></font>
-						</td>
-<?php
-					}
-				echo "</tr>";
+					<td align='left' WIDTH='100'><font size='-2'>&nbsp; <b>Table:</b> &nbsp;</font></td><?php
+					include('_hours.php'); ?>
+				</tr><?php
 
                 $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
 				$sql = "SELECT Parties.*, Types.name as typeName FROM Parties join Types on Parties.typeId = Types.typeId WHERE Parties.state in ('validated', 'verified') AND Parties.year = ".$thisYear." order by Parties.start ASC";
@@ -84,10 +71,10 @@ if(!$db){
 					echo "<td align='left'>".stripslashes($ligne["table"])."</td>";
 
 					$partyDate = strtotime($ligne["start"]);
-					$partyOffset = ($partyDate - $start) / 3600;
-					$partyDuration = $ligne["duration"];
+					$partyOffset = ($partyDate - $start) / 3600 * 2;
+					$partyDuration = $ligne["duration"] * 2;
 
-					for ($index=0; $index<$duration; $index++) {
+					for ($index=0; $index < $duration * 2; $index++) {
 						if ($index >= $partyOffset && $index < $partyOffset + $partyDuration) {
 							echo "<td align='center' bgcolor='gold'>&nbsp</td>";
 						} else {
