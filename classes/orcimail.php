@@ -267,7 +267,7 @@ class Orcimail {
         ));
     }
 
-    public static function ctcAdmin($pBody, $pId, $pMail, $pEmail){
+    public static function contactAdmin($pBody, $pId, $pMail, $pEmail){
         
         return self::sendMail(array(
             'to' => $pMail,

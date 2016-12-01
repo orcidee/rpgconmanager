@@ -527,7 +527,7 @@ class Party {
 		if(mysql_num_rows($res) == 1){
 			$row = mysql_fetch_assoc($res);
 			$email = $row['email'];
-			return Orcimail::ctcAdmin(htmlentities($pBody, ENT_QUOTES, "UTF-8"), htmlentities($pId, ENT_QUOTES, "UTF-8"), $email, $pEmail);
+			return Orcimail::contactAdmin(htmlentities($pBody, ENT_QUOTES, "UTF-8"), htmlentities($pId, ENT_QUOTES, "UTF-8"), $email, $pEmail);
 		}else{
 			return false;
 		}
