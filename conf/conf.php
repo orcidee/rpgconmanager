@@ -40,3 +40,4 @@ if(ENV == "test"){
 
 define("IS_DEBUG", ENV != "PROD" && isset($_GET['debug']));
 //define("IS_DEBUG", true);
+date_default_timezone_set('Europe/Zurich');
