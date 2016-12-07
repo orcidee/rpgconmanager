@@ -153,7 +153,7 @@ if(@$_GET['action'] == 'unsubscribe') {
             if (count($party->getPlayers()) < $party->getPlayerMax()) {?>
                 <input type="button" class="subscribe" value="Je veux m'inscrire à cette partie !" data-partyId="<?= $partyId ?>" />
             <?php 	} else {?>
-                <span>C'est complet !</span>
+                <span class="red">C'est complet !</span>
             <?php 	}
         }?>
     </div>

@@ -360,8 +360,11 @@ if($isListShowable){
 
 							<div class="planning">
 								<span class="start">Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h.</span> &ndash;
-								<span class="free-space">
-									<?= (count($party->getPlayers()) < $party->getPlayerMax()) ? 'Complet' : 'Place disponible'?>
+								<?php
+								$isFull = count($party->getPlayers()) < $party->getPlayerMax();
+								?>
+								<span class="free-space <?= $isFull ? 'red' : 'green' ?>">
+									<?= $isFull ? 'Complet' : 'Place disponible'?>
 								</span> &ndash; <a href="?page=party&partyId=<?= $party->getId() ?>">Détails & Inscription</a>
 							</div>
 
