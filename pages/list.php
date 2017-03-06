@@ -101,8 +101,10 @@ if(@$_GET['formFiltered']){
 		$filterYear = true;
 		if (is_numeric($_GET['year'])) $where[] = "p.year = ".$_GET['year'];
 	}
-	if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
-		$where[] = "p.typeId = ".$_GET['typeId'];
+    $selected_types = array();
+	if(@$_GET['typeId'] != "" && is_array($_GET['typeId'])){
+        $selected_types = $_GET['typeId'];
+		$where[] = "p.typeId IN (".implode($selected_types, ','). ')';
 	}
 	if(@$_GET['animId'] != "" && is_numeric($_GET['animId'])){
 		$where[] = "p.userId = ".$_GET['animId'];
@@ -182,30 +184,34 @@ if($isListShowable){
 		<div>
 			<fieldset>
 				<legend>Filtrer par :</legend>
-                <label for="year">Année</label>
-                <select name="year">
-                    <?php
-                    $years = Party::getYears();
-                    foreach($years as $year){
-                        echo "<option ".((@$_GET['year']==$year) ? "selected='selected'" : "")." value='".$year."' >".$year."</option>";
-                    } ?>
-                    <option value='all'>Toutes</option>
-                </select>
-				<label for="typeId">Type</label>
-				<select name='typeId'>
-					<option value=''>---</option>
+
+                <?php if ($user->isAdmin()) { ?>
+                    <label for="year">Année</label>
+                    <select name="year" id="year">
+                        <?php
+                        $years = Party::getYears();
+                        foreach($years as $year){
+                            echo "<option ".((@$_GET['year']==$year) ? "selected='selected'" : "")." value='".$year."' >".$year."</option>";
+                        } ?>
+                        <option value='all'>Toutes</option>
+                    </select>
+                <?php } ?>
+
+
+                <label for="typeId">Type</label>
+				<select name='typeId[]' id="typeId" multiple="true">
 					<?php
 						// Get the types from DB
 						foreach(Party::getTypes() as $typeId => $type){
-							echo "<option ".((@$_GET['typeId']==$typeId) ? "selected='selected'" : "")." value='".$typeId."' title='".$type['description']."'>".stripslashes($type['name'])."</option>";
+							echo "<option ".(in_array($typeId, $selected_types) ? "selected='selected'" : "")." value='".$typeId."' title='".$type['description']."'>".stripslashes($type['name'])."</option>";
 						}
 					?>
 				</select>
-				<label for="animId">Animateur</label>
 
+
+				<label for="animId">Animateur</label>
 				<?php
 				// ANIMATOR FILTER
-
 				$defaultYear = Controls::getDate(Controls::CONV_START, "%Y");
 				$year = is_numeric(@$_GET['year'])?@$_GET['year']:$defaultYear;
 
@@ -213,18 +219,18 @@ if($isListShowable){
 				" JOIN Parties ON Users.userId = Parties.UserId".$join.
 				" WHERE Parties.year = ".$year;
 
-				if(@$_GET['typeId'] != "" && is_numeric($_GET['typeId'])){
-					$sqlUsers .= " AND Parties.typeId = ".$_GET['typeId'];
+				if(count($selected_types) > 0){
+					$sqlUsers .= " AND Parties.typeId IN (".implode($selected_types, ',').')';
 				}
 				$sqlUsers .= " order by Users.firstname, Users.lastname";
 				$resUsers = mysql_query ( $sqlUsers ); ?>
-
-				<select name='animId'>
+				<select name='animId' multiple="true">
 					<option value=''>---</option>
 					<?php while ($rowUser = mysql_fetch_assoc($resUsers)) {
 						echo "<option ".((@$_GET['animId']==$rowUser['userId']) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
 					} ?>
 				</select>
+
 				<?PHP
 					if($user && $user->getRole() == 'administrator'){
 				?>
