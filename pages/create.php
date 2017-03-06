@@ -275,7 +275,6 @@ if($user){
                                 echo "<option value='$i' ".(($pv['duration']==$i)?"selected='selected'":"").">$i heure".(($i==1)?'':'s')."</option>";
                             }
                         echo '</select>';
-                        $party->getStartDay();
                         ?>
 
                         <label for='day-start'>Jour de début de la partie</label>
