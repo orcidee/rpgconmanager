@@ -95,22 +95,33 @@ if($user && $user->getRole() == 'administrator'){
 }
 
 $filterYear = false;
+$selectedTypes = [];
+$selectedAnimators = [];
+$selectedStates = [];
 if(@$_GET['formFiltered']){
     if(@$_GET['year'] != "")
 	{
 		$filterYear = true;
 		if (is_numeric($_GET['year'])) $where[] = "p.year = ".$_GET['year'];
 	}
-    $selected_types = array();
 	if(@$_GET['typeId'] != "" && is_array($_GET['typeId'])){
-        $selected_types = $_GET['typeId'];
-		$where[] = "p.typeId IN (".implode($selected_types, ','). ')';
+        $selectedTypes = $_GET['typeId'];
+		$where[] = "p.typeId IN (".implode($selectedTypes, ','). ")";
 	}
-	if(@$_GET['animId'] != "" && is_numeric($_GET['animId'])){
-		$where[] = "p.userId = ".$_GET['animId'];
+	if(@$_GET['animId'] != "" && is_array($_GET['animId'])){
+        $selectedAnimators = $_GET['animId'];
+		$where[] = "p.userId IN (".implode($selectedAnimators, ','). ")";
 	}
-	if(isset($_GET['partyState']) && $_GET['partyState'] != "" && strlen($stateLabels[$_GET['partyState']]) > 0){
-		$where[] = "p.state = '".$_GET['partyState']."'";
+
+    if(is_array($_GET['partyState'])) {
+        foreach ($_GET['partyState'] as $selectedState) {
+            if (array_key_exists($selectedState, $stateLabels)) {
+                $selectedStates[] = $selectedState;
+            }
+        }
+    }
+	if(count($selectedStates) > 0) {
+		$where[] = "p.state IN ('".implode($selectedStates, "','")."')";
 	}
 }
 $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
@@ -199,11 +210,11 @@ if($isListShowable){
 
 
                 <label for="typeId">Type</label>
-				<select name='typeId[]' id="typeId" multiple="true">
+				<select name='typeId[]' id="typeId" multiple>
 					<?php
 						// Get the types from DB
 						foreach(Party::getTypes() as $typeId => $type){
-							echo "<option ".(in_array($typeId, $selected_types) ? "selected='selected'" : "")." value='".$typeId."' title='".$type['description']."'>".stripslashes($type['name'])."</option>";
+							echo "<option ".(in_array($typeId, $selectedTypes) ? "selected='selected'" : "")." value='".$typeId."' title='".$type['description']."'>".stripslashes($type['name'])."</option>";
 						}
 					?>
 				</select>
@@ -219,15 +230,14 @@ if($isListShowable){
 				" JOIN Parties ON Users.userId = Parties.UserId".$join.
 				" WHERE Parties.year = ".$year;
 
-				if(count($selected_types) > 0){
-					$sqlUsers .= " AND Parties.typeId IN (".implode($selected_types, ',').')';
+				if(count($selectedTypes) > 0){
+					$sqlUsers .= " AND Parties.typeId IN (".implode($selectedTypes, ',').')';
 				}
 				$sqlUsers .= " order by Users.firstname, Users.lastname";
 				$resUsers = mysql_query ( $sqlUsers ); ?>
-				<select name='animId' multiple="true">
-					<option value=''>---</option>
+				<select name='animId[]' multiple id="animId">
 					<?php while ($rowUser = mysql_fetch_assoc($resUsers)) {
-						echo "<option ".((@$_GET['animId']==$rowUser['userId']) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
+						echo "<option ".(in_array($rowUser['userId'], $selectedAnimators) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
 					} ?>
 				</select>
 
@@ -235,13 +245,12 @@ if($isListShowable){
 					if($user && $user->getRole() == 'administrator'){
 				?>
 						<label for="partyState">Status</label>
-						<select name='partyState'>
-							<option value=''>---</option>
-							<option value='created' <?php echo (@$_GET['partyState']=="created") ? "selected='selected'" : "" ?>><?= $stateLabels['created'] ?></option>
-							<option value='verified' <?php echo (@$_GET['partyState']=="verified") ? "selected='selected'" : "" ?>><?= $stateLabels['verified'] ?></option>
-							<option value='validated' <?php echo (@$_GET['partyState']=="validated") ? "selected='selected'" : "" ?>><?= $stateLabels['validated'] ?></option>
-							<option value='refused' <?php echo (@$_GET['partyState']=="refused") ? "selected='selected'" : "" ?>><?= $stateLabels['refused'] ?></option>
-							<option value='canceled' <?php echo (@$_GET['partyState']=="canceled") ? "selected='selected'" : "" ?>><?= $stateLabels['canceled'] ?></option>
+						<select name='partyState[]' id="partyState" multiple>
+							<option value='created' <?= in_array("created", $selectedStates) ? "selected='selected'" : "" ?>><?= $stateLabels['created'] ?></option>
+							<option value='verified' <?= in_array("verified", $selectedStates) ? "selected='selected'" : "" ?>><?= $stateLabels['verified'] ?></option>
+							<option value='validated' <?= in_array("validated", $selectedStates) ? "selected='selected'" : "" ?>><?= $stateLabels['validated'] ?></option>
+							<option value='refused' <?= in_array("refused", $selectedStates) ? "selected='selected'" : "" ?>><?= $stateLabels['refused'] ?></option>
+							<option value='canceled' <?= in_array("canceled", $selectedStates) ? "selected='selected'" : "" ?>><?= $stateLabels['canceled'] ?></option>
 						</select>
 				<?PHP
 					}
