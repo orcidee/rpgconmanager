@@ -370,18 +370,20 @@ class Party {
 
         // Initialisation des slots
         $year = Controls::getDate(Controls::CONV_START, "%Y");
-        $sql = "SELECT * FROM Parties WHERE state not in ('canceled','refused') AND YEAR(`start`) = $year";
+        // Filter state the same way as in table assignation page
+        $sql = "SELECT * FROM Parties WHERE state in ('validated','verified') AND YEAR(`start`) = $year";
         $res = mysql_query($sql);
 
         if ($res) {
             while ($row = mysql_fetch_assoc($res)) {
                 $start = self::dateToSlot($row['start']);
-                $duration = $row['duration'];
+                // Duration is in hours, slots are in 1/2 hours => *2
+                $duration = $row['duration'] * 2;
                 $partyId = $row['partyId'];
 
                 for ($i = $start; $i < ($duration + $start); $i++) {
                     for ($j = 0; $j < intval($row['tableAmount']); $j++) {
-                        $slots[$i][$j] = $partyId;
+                        $slots[$i][] = $partyId;
                     }
                 }
             }
