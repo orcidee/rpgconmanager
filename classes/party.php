@@ -380,7 +380,9 @@ class Party {
                 $partyId = $row['partyId'];
 
                 for ($i = $start; $i < ($duration + $start); $i++) {
-                    $slots[$i][] = $partyId;
+                    for ($j = 0; $j < intval($row['tableAmount']); $j++) {
+                        $slots[$i][$j] = $partyId;
+                    }
                 }
             }
         }
