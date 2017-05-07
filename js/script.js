@@ -1,9 +1,13 @@
 
 function showElem(pDiv){
 	if($('#'+pDiv).is(":hidden")){
-		$('#'+pDiv).slideDown("Normal");
+		$('#'+pDiv).slideDown(400, function(){
+      orcidee.manager.adaptHeight();
+    });
 	}else{
-		$('#'+pDiv).slideUp("Normal");
+		$('#'+pDiv).slideUp(400, function(){
+      orcidee.manager.adaptHeight();
+    });
 	}
 }
 
