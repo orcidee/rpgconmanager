@@ -241,14 +241,22 @@ class Party {
             $sql = "SELECT * FROM Types WHERE typeId='$typeId'";
             $res = mysql_query ( $sql );
             $row = mysql_fetch_assoc($res);
-            $type = array("name" => $row['name'], "description" => $row['description'], "typeId" => $row['typeId']);
+            $type = array(
+                "name" => $row['name'],
+                "description" => $row['description'],
+                "typeId" => $row['typeId']
+            );
             return $type;
         }else{
             $types = array();
             $sql = "SELECT * FROM Types";
             $res = mysql_query ( $sql );
             while ($row = mysql_fetch_assoc($res)) {
-                $types[$row['typeId']] = array("name" => $row['name'], "description" => $row['description']);
+                $types[$row['typeId']] = array(
+                    "name" => $row['name'],
+                    "description" => $row['description'],
+                    "typeId" => $row['typeId']
+                );
             }
             return $types;
         }
