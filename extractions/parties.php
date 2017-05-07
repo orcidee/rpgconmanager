@@ -40,8 +40,8 @@ if(!$db){
 				$res2 = mysql_query ( $sql2 );
 
 				$PDF->AddPage();
-				$PDF->SetFont('','B', 20);
-				$PDF->Cell($Col1width + $Col2width,15," Table n°".$row['table'],"LT");
+				$PDF->SetFont('','B', 18);
+				$PDF->Cell($Col1width + $Col2width,15," Table n° ".$row['table'],"LT");
 				$PDF->SetTextColor(255,0,0);
 				$fullText = " ";
 				if (mysql_num_rows($res2) >= $row["playerMax"]) $fullText = "COMPLET";
@@ -49,10 +49,10 @@ if(!$db){
 				$PDF->SetTextColor(0);
 
 				$PDF->SetFont('','B', 25);
-				$PDF->MultiCell($Col1width + $Col2width + $Col3width + $Col4width,12,"P".($row["partyId"]<10 ? "0" : "").$row["partyId"]." - ".$row["name"],"LR");
+				$PDF->MultiCell($Col1width + $Col2width + $Col3width + $Col4width,12, ' '.$row["name"],"LR");
 
 				$PDF->SetFont('','B', 11);
-				$PDF->Cell($Col1width,7,"par","L",0,"R");
+				$PDF->Cell($Col1width,7,"Par :","L",0,"R");
 				$PDF->SetFont('','I');
 				$PDF->Cell($Col2width + $Col3width + $Col4width,7,$row["firstname"]." ".$row["lastname"],"R",1);
 
