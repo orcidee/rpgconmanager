@@ -80,13 +80,13 @@ if(@$_GET['action'] == 'unsubscribe') {
 <div class="party-detail" data-id="<?= $party->getId()?>">
 
     <h1>
-        <span class="name"><?= $party->getName() ?> : </span>
-        <span class="scenario"><?= $party->getScenario() ?></span>
+        <span class="name"><?= $party->getName() ?></span>
+        <span class="scenario"><?= strlen($party->getScenario()) > 0 ? ':':'' ?> <?= $party->getScenario() ?></span>
     </h1>
 
     <h2>
-        <span class="type"><?= $party->getTypeName() ?> : </span>
-        <span class="kind"><?= $party->getKind() ?></span>
+        <span class="type"><?= $party->getTypeName() ?></span>
+        <span class="kind"><?= strlen($party->getKind()) > 0 ? ':':'' ?> <?= $party->getKind() ?></span>
     </h2>
 
     <div class="planning">
