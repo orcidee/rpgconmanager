@@ -484,3 +484,27 @@ html body div#main form#tablesForm table tbody tr td input
 #tablesForm tr:nth-child(even) {
     background-color: #e3e3e3;
 }
+span.free-space.green
+{
+color:green;
+}
+span.free-space.red, span.red
+{
+color:red;
+}
+
+html body div#main div.party-detail div.subscribe span.red
+{
+  font-size: 1.4em;
+  line-height: 2em;
+  font-weight: bold;
+}
+html body div#main div.party-detail div.players
+{
+  font-size: 1.3em;
+  line-height: 0.6em;
+}
+html body div#main div.party-detail div.players div.inscription
+{
+text-decoration: underline;
+}
