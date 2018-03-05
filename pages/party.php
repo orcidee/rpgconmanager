@@ -132,7 +132,7 @@ if(@$_GET['action'] == 'unsubscribe') {
     </div>
 
     <div class="players">
-        Inscriptions: <?php
+        Inscriptions:<br/> <?php
             /** @var User $player */
             $isFirst = true;
             foreach ($party->getPlayers() as $player) {
