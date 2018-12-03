@@ -35,9 +35,13 @@ require_once(dirname(__FILE__).'/conf/conf.php');
     <body>
 
 <?php
-$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());
-$db = (mysql_select_db(DB));
-mysql_query("SET NAMES 'utf8'");
+$mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+/* check connection */
+if ($mysqli->connect_errno) {
+    printf("Connect failed: %s\n", $mysqli->connect_error);
+    exit();
+}
+$mysqli->query("SET NAMES 'utf8'");
 
 require_once(dirname(__FILE__).'/classes/controls.php');
 require_once(dirname(__FILE__).'/classes/user.php');
@@ -51,6 +55,7 @@ if(!$db){
 
     $view = new View();
     $user = User::getFromSession();
+    $controls = new Controls();
 
     if(IS_DEBUG){
         echo "<div class='dbg'>
@@ -87,13 +92,13 @@ if(!$db){
     }
 
 
-    if(Controls::isAppOpen()){
+    if($controls->isAppOpen()){
 
         if($user && ($user->getRole() == "animator" || $user->getRole() == "administrator") ){
 
             // Ajouter une partie / Editer une partie
             if(@$_GET['page'] == "create" || @$_GET['page'] == "edit"){
-                if(Controls::isMjOpen() || isset($_GET['partyId'])){
+                if($controls->isMjOpen() || isset($_GET['partyId'])){
                     $view->content = "create";
                 }
             }
@@ -178,7 +183,7 @@ if(!$db){
 
 
 }
-mysql_close($dbServer);
+$mysqli->close();
 
 include("scripts.php");
 

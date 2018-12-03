@@ -17,22 +17,18 @@ class Controls {
     const PLAYER_CLOSE = "playerCloseDate";
     const NB_TABLES = "numberOfTables";
 
-
-    public static function getNbTables(){
-
-        // TODO Change connexion mode globally, here is the right way to do.
-        // Create connection
-        $connexion = new mysqli(HOST, USER, PASSWORD, DB);
-        // Check connection
-        if ($connexion->connect_error) {
-            die("Connection failed: " . $connexion->connect_error);
+    function __construct() {
+        $this->mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
         }
+    }
 
+
+    public function getNbTables(){
         $sql = "SELECT * FROM Controls WHERE `key` = '".self::NB_TABLES."'";
-        $result = $connexion->query($sql);
-        $connexion->close();
-
-        // var_dump($result->num_rows);die();
+        $result = $this->mysqli->query($sql);
+        $this->mysqli->close();
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -52,20 +48,16 @@ class Controls {
     * à moins qu'un contrôle dise le contraire.
     * Cette fonction sert par exemple à fermer tous les services d'un coup si nécessaire.
     */
-    public static function isAppOpen(){
-        $sql = "SELECT * FROM Controls WHERE `key` = 'appOpenDate'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-        if($nb == 1){
-            $row = mysql_fetch_assoc($res);
+    public function isAppOpen(){
+        $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'appOpenDate'");
+        if($this->mysqli->affected_rows == 1){
+            $row = mysqli_fetch_assoc($res);
             // exemple: 2012/01/01 00:00
             $openStamp = strtotime($row['value']);
             
-            $sql = "SELECT * FROM Controls WHERE `key` = 'appCloseDate'";
-            $res = mysql_query ( $sql );
-            $nb = mysql_num_rows($res);
-            if($nb == 1){
-                $row = mysql_fetch_assoc($res);
+            $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'appCloseDate'");
+            if($this->mysqli->affected_rows == 1){
+                $row = mysqli_fetch_assoc($res);
                 // exemple: 2012/01/01 00:00
                 $closeStamp = strtotime($row['value']);
                 $now = time();
@@ -82,20 +74,16 @@ class Controls {
     * Retourne TRUE si l'inscription de partie par les MJ est ouverte, FALSE sinon.
     * Cette fonction retournera toujours FALSE si la fonction isAppOpen() retourne FALSE.
     */
-    public static function isMjOpen(){
-        if(self::isAppOpen()){
-            $sql = "SELECT * FROM Controls WHERE `key` = 'mjOpenDate'";
-            $res = mysql_query ( $sql );
-            $nb = mysql_num_rows($res);
-            if($nb == 1){
-                $row = mysql_fetch_assoc($res);
+    public function isMjOpen(){
+        if($this->isAppOpen()){
+            $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'mjOpenDate'");
+            if($this->mysqli->affected_rows == 1){
+                $row = mysqli_fetch_assoc($res);
                 // exemple: 2012/01/01 00:00
                 $openStamp = strtotime($row['value']);
-                $sql = "SELECT * FROM Controls WHERE `key` = 'mjCloseDate'";
-                $res = mysql_query ( $sql );
-                $nb = mysql_num_rows($res);
-                if($nb == 1){
-                    $row = mysql_fetch_assoc($res);
+                $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'mjCloseDate'");
+                if($this->mysqli->affected_rows == 1){
+                    $row = mysqli_fetch_assoc($res);
                     // exemple: 2012/01/01 00:00
                     $closeStamp = strtotime($row['value']);
                     $now = time();
@@ -112,20 +100,16 @@ class Controls {
     * Retourne TRUE si l'inscription aux parties est ouverte, FALSE sinon.
     * Cette fonction retournera toujours FALSE si la fonction isAppOpen() retourne FALSE.
     */
-    public static function isPlayerOpen(){
-        if(self::isAppOpen()){
-            $sql = "SELECT * FROM Controls WHERE `key` = 'playerOpenDate'";
-            $res = mysql_query ( $sql );
-            $nb = mysql_num_rows($res);
-            if($nb == 1){
-                $row = mysql_fetch_assoc($res);
+    public function isPlayerOpen(){
+        if($this->isAppOpen()){
+            $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'playerOpenDate'");
+            if($this->mysqli->affected_rows == 1){
+                $row = mysqli_fetch_assoc($res);
                 // exemple: 2012/01/01 00:00
                 $openStamp = strtotime($row['value']);
-                $sql = "SELECT * FROM Controls WHERE `key` = 'playerCloseDate'";
-                $res = mysql_query ( $sql );
-                $nb = mysql_num_rows($res);
-                if($nb == 1){
-                    $row = mysql_fetch_assoc($res);
+                $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'playerCloseDate'");
+                if($this->mysqli->affected_rows == 1){
+                    $row = mysqli_fetch_assoc($res);
                     // exemple: 2012/01/01 00:00
                     $closeStamp = strtotime($row['value']);
                     $now = time();     
@@ -146,8 +130,8 @@ class Controls {
      * @param null $pattern Le pattern de formattage pour retourner la date en String.
      * @return bool|int|string
      */
-    public static function getDate($dateIdentifier, $pattern = null){
-        return self::getDatesOfKey($pattern, $dateIdentifier);
+    public function getDate($dateIdentifier, $pattern = null){
+        return $this->getDatesOfKey($pattern, $dateIdentifier);
     }
 
     /**
@@ -155,51 +139,51 @@ class Controls {
      * @param $stamp
      * @return bool
      */
-    public static function setDate($dateIdentifier, $stamp){
-        return self::setDatesOfKey($stamp, $dateIdentifier);
+    public function setDate($dateIdentifier, $stamp){
+        return $this->setDatesOfKey($stamp, $dateIdentifier);
     }
 
     /**
     * Defini en BD la date (timestamp) de la prochaine convention. Retourne true réussi.
     */
-    public static function setConvDate($stamp){
-        return self::setDatesOfKey($stamp, "convDate");
+    public function setConvDate($stamp){
+        return $this->setDatesOfKey($stamp, "convDate");
     }
     /**
     * Defini en BD la date (timestamp) d'ouverture de l'application. Retourne true réussi.
     */
-    public static function setAppOpenDate($stamp){
-        return self::setDatesOfKey($stamp, "appOpenDate");
+    public function setAppOpenDate($stamp){
+        return $this->setDatesOfKey($stamp, "appOpenDate");
     }
     /**
     * Defini en BD la date (timestamp) de fermeture de l'application. Retourne true réussi.
     */
-    public static function setAppCloseDate($stamp){
-        return self::setDatesOfKey($stamp, "appCloseDate");
+    public function setAppCloseDate($stamp){
+        return $this->setDatesOfKey($stamp, "appCloseDate");
     }
     /**
     * Defini en BD la date d'ouverture des services animateurs (MJ). Retourne true réussi.
     */
-    public static function setMjOpenDate($stamp){
-        return self::setDatesOfKey($stamp, "mjOpenDate");
+    public function setMjOpenDate($stamp){
+        return $this->setDatesOfKey($stamp, "mjOpenDate");
     }
     /**
     * Defini en BD la date de fermeture des services animateurs (MJ). Retourne true réussi.
     */
-    public static function setMjCloseDate($stamp){
-        return self::setDatesOfKey($stamp, "mjCloseDate");
+    public function setMjCloseDate($stamp){
+        return $this->setDatesOfKey($stamp, "mjCloseDate");
     }
     /**
     * Defini en BD la date d'ouverture des services joueurs. Retourne true réussi.
     */
-    public static function setPlayerOpenDate($stamp){
-        return self::setDatesOfKey($stamp, "playerOpenDate");
+    public function setPlayerOpenDate($stamp){
+        return $this->setDatesOfKey($stamp, "playerOpenDate");
     }
     /**
     * Defini en BD la date de fermeture des services joueurs. Retourne true réussi.
     */
-    public static function setPlayerCloseDate($stamp){
-        return self::setDatesOfKey($stamp, "playerCloseDate");
+    public function setPlayerCloseDate($stamp){
+        return $this->setDatesOfKey($stamp, "playerCloseDate");
     }
     
     
@@ -207,13 +191,11 @@ class Controls {
     * Retourne la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
     * Retourne true si la nouvelle date a pu etre enregistree en BD.
     */
-    private static function getDatesOfKey($pattern = null, $key) {
+    private function getDatesOfKey($pattern = null, $key) {
         $key = (is_null($key)) ? "appOpenDate" : $key;
-        $sql = "SELECT * FROM Controls WHERE `key` = '$key'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-        if($nb == 1){
-            $row = mysql_fetch_assoc($res);
+        $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = '$key'");
+        if($this->mysqli->affected_rows == 1){
+            $row = mysqli_fetch_assoc($res);
             // exemple: 2012/01/01 00:00
             if(is_null($pattern)){
                 return strtotime($row['value']);
@@ -228,27 +210,19 @@ class Controls {
     * Defini la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
     * Retourne true si la nouvelle date a pu etre enregistree en BD.
     */
-    private static function setDatesOfKey($stamp, $key = NULL) {
+    private function setDatesOfKey($stamp, $key = NULL) {
         $key = (is_null($key)) ? "appOpenDate" : $key;
-        return self::setProperty($key, $stamp);
+        return $this->setProperty($key, $stamp);
     }
 
     /**
      * Defini la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
      * Retourne true si la nouvelle date a pu etre enregistree en BD.
      */
-    private static function setProperty($key, $val) {
-        $sql = "SELECT * FROM Controls WHERE `key` = '$key'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-        $res = false;
-        if ($nb == 0){
-            $sql = "INSERT INTO Controls (`key`,`value`) VALUES ('$key','$val')";
-            $res = mysql_query ( $sql );
-        }elseif($nb == 1){
-            $sql = "UPDATE Controls SET value = '$val' WHERE `key` = '$key'";
-            $res = mysql_query ( $sql );
-        }
+    private function setProperty($key, $val) {
+        $res = $this->mysqli->query(
+            "INSERT INTO Controls (`key`,`value`) VALUES('$key','$val') ON DUPLICATE KEY UPDATE `value`='$val'"
+        );
         return ($res)?true:false;
     }
     

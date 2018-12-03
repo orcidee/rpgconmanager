@@ -4,14 +4,12 @@
 <script src="js/script.js"></script>
 
 <?php
-$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());
-$db = (mysql_select_db(DB));
-mysql_query("SET NAMES 'utf8'");
+$controls = new Controls();
 ?>
 <script><!--
     orcidee.manager.createParty.options = {
-        max: <?php  echo Controls::getNbTables(); ?>,
-        start: <?php echo Controls::getDate(Controls::CONV_START, "%H"); ?>
+        max: <?php  echo $controls->getNbTables(); ?>,
+        start: <?php echo $controls->getDate(Controls::CONV_START, "%H"); ?>
     };
     orcidee.manager.isDebug = <?php echo (IS_DEBUG)?'true':'false'; ?>;
 //--></script>

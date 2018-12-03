@@ -18,14 +18,17 @@ class User {
     private $role;
     
     public function __construct ($userId) {
+        $this->mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
+        }
         
         $sql = "SELECT * FROM Users WHERE userId = '$userId'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-            
-        if($nb == 1){
+        $res = $this->mysqli->query($sql);
+
+        if($res->num_rows == 1){
             // User found
-            $row = mysql_fetch_assoc($res);
+            $row = $res->fetch_assoc();
             
             $this->userId = $row["userId"];
             $this->lastname = stripslashes($row["lastname"]);
@@ -38,18 +41,17 @@ class User {
             $this->country = stripslashes($row["country"]);
                             
             $sql = "SELECT * FROM Administrators WHERE userId = '$this->userId'";
-            $res = mysql_query ( $sql );                
-            $nb = mysql_num_rows($res);
+            $res = $this->mysqli->query($sql);
+            $nb = $res->num_rows;
             if($nb == 1){
                 // We have an ADMIN
                 $this->role = "administrator";
             }elseif($nb == 0){
                 $sql = "SELECT * FROM Animators WHERE userId = '$this->userId'";
-                $res = mysql_query ( $sql );
-                $nb = mysql_num_rows($res);
-                if($nb == 1){
+                $res = $this->mysqli->query($sql);
+                if($res->num_rows == 1){
                     $this->role = "animator";
-                }elseif($nb == 0){
+                }elseif($res->num_rows == 0){
                     $this->role = "player";
                 }else{
                     // WTF
@@ -57,7 +59,7 @@ class User {
             }else{
                 // WTF
             }
-        }elseif($nb == 0){
+        }elseif($res->num_rows == 0){
             // User does not exists
         }else{
             // WTF
@@ -79,9 +81,22 @@ class User {
         if(!is_null($sort) && ""!=$sort){
             $sql .= " ORDER BY $sort";
         }
-        return mysql_query ( $sql );
+        $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($mysqli->connect_error) {
+            die("Connection failed: " . $mysqli->connect_error);
+        }
+        $res = $mysqli->query($sql);
+        $mysqli->close();
+
+        return $res;
     }
 
+    /**
+     * @param string $role
+     * @param null $year
+     * @param null $sort
+     * @return bool|mysqli_result|resource
+     */
     public static function getUsersByYear($role = 'all', $year=null, $sort = null){
         if( ! is_numeric($year)){
             return self::getUsers($role, $sort);
@@ -104,7 +119,15 @@ class User {
             $sql .= " ORDER BY u.$sort";
         }
 
-        return mysql_query ( $sql );
+        $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($mysqli->connect_error) {
+            die("Connection failed: " . $mysqli->connect_error);
+        }
+
+        $res = $mysqli->query($sql);
+        $mysqli->close();
+
+        return $res;
     }
     
     /**
@@ -115,9 +138,9 @@ class User {
     public function updateData($d){
         
         $sql = "SHOW COLUMNS FROM Users";
-        $res = mysql_query ( $sql );
+        $res = $this->mysqli->query($sql);
         $fields = array();
-        while ($row = mysql_fetch_assoc($res)) {
+        while ($row = $res->fetch_assoc()) {
             $fields[] = strtolower($row['Field']);
         }
         $sql = "UPDATE Users SET";
@@ -135,8 +158,8 @@ class User {
             }
         }
         $sql .= " WHERE `userId` = '".$this->userId."'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_affected_rows();
+        $res = $this->mysqli->query($sql);
+        $nb = $res->num_rows;
         
         $result['user'] = new User($this->userId);
         
@@ -172,11 +195,9 @@ class User {
         }
         
         $sql = "SELECT userId FROM $table WHERE userId = '$id' AND password='$pwd'";
-        $res = mysql_query ($sql);
-        echo mysql_error();
-        $nb = mysql_num_rows($res);
-        
-        return ($res && ($nb === 1));
+        $res = $this->mysqli->query($sql);
+
+        return ($res && ($res->num_rows === 1));
     }
     
     /**
@@ -208,9 +229,8 @@ class User {
         }
     
         $sql = "UPDATE $table SET `password`='".sha1($pwd)."' WHERE `userId` = '".$this->userId."'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_affected_rows();
-        return ($res && ($nb === 1));
+        $res = $this->mysqli->query($sql);
+        return ($res && ($res->num_rows === 1));
     }
     
     /**
@@ -229,12 +249,16 @@ class User {
         
         if( isset($d['email']) && isset($d['password']) ){
             if ( Controls::validateEmail($d['email']) && !self::emailExists($d['email']) ){
-                
+                $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+                if ($mysqli->connect_error) {
+                    die("Connection failed: " . $mysqli->connect_error);
+                }
+
                 // Get User's fields
                 $sql = "SHOW COLUMNS FROM Users";
-                $res = mysql_query ( $sql );
+                $res = $mysqli->query($sql);
                 $fields = array();
-                while ($row = mysql_fetch_assoc($res)) {
+                while ($row = $res->fetch_assoc()) {
                     $fields[] = strtolower($row['Field']);
                 }
 
@@ -251,57 +275,62 @@ class User {
                 }
                 
                 // Insert User
-                $res = mysql_query ( $sql );
-                $nb = mysql_affected_rows();
-                
-                if($res && ($nb === 1)){
+                $res = $mysqli->query($sql);
+
+                if($res && ($res->num_rows === 1)){
                 
                     // Get automatic userId
                     $sql = "SELECT userId FROM Users WHERE email = '".$d['email']."'";
-                    $res = mysql_query ( $sql );
-                    $nb = mysql_num_rows($res);
+                    $res = $mysqli->query($sql);
                     
-                    if($res && ($nb === 1)){
-                        $row = mysql_fetch_assoc($res);
+                    if($res && ($res->num_rows === 1)){
+                        $row = $res->fetch_assoc();
                         $userId = $row['userId'];
                         
                         // Insert animator
                         $sql = "INSERT INTO Animators SET `userId`='$userId', `password`='".sha1($d['password'])."'";
-                        $res = mysql_query ( $sql );
-                        $nb = mysql_affected_rows();
-                        if($res && ($nb === 1)){
+                        $res = $mysqli->query($sql);
+                        if($res && ($res->num_rows === 1)){
                         
                             // Validate it by authentification, and return it
                             $auth = self::auth($d['email'], $d['password']);
                             if($auth['status'] == 2){
-                                return self::getFromId($auth['userId']);
+                                $mysqli->close();
+                                return new User($auth['userId']);
                             }
                         }
                     }
                 }
             }
         }
+        $mysqli->close();
         return FALSE;
     }
     
     /**
-    * @param $user A player to upgrade to MJ
-    * @param $d An array of data, containing new password
-    */
+     * @param $user User A player to upgrade to MJ
+     * @param $d array data, containing new password
+     * @return bool|mixed
+     */
     public static function upgradeToMJ($user, $d){
         $user = new User($user->getId());
         if ( $user || $user->getRole() == 'player' ){
             // Insert animator
             $sql = "INSERT INTO Animators SET `userId`='".$user->getId()."', `password`='".sha1($d['password'])."'";
-            $res = mysql_query ( $sql );
-            $nb = mysql_affected_rows();
-            if($res && ($nb === 1)){
+            $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+            if ($mysqli->connect_error) {
+                die("Connection failed: " . $mysqli->connect_error);
+            }
+            $res = $mysqli->query($sql);
+            if($res && ($res->num_rows === 1)){
                 // Validate it by authentification, and return it
                 $auth = self::auth($d['email'], $d['password']);
                 if($auth['status'] == 2){
+                    $mysqli->close();
                     return $user->updateData($d);
                 }
             }
+            $mysqli->close();
         }
         return FALSE;
     }
@@ -313,22 +342,24 @@ class User {
     */
     public static function register($email, $lastname, $firstname){
         if ( Controls::validateEmail($email) && !self::emailExists($email) ){
-            
+            $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+            if ($mysqli->connect_error) {
+                die("Connection failed: " . $mysqli->connect_error);
+            }
+
             // Build SQL request
             $sql = "INSERT INTO Users SET `email`='".strtolower($email)."', `lastname`='".strtolower(addslashes($lastname))."', `firstname`='".strtolower(addslashes($firstname))."'";
 
             // Insert User
-            $res = mysql_query ( $sql );
-            $nb = mysql_affected_rows();
+            $res = $mysqli->query($sql);
             
-            if($res && ($nb === 1)){
+            if($res && ($res->num_rows === 1)){
             
                 // Get and return new userId
                 $sql = "SELECT userId FROM Users WHERE email = '$email'";
-                $res = mysql_query ( $sql );
-                $nb = mysql_num_rows($res);
-                if($res && ($nb === 1)){
-                    $row = mysql_fetch_assoc($res);
+                $res = $mysqli->query($sql);
+                if($res && ($res->num_rows === 1)){
+                    $row = $res->fetch_assoc();
                     return new User($row["userId"]);
                 }
             }
@@ -343,47 +374,35 @@ class User {
     public static function getFromSession(){
         // Si activ session
         if (isset($_SESSION) && isset($_SESSION['userId'])) {
-        
             // get User From session
-            return self::getFromId($_SESSION['userId']);
-            
+            return new User($_SESSION['userId']);
         }
         return FALSE;
     }
-    
-    /*
-    * @DEPRECATED
-    * Use new User($userId)
-    */
-    public static function getFromId($userId){
-        
-        $sql = "SELECT userId FROM Users WHERE userId = '$userId'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-        
-        if($nb == 1){
-            $row = mysql_fetch_assoc($res);
-            return new User($row["userId"]);
-        }
-        return FALSE;
-    }
-    
+
     /**
-    * True si l'email est déjà enregistré en BD, false sinon.
-    * Ajouter un deuxieme attribut pour spécifier un ID d'utilisateur, afin de vérifier si l'email
-    * est associée à un autre utilisateur.
-    */
+     * True si l'email est déjà enregistré en BD, false sinon.
+     * Ajouter un deuxieme attribut pour spécifier un ID d'utilisateur, afin de vérifier si l'email
+     * est associée à un autre utilisateur.
+     *
+     * @param $email
+     * @param null $excludeId
+     * @return bool
+     */
     public static function emailExists($email, $excludeId = null){
+        $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($mysqli->connect_error) {
+            die("Connection failed: " . $mysqli->connect_error);
+        }
         $sql = "SELECT userId FROM Users WHERE email = '$email'";
-        $res = mysql_query ($sql);
-        $nb = mysql_num_rows($res);
+        $res = $mysqli->query($sql);
         $exists = false;
         if(is_null($excludeId)){
-            if($nb > 0){
+            if($res->num_rows > 0){
                 $exists = true;
             }
         }else{
-            while ($row = mysql_fetch_assoc($res)) {
+            while ($row = $res->fetch_assoc()) {
                 if($row['userId'] != $excludeId){
                     $exists = true;
                 }
@@ -396,9 +415,8 @@ class User {
     * Fonction d'authentification et de sauvegarde de l'id en session
     */
     public static function auth ($email, $password) {
-    
-        $res = array();
-        $result['status'] = 0;
+
+        $result = array ('status' => 0);
         
         if(Controls::validateEmail($email)){
             
@@ -406,32 +424,36 @@ class User {
             $password = sha1($password);
         
             $sql = "SELECT userId FROM Users WHERE email = '$email'";
-            $res = mysql_query ($sql);
-            $nb = mysql_num_rows($res);
-                    
-            if($nb == 1){
+
+            $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+            if ($mysqli->connect_error) {
+                die("Connection failed: " . $mysqli->connect_error);
+            }
+
+            $res = $mysqli->query($sql);
+
+            if($res->num_rows == 1){
                 // User found
-                $row = mysql_fetch_assoc($res);
+                $row = $res->fetch_assoc();
                 
                 $userId = $row["userId"];
 
                 $sql = "SELECT * FROM Administrators WHERE userId = '$userId'";
-                $res = mysql_query ( $sql );                
-                $nb = mysql_num_rows($res);
+                $res = $mysqli->query($sql);
+                $nb = $res->num_rows;
                 if($nb == 1){
                     // ADMIN password
-                    $row = mysql_fetch_assoc($res);
+                    $row = $res->fetch_assoc();
                     if($password == $row['password']){
                         $result['userId'] = $userId;
                         $result['status'] = 2;
                     }
                 }elseif($nb == 0){
                     $sql = "SELECT * FROM Animators WHERE userId = '$userId'";
-                    $res = mysql_query ( $sql );
-                    $nb = mysql_num_rows($res);
-                    if($nb == 1){
+                    $res = $mysqli->query($sql);
+                    if($res->num_rows == 1){
                         // MJ password
-                        $row = mysql_fetch_assoc($res);
+                        $row = $res->fetch_assoc();
                         if($password == $row['password']){
                             $result['userId'] = $userId;
                             $result['status'] = 2;
@@ -439,6 +461,7 @@ class User {
                     }
                 }
             }
+            $mysqli->close();
         } else {
             // echo "L'adresse e-mail $email n'est pas valide";
             $result['status'] = 1;
@@ -458,12 +481,15 @@ class User {
     public static function pseudoAuth ($email, $data = null, $force = false) {
         if ($force || !(isset($_SESSION) && isset($_SESSION['userId']))) {
             if(Controls::validateEmail($email)){
+                $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+                if ($mysqli->connect_error) {
+                    die("Connection failed: " . $mysqli->connect_error);
+                }
                 $sql = "SELECT * FROM Users WHERE email = '$email'";
-                $res = mysql_query ($sql);
-                $nb = mysql_num_rows($res);
-                if($nb == 1){
-                    $row = mysql_fetch_assoc($res);
-                    $user = self::getFromId($row["userId"]);
+                $res = $mysqli->query($sql);
+                if($res->num_rows == 1){
+                    $row = $res->fetch_assoc();
+                    $user = new User($row["userId"]);
                     if($user){
                         $user->role = "player";
                         if(!is_null($data)){
@@ -486,9 +512,8 @@ class User {
     */
     public function participatesTo ($partyId){
         $sql = "SELECT * FROM Inscriptions WHERE partyId = ".$partyId." AND userId = ".$this->userId;
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-        return ($res && $nb > 0);
+        $res = $this->mysqli->query($sql);
+        return ($res && $res->num_rows > 0);
     }
     /*
     * Returns true if "this" user animates the given party.
@@ -496,9 +521,8 @@ class User {
     public function animates ($partyId){
         if($this->getRole() == 'animator' || $this->getRole() == 'administrator'){
             $sql = "SELECT * FROM Parties WHERE partyId = ".$partyId." AND userId = ".$this->userId;
-            $res = mysql_query ( $sql );
-            $nb = mysql_num_rows($res);
-            return ($res && $nb > 0);
+            $res = $this->mysqli->query($sql);
+            return ($res && $res->num_rows > 0);
         }
         return false;
     }

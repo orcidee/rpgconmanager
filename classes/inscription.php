@@ -7,11 +7,16 @@ class Inscription {
     private $partyId;
     public $isValid;
     public $status;
+    private $mysqli;
     
     /**
     * Procède à l'inscription de l'utilisateur ($userId) à la partie ($partyId).
     */
     public function __construct ($userId, $partyId) {
+        $this->mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
+        }
     
         $userId = addslashes($userId);
         $partyId = addslashes($partyId);
@@ -19,20 +24,17 @@ class Inscription {
         $this->isValid = false;
         // Verifier la nouveauté
         $sql = "SELECT * FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_num_rows($res);
-        if($res && ($nb === 0)){
+        $res = $this->mysqli->query($sql);
+        if($res && ($res->num_rows === 0)){
             // Procède à l'inscription
             $sql = "INSERT INTO Inscriptions SET `userId`='$userId', `partyId`='$partyId'";
-            $res = mysql_query ( $sql );
-            $nb = mysql_affected_rows();
-            if($res && ($nb === 1)){
+            $res = $this->mysqli->query($sql);
+            if($res && ($res->num_rows === 1)){
                 // Get automatic inscriptionId
                 $sql = "SELECT * FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'";
-                $res = mysql_query ( $sql );
-                $nb = mysql_num_rows($res);
-                if($res && ($nb === 1)){
-                    $row = mysql_fetch_assoc($res);
+                $res = $this->mysqli->query($sql);
+                if($res && ($res->num_rows === 1)){
+                    $row = $res->fetch_assoc();
                     $this->inscriptionId = $row['inscriptionId'];
                     $this->userId = $row['userId'];
                     $this->partyId = $row['partyId'];
@@ -40,9 +42,9 @@ class Inscription {
                     $this->status = "created";
                 }
             }
-        }elseif($res && ($nb === 1)){
+        }elseif($res && ($res->num_rows === 1)){
             // Deja inscrit
-            $row = mysql_fetch_assoc($res);
+            $row = $res->fetch_assoc();
             $this->inscriptionId = $row['inscriptionId'];
             $this->userId = $row['userId'];
             $this->partyId = $row['partyId'];
@@ -58,11 +60,14 @@ class Inscription {
     * ($partyId).
     */
     public static function unsubscribe ($partyId, $userId){
+        $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($mysqli->connect_error) {
+            die("Connection failed: " . $mysqli->connect_error);
+        }
         $userId = addslashes($userId);
         $partyId = addslashes($partyId);
         $sql = "DELETE FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'";
-        $res = mysql_query ( $sql );
-        $nb = mysql_affected_rows();
-        return $res && ($nb === 1);
+        $res = $mysqli->query($sql);
+        return $res && ($res->num_rows === 1);
     }
 }

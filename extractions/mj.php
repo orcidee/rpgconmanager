@@ -17,9 +17,10 @@ if($user){
 
     if($user->getRole() == "administrator"){
 
+        $controls = new Controls();
 
 
-        $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
+        $thisYear = $controls->getDate(Controls::CONV_START, '%Y');
         $animators = User::getUsersByYear(User::ROLE_MJ, $thisYear);
 
         ob_start();
