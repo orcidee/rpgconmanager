@@ -219,7 +219,7 @@ class Orcimail {
             'to' => $user->getEmail(),
             'subject' => ("Orc'idee - Confirmation d'inscription à la partie ".$p->getId()),
             'body' => $message
-        ));
+        ), true);
     }
 
     public static function unsubscribeToParty ($p, $user){
@@ -368,11 +368,11 @@ class Orcimail {
         ));
     }
 
-    private static function sendMail ($data){
+    private static function sendMail ($data, $void_cc = false){
 
         $headers =  "From: " . MAIL_FROM . "\r\n" .
                     "Reply-To: " . MAIL_FROM . "\r\n" .
-                    "Cc: " . MAIL_CC . "\r\n" .
+                    $void_cc ? "" : "Cc: " . MAIL_CC . "\r\n" .
                     "X-Mailer: PHP/" . phpversion() . "\r\n" .
                     "MIME-Version: 1.0" . "\r\n" .
                     "Content-type: text/html; charset=UTF-8";
