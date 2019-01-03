@@ -35,151 +35,140 @@ require_once(dirname(__FILE__).'/conf/conf.php');
     <body>
 
 <?php
-$mysqli = new mysqli(HOST, USER, PASSWORD, DB);
-/* check connection */
-if ($mysqli->connect_errno) {
-    printf("Connect failed: %s\n", $mysqli->connect_error);
-    exit();
-}
-$mysqli->query("SET NAMES 'utf8'");
-
 require_once(dirname(__FILE__).'/classes/controls.php');
 require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
 
 
-    $view = new View();
-    $user = User::getFromSession();
-    $controls = new Controls();
+$view = new View();
+$user = User::getFromSession();
+$controls = new Controls();
 
-    if(IS_DEBUG){
-        echo "<div class='dbg'>
-            <p>Database</p>
-             <ul>
-                <li>Connexion ok</li>
-                <li>Using ".DB."</li>
-                </ul>
-            <p>User: ". (($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0");
-        echo "</p></div>";
-    }
+if(IS_DEBUG){
+    echo "<div class='dbg'>
+        <p>Database</p>
+         <ul>
+            <li>Connexion ok</li>
+            <li>Using ".DB."</li>
+            </ul>
+        <p>User: ". (($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0");
+    echo "</p></div>";
+}
 
-    $title = null;
+$title = null;
 
-    switch (@$_GET['page']){
-        case "create": $title = "Proposer une partie ou une animation";
-        break;
-        case "edit": $title = "Editer une animation existante";
-        break;
-        case "party": $title = "Détail de la partie";
-        break;
-        case "profile": $title = "Editer mon profil";
-        break;
-        case "list": $title = "Liste des parties";
-        break;
-        case "print": $title = "Imprimer les plans";
-        break;
-        case "conf": $title = "Contrôles de l'application";
-        break;
-        case "tables": $title = "Définir les numéros de table";
-        break;
-        case "logout": $title = "Déconnexion";
-        break;
-    }
+switch (@$_GET['page']){
+    case "create": $title = "Proposer une partie ou une animation";
+    break;
+    case "edit": $title = "Editer une animation existante";
+    break;
+    case "party": $title = "Détail de la partie";
+    break;
+    case "profile": $title = "Editer mon profil";
+    break;
+    case "list": $title = "Liste des parties";
+    break;
+    case "print": $title = "Imprimer les plans";
+    break;
+    case "conf": $title = "Contrôles de l'application";
+    break;
+    case "tables": $title = "Définir les numéros de table";
+    break;
+    case "logout": $title = "Déconnexion";
+    break;
+}
 
 
-    if($controls->isAppOpen()){
+if($controls->isAppOpen()){
 
-        if($user && ($user->getRole() == "animator" || $user->getRole() == "administrator") ){
+    if($user && ($user->getRole() == "animator" || $user->getRole() == "administrator") ){
 
-            // Ajouter une partie / Editer une partie
-            if(@$_GET['page'] == "create" || @$_GET['page'] == "edit"){
-                if($controls->isMjOpen() || isset($_GET['partyId'])){
-                    $view->content = "create";
-                }
+        // Ajouter une partie / Editer une partie
+        if(@$_GET['page'] == "create" || @$_GET['page'] == "edit"){
+            if($controls->isMjOpen() || isset($_GET['partyId'])){
+                $view->content = "create";
             }
-
-            // Editer mon profil
-            if(@$_GET['page'] == "profile"){
-                $view->content = "profile";
-            }
-
-			// Contacter l'équipe orc'idee
-			if(@$_GET['page'] == "contact"){
-                $view->content = "contact";
-            }
-
         }
 
-        // Open pages
-        if ( in_array (@$_GET['page'], array('list', 'party'))) {
-            $view->content = $_GET['page'];
+        // Editer mon profil
+        if(@$_GET['page'] == "profile"){
+            $view->content = "profile";
+        }
+
+  // Contacter l'équipe orc'idee
+  if(@$_GET['page'] == "contact"){
+            $view->content = "contact";
         }
 
     }
 
-    if($user && $user->getRole() == "administrator"){
-
-        // Impressions (plans)
-        if(@$_GET['page'] == "print"){
-            $view->content = "print";
-        }
-
-        // Contrôles de l'application
-        if(@$_GET['page'] == "conf"){
-            $view->content = "conf";
-        }
-
-        // Définition des numéros de table
-        if(@$_GET['page'] == "tables"){
-            $view->content = "tables";
-        }
-
-        // Définition des numéros de table
-        if(@$_GET['page'] == "users"){
-            $view->content = "users";
-        }
+    // Open pages
+    if ( in_array (@$_GET['page'], array('list', 'party'))) {
+        $view->content = $_GET['page'];
     }
 
-    if(@$_GET['page'] == "logout"){
-        $view->content = "logout";
+}
+
+if($user && $user->getRole() == "administrator"){
+
+    // Impressions (plans)
+    if(@$_GET['page'] == "print"){
+        $view->content = "print";
     }
 
-    if(!$user){
+    // Contrôles de l'application
+    if(@$_GET['page'] == "conf"){
+        $view->content = "conf";
+    }
 
-        // By default: No forward after authentification
-        $forward = "";
+    // Définition des numéros de table
+    if(@$_GET['page'] == "tables"){
+        $view->content = "tables";
+    }
 
-        // $title not null means we know the feature requested (see switch case, upper in this page)
-        if(!is_null($title)){
+    // Définition des numéros de table
+    if(@$_GET['page'] == "users"){
+        $view->content = "users";
+    }
+}
 
-            $forwardValues = "";
-            // Add here valid forward parameter
-            if(isset($_GET['page']) && $_GET['page'] != 'logout'){
-                $forwardValues .= "page=".$_GET['page']."&";
-            }
-            if(isset($_GET['partyId'])){
-                $forwardValues .= "partyId=".$_GET['partyId']."&";
-            }
-            $forward = "?forward=".urlencode($forwardValues);
+if(@$_GET['page'] == "logout"){
+    $view->content = "logout";
+}
+
+if(!$user){
+
+    // By default: No forward after authentification
+    $forward = "";
+
+    // $title not null means we know the feature requested (see switch case, upper in this page)
+    if(!is_null($title)){
+
+        $forwardValues = "";
+        // Add here valid forward parameter
+        if(isset($_GET['page']) && $_GET['page'] != 'logout'){
+            $forwardValues .= "page=".$_GET['page']."&";
         }
+        if(isset($_GET['partyId'])){
+            $forwardValues .= "partyId=".$_GET['partyId']."&";
+        }
+        $forward = "?forward=".urlencode($forwardValues);
     }
+}
 
-    if( ! @$_GET["modal"] == true ){
-      include("menu.php");
-    }
+if( ! @$_GET["modal"] == true ){
+  include("menu.php");
+}
 
-    if(!is_null($view->content)){
-        $view->html();
-    } else {
-        echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>
-        <br/><br/>
-        <div style='margin:auto; text-align:center;'><img src='http://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
-    }
+if(!is_null($view->content)){
+    $view->html();
+} else {
+    echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>
+    <br/><br/>
+    <div style='margin:auto; text-align:center;'><img src='http://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
+}
 
-
-
-$mysqli->close();
 
 include("scripts.php");
 

@@ -9,13 +9,15 @@ if ($isAdmin || $animates) {
     $stateLabels['refused'] = "Refusée";
     $stateLabels['canceled'] = "Annulée";
 
+    $controls = new Controls();
+
     $allow = array(
         'edit' => ($animates || $isAdmin) && ($party->getState() == 'created' || $party->getState() == 'verified' || $party->getState() == 'refused' || $party->getState() == 'validated'),
         'cancel' => ($animates || $isAdmin) && $party->getState() !== 'canceled',
         'refuse' => $isAdmin && ($party->getState() == 'created' || $party->getState() == 'verified' || $party->getState() == 'validated'),
         'verify' => $isAdmin && ($party->getState() == "created" || $party->getState() == "refused"),
         'validate' => $isAdmin && $party->getState() == "verified",
-        'subscribe' => !$animates && !$participates && $party->getState() == 'validated' && Controls::isPlayerOpen()
+        'subscribe' => !$animates && !$participates && $party->getState() == 'validated' && $controls->isPlayerOpen()
     );
 
     ?>

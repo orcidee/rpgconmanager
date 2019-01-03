@@ -22,13 +22,13 @@ class Party {
     private $year;
     private $state;
 
-    private $mysqli; // DB Connector;
-    
+    protected $mysqli; // DB Connector;
+
     public $isValid; // true: Données valides, prêtes pour creneau et sauvegarde
     public $isFake; // true: Pas encore sauvé en BD
     public $errors;
     public $infos;
-    
+
     /**
     * Create a new party (without saving it in DB).
     * If parameter "new" is unset or true, will create a new fake party,
@@ -61,7 +61,7 @@ class Party {
                 isset($data['duration']) && strlen($data['duration']) > 0 &&
                 isset($data['tableAmount']) && in_array($data['tableAmount'], array(0,1,2,3))
             ) {
-                
+
                 $this->userId = $data['userId'];
                 $this->typeId = $data['typeId'];
                 $this->name = $data['name'];
@@ -79,12 +79,12 @@ class Party {
                 $this->state = "created";
                 $this->isFake = true;
                 $this->tableAmount = $data['tableAmount'];
-                
+
                 if(isset($data['partyId']) && @$data['action'] == 'edit'){
                     // Trying to update existing
                     $this->partyId = $data['partyId'];
                 }
-                
+
             }else{
                 $this->isValid = false;
             }
@@ -93,7 +93,7 @@ class Party {
             $res = $this->mysqli->query("SELECT * FROM Parties WHERE partyId='$partyId'");
 			if ($res->num_rows == 1){
 				$row = $res->fetch_assoc();
-				
+
 				foreach($row as $key => $value){
 					$this->$key = $value;
 				}
@@ -104,9 +104,22 @@ class Party {
         }else{
             $this->isValid = false;
         }
-        
     }
-    
+
+    public function __destruct() {
+        $this->mysqli->close();
+    }
+
+    /**
+     * Called after unserialize($party)
+     */
+    public function __wakeup() {
+        $this->mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
+        }
+    }
+
     public function getPlayers(){
         $players = array();
         $res = $this->mysqli->query("SELECT * FROM Inscriptions WHERE partyId = '$this->partyId'");
@@ -115,7 +128,7 @@ class Party {
         }
         return $players;
     }
-    
+
     public static function getYears(){
         $years = array();
 
@@ -128,37 +141,35 @@ class Party {
         while ($row = $res->fetch_assoc()) {
             $years[] = $row['year'];
         }
-        $mysqli->close();
         return $years;
     }
-    
+
     /**
     * Save "this" party in DB
     */
     public function save (){
-        
+
         if($this->isFake && $this->isValid && ($this->state == "created" || $this->state == "validated")){
-        
-        
+
             // validate userId
             $sql = "SELECT * FROM Animators WHERE userId = '$this->userId'";
             $res = $this->mysqli->query($sql);
             $nb = $res->num_rows;
-            
+
             if($nb === 0){
                 $sql = "SELECT * FROM Administrators WHERE userId = '$this->userId'";
                 $res = $this->mysqli->query($sql);
                 $nb = $res->num_rows;
             }
-            
+
             if($nb === 1){
                 // user ok
 
                 // UPDATE PARTY
                 if(isset($this->partyId) && strlen($this->partyId) > 0){
-                
+
                     if($this->state == 'created'){
-                
+
                         $sql = "UPDATE Parties SET ".
                         "`typeId`='".addslashes($this->typeId)."',".
                         "`name`='".addslashes($this->name)."',".
@@ -182,16 +193,16 @@ class Party {
                         "`note`='".addslashes($this->note)."'".
                         " WHERE `partyId` = '".$this->partyId."'";
                     }
-                    $res = mysql_query ($sql);
-                
-                    if($res && "" === mysql_error()){
+                    $res = $this->mysqli->query($sql);
+
+                    if($res && "" === $this->mysqli->error){
                         $this->isFake = false;
                         return true;
                     }
-                
+
                 // INSERT PARTY
                 }else{
-                    $sql =  "INSERT INTO Parties (`userId`,`typeId`,`name`,`kind`,`scenario`,".
+                    $sql = "INSERT INTO Parties (`userId`,`typeId`,`name`,`kind`,`scenario`,".
                     "`playerMin`,`playerMax`,`level`,`duration`,`start`,`description`,`note`,".
                     "`language`,`year`,`state`,`tableAmount`)".
                     "VALUES ('".addslashes($this->userId)."','".
@@ -210,20 +221,13 @@ class Party {
                     addslashes($this->year)."','".
                     addslashes($this->state)."','".
                     addslashes($this->tableAmount)."')";
-                    
+
                     $res = $this->mysqli->query($sql);
-                
+
                     if($res === true){
                         $this->isFake = false;
-                        
-                        $sql = "SELECT LAST_INSERT_ID() FROM Parties";
-                        $res = $this->mysqli->query($sql);
-                        
-                        if($res->num_rows === 1){
-                            $row = $res->fetch_array();
-                            $this->partyId = $row[0];
-                            return true;
-                        }
+                        $this->partyId = $this->mysqli->insert_id;
+                        return true;
                     }
                 }
             }
@@ -231,7 +235,7 @@ class Party {
         echo "<p class='dbg'>".$this->mysqli->error."</p>";
         return false;
     }
-    
+
 	// met à jour la table pour une partie
 	public static function setTableForParty($partyId, $table){
         $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
@@ -252,7 +256,7 @@ class Party {
         $mysqli->close();
 		return false;
 	}
-	
+
     public static function getTypes($typeId = null){
         $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
         if ($mysqli->connect_error) {
@@ -284,7 +288,7 @@ class Party {
             return $types;
         }
     }
-    
+
     public function cancel(){
         $this->state = "canceled";
         $sql = "UPDATE Parties SET  `state`='canceled' WHERE `partyId` = '".$this->partyId."'";
@@ -304,12 +308,12 @@ class Party {
         }
         return false;
     }
-    
+
     public function refuse(){
         $this->state = "refused";
         $sql = "UPDATE Parties SET  `state`='refused' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query ( $sql );
-        
+
         if($res && ($res->num_rows === 1)){
             // TODO Insert history line
             // Send a mail
@@ -318,12 +322,12 @@ class Party {
         }
         return false;
     }
-    
+
     public function validate(){
         $this->state = "validated";
         $sql = "UPDATE Parties SET  `state`='validated' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query ( $sql );
-        
+
         if($res && ($res->num_rows === 1)){
             // TODO Insert history line
             // Send a mail
@@ -336,7 +340,7 @@ class Party {
         $this->state = "verified";
         $sql = "UPDATE Parties SET  `state`='verified' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query( $sql );
-        
+
         if($res && ($res->num_rows === 1)){
             // TODO Insert history line
             // Send a mail
@@ -346,9 +350,9 @@ class Party {
         return false;
     }
 
-    
+
     public function toArray(){
-        
+
         $res = array(
             "partyId"     => $this->partyId,
             "userId"      => $this->userId,
@@ -371,10 +375,10 @@ class Party {
             "errors"      => $this->errors,
             "tableAmount" => $this->tableAmount,
         );
-        
+
         return $res;
     }
-    
+
     /**
     * Retourne un tableau associatif à deux dimensions, représentatif de la charge actuelle.
     * Ajoute la partie (start, duration) au tableau, si ces paramètres sont fournis.
@@ -454,11 +458,11 @@ class Party {
 
         return $result;
     }
-    
+
     public function getAnimator(){
         return new User($this->userId);
     }
-    
+
     public function getId(){
         return $this->partyId;
     }
@@ -485,7 +489,7 @@ class Party {
 		return $this->playerMin;
 	}
     public function getPlayerMax(){
-		return $this->playerMax;
+		return intval($this->playerMax);
 	}
     public function getLevel(){
 
@@ -533,7 +537,7 @@ class Party {
     public function getTableAmount(){
         return $this->tableAmount;
     }
-    
+
 	public function accMail(){
 		$sql = 'SELECT * FROM Users WHERE userId = (SELECT userId FROM Parties where partyId = ' . $this->partyId . ')';
 		$result = $this->mysqli->query($sql);
@@ -544,15 +548,15 @@ class Party {
 			return false;
 		}
 	}
-	
+
 	public function freeSlot(){
 		$sql = "SELECT COUNT(*) AS nbr FROM Inscriptions WHERE partyId = " . $this->partyId . ";";
 		$res = $this->mysqli->query($sql);
 		$res = $res->fetch_assoc();
-		
+
 		return ($this->getPlayerMax() - $res['nbr']);
 	}
-	
+
     public static function mailAnim($pId, $pBody, $pEmail){
 		$id = htmlentities($pId, ENT_QUOTES, "UTF-8");
 		$sql = 'SELECT email FROM Users WHERE userId = (SELECT userId FROM Parties WHERE partyId = ' . $id . ') AND accepteMail = 1;';
@@ -562,7 +566,7 @@ class Party {
             die("Connection failed: " . $mysqli->connect_error);
         }
 		$res = $mysqli->query($sql);
-		
+
 		if($res->num_rows == 1){
 			$row = $res->fetch_assoc();
 			$email = $row['email'];
@@ -572,16 +576,16 @@ class Party {
             $mysqli->close();
 			return false;
 		}
-		
+
 	}
-    
-    
-	
+
+
+
     private static function dateToSlot($date){
         $appControls = new Controls();
         $start = $appControls->getDate(Controls::CONV_START);
         $d = strtotime($date);
-        
+
         $nb = ($d - $start) / 60 / 30 ;
         return $nb;
     }

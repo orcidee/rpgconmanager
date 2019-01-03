@@ -1,11 +1,6 @@
 <?php
 
 require_once(dirname(__FILE__).'/../conf/conf.php');
-
-$dbServer = mysql_connect(HOST,USER,PASSWORD) or die("Impossible de se connecter : " . mysql_error());
-$db = (mysql_select_db(DB));
-mysql_query("SET NAMES 'utf8'");
-
 require_once(dirname(__FILE__).'/../classes/controls.php');
 require_once(dirname(__FILE__).'/../classes/user.php');
 require_once(dirname(__FILE__).'/../classes/party.php');
@@ -18,7 +13,11 @@ if($user){
     if($user->getRole() == "administrator"){
 
         $controls = new Controls();
-
+        $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        if ($mysqli->connect_errno) {
+            printf("Connect failed: %s\n", $mysqli->connect_error);
+            exit();
+        }
 
         $thisYear = $controls->getDate(Controls::CONV_START, '%Y');
         $animators = User::getUsersByYear(User::ROLE_MJ, $thisYear);
@@ -44,7 +43,7 @@ if($user){
         </tr>
         <?php
 
-        while($row = mysql_fetch_assoc($animators)){  ?>
+        while($row = $animators->fetch_assoc()){  ?>
             <tr>
                 <td valign='middle'><?= $row['lastname'] ?> </td>
                 <td valign='middle'><?= $row['firstname'] ?></td>

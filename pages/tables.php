@@ -20,6 +20,13 @@ if($user){
 
       <?php
 
+      $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+      if ($mysqli->connect_errno) {
+          printf("Connect failed: %s\n", $mysqli->connect_error);
+          exit();
+      }
+      $controls = new Controls();
+
       $thisYear = $controls->getDate(Controls::CONV_START, '%Y');
       $sql = "SELECT Parties.*, Types.typeId as typeId, Users.* FROM Parties".
           " JOIN Types on Parties.typeId = Types.typeId".

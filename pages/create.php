@@ -105,7 +105,6 @@ if($user){
         // SAUVEGARDE DE LA PARTIE CONFIRMEE
         elseif(isset($_POST) and @$_POST['action'] == 'confirm' && isset($_SESSION['party'])) {
 
-            /** @var Party $party */
             $party = unserialize($_SESSION['party']);
             $edit = (!is_null($party->getId()) && strlen($party->getId()) > 0);
 

@@ -19,8 +19,10 @@ $isAdmin = $user && $user->isAdmin();
 $animates = $user && $user->animates($partyId);
 $participates = $user && $user->participatesTo($partyId);
 
-$contactable = Controls::isPlayerOpen() || $isAdmin;
-$subscribable = !$animates && !$participates && $party->getState() == 'validated' && Controls::isPlayerOpen();
+$controls = new Controls();
+
+$contactable = $controls->isPlayerOpen() || $isAdmin;
+$subscribable = !$animates && !$participates && $party->getState() == 'validated' && $controls->isPlayerOpen();
 
 $date = strftime("%d.%m.%Y à %H:%M", strtotime($party->getStart()));
 $nbPlayers = $party->getPlayerMin() == $party->getPlayerMax() ?

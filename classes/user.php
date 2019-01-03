@@ -16,20 +16,20 @@ class User {
     private $city;
     private $country;
     private $role;
-    
+
     public function __construct ($userId) {
         $this->mysqli = new mysqli(HOST, USER, PASSWORD, DB);
         if ($this->mysqli->connect_error) {
             die("Connection failed: " . $this->mysqli->connect_error);
         }
-        
+
         $sql = "SELECT * FROM Users WHERE userId = '$userId'";
         $res = $this->mysqli->query($sql);
 
         if($res->num_rows == 1){
             // User found
             $row = $res->fetch_assoc();
-            
+
             $this->userId = $row["userId"];
             $this->lastname = stripslashes($row["lastname"]);
             $this->firstname = stripslashes($row["firstname"]);
@@ -39,7 +39,7 @@ class User {
             $this->npa = stripslashes($row["npa"]);
             $this->city = stripslashes($row["city"]);
             $this->country = stripslashes($row["country"]);
-                            
+
             $sql = "SELECT * FROM Administrators WHERE userId = '$this->userId'";
             $res = $this->mysqli->query($sql);
             $nb = $res->num_rows;
@@ -65,9 +65,9 @@ class User {
             // WTF
         }
     }
-    
+
     public static function getUsers($role = "all", $sort = null){
-        
+
         if($role == 'player'){
             $sql = "SELECT u.* FROM Users u WHERE u.userId not in (select a.userId FROM Animators a)";
         }elseif($role == 'animator'){
@@ -129,14 +129,14 @@ class User {
 
         return $res;
     }
-    
+
     /**
     * Met à jours les données de l'utilisateur en BD, avec les données passées en paramètre.
     * Retourne un tableau associatif "user" (mis à jour) et "msg".
-    * $d Tableau associatif dont les clés ont les mêmes noms que les propriétés de l'objet user. 
+    * $d Tableau associatif dont les clés ont les mêmes noms que les propriétés de l'objet user.
     */
     public function updateData($d){
-        
+
         $sql = "SHOW COLUMNS FROM Users";
         $res = $this->mysqli->query($sql);
         $fields = array();
@@ -144,7 +144,7 @@ class User {
             $fields[] = strtolower($row['Field']);
         }
         $sql = "UPDATE Users SET";
-        
+
         $first = true;
         foreach($d as $key => $value){
             if(in_array(strtolower($key), $fields)){
@@ -159,24 +159,18 @@ class User {
         }
         $sql .= " WHERE `userId` = '".$this->userId."'";
         $res = $this->mysqli->query($sql);
-        $nb = $res->num_rows;
-        
+
         $result['user'] = new User($this->userId);
-        
-        if($res && ($nb === 1)){
+
+        if($res){
             $result['msg'] = 'Tes données ont été mises à jour.';
         }else{
-            if($res && $nb == 0){
-                $result['msg'] = "Il semble que tu n'ais modifié aucune donnée.";
-            }else{
-                $result['msg'] = "Echec. Désolé, visiblement, un alignement imprévu des planètes nous a empêché de mettre à jour tes données. Merci de réessayer plus tard ou de <a href=''>nous contacter</a>.";
-            }
-            
+            $result['msg'] = "Echec. Désolé, visiblement, un alignement imprévu des planètes nous a empêché de mettre à jour tes données. Merci de réessayer plus tard ou de <a href=''>nous contacter</a>.";
         }
-        
+
         return $result;
     }
-    
+
     /**
     * Verifie que le mot de passe fourni en paramètre correspond bien à celui de l'utilisateur
     * courant.
@@ -185,7 +179,7 @@ class User {
 
         $pwd = sha1($pwd);
         $id = $this->userId;
-    
+
         if($this->role == "animator"){
             $table = "Animators";
         }elseif($this->role == "administrator"){
@@ -193,13 +187,13 @@ class User {
         }else{
             return false;
         }
-        
+
         $sql = "SELECT userId FROM $table WHERE userId = '$id' AND password='$pwd'";
         $res = $this->mysqli->query($sql);
 
         return ($res && ($res->num_rows === 1));
     }
-    
+
     /**
     * Réinitialise le mot de passe de l'utilisateur.
     * Retourne le nouveau mot de passe, ou false en cas d'échec.
@@ -214,12 +208,12 @@ class User {
         $user = new User($this->userId);
         return ($user->updatePassword($pwd)) ? $pwd : false;
     }
-    
+
     /**
     * Met à jour le mot de passe de l'utilisateur. Retourne true si la mise à jour est un succès.
     */
     public function updatePassword($pwd){
-    
+
         if($this->role == "animator"){
             $table = "Animators";
         }elseif($this->role == "administrator"){
@@ -227,26 +221,26 @@ class User {
         }else{
             return false;
         }
-    
+
         $sql = "UPDATE $table SET `password`='".sha1($pwd)."' WHERE `userId` = '".$this->userId."'";
         $res = $this->mysqli->query($sql);
         return ($res && ($res->num_rows === 1));
     }
-    
+
     /**
     * Verifie que le mot de passe fourni en paramètre est utilisable selon nos normes de sécurité.
     */
     public static function validatePassword($pwd){
         return (strlen($pwd) > 4);
     }
-    
+
     /**
     * Only used for MJ.
     * Register a new USER with the datas $d and return it.
     * Or return false if error occurs.
     */
     public static function registerMJ($d){
-        
+
         if( isset($d['email']) && isset($d['password']) ){
             if ( Controls::validateEmail($d['email']) && !self::emailExists($d['email']) ){
                 $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
@@ -273,25 +267,22 @@ class User {
                     }
                     $first = false;
                 }
-                
-                // Insert User
-                $res = $mysqli->query($sql);
 
-                if($res && ($res->num_rows === 1)){
-                
+                // Insert User
+                if($mysqli->query($sql)){
+
                     // Get automatic userId
                     $sql = "SELECT userId FROM Users WHERE email = '".$d['email']."'";
                     $res = $mysqli->query($sql);
-                    
+
                     if($res && ($res->num_rows === 1)){
                         $row = $res->fetch_assoc();
                         $userId = $row['userId'];
-                        
+
                         // Insert animator
                         $sql = "INSERT INTO Animators SET `userId`='$userId', `password`='".sha1($d['password'])."'";
-                        $res = $mysqli->query($sql);
-                        if($res && ($res->num_rows === 1)){
-                        
+                        if($mysqli->query($sql)){
+
                             // Validate it by authentification, and return it
                             $auth = self::auth($d['email'], $d['password']);
                             if($auth['status'] == 2){
@@ -306,7 +297,7 @@ class User {
         $mysqli->close();
         return FALSE;
     }
-    
+
     /**
      * @param $user User A player to upgrade to MJ
      * @param $d array data, containing new password
@@ -322,7 +313,7 @@ class User {
                 die("Connection failed: " . $mysqli->connect_error);
             }
             $res = $mysqli->query($sql);
-            if($res && ($res->num_rows === 1)){
+            if($res){
                 // Validate it by authentification, and return it
                 $auth = self::auth($d['email'], $d['password']);
                 if($auth['status'] == 2){
@@ -334,7 +325,7 @@ class User {
         }
         return FALSE;
     }
-    
+
     /**
     * Register a new USER with the datas $d and return it.
     * Or return false if error occurs.
@@ -352,9 +343,9 @@ class User {
 
             // Insert User
             $res = $mysqli->query($sql);
-            
-            if($res && ($res->num_rows === 1)){
-            
+
+            if($res){
+
                 // Get and return new userId
                 $sql = "SELECT userId FROM Users WHERE email = '$email'";
                 $res = $mysqli->query($sql);
@@ -366,7 +357,7 @@ class User {
         }
         return FALSE;
     }
-    
+
     /**
     * Returns the user corresponding to saved userId SESSION.
     * Or false if SESSION is not available.
@@ -410,19 +401,19 @@ class User {
         }
         return $exists;
     }
-    
+
     /**
     * Fonction d'authentification et de sauvegarde de l'id en session
     */
     public static function auth ($email, $password) {
 
         $result = array ('status' => 0);
-        
+
         if(Controls::validateEmail($email)){
-            
+
             // encode password
             $password = sha1($password);
-        
+
             $sql = "SELECT userId FROM Users WHERE email = '$email'";
 
             $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
@@ -435,7 +426,7 @@ class User {
             if($res->num_rows == 1){
                 // User found
                 $row = $res->fetch_assoc();
-                
+
                 $userId = $row["userId"];
 
                 $sql = "SELECT * FROM Administrators WHERE userId = '$userId'";
@@ -468,7 +459,7 @@ class User {
         }
         return $result;
     }
-    
+
     /**
     * Fonction de pseudo authentification, ne génère pas de session.
     * Retourne un objet user avec le rôle joueur.
@@ -506,7 +497,7 @@ class User {
         }
         return false;
     }
-    
+
     /*
     * Returns true if "this" user participates to the given party.
     */
@@ -526,7 +517,7 @@ class User {
         }
         return false;
     }
-    
+
     /** Accessors */
     public function getUserId(){
         return $this->userId;

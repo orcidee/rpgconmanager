@@ -12,7 +12,6 @@ if ($mysqli->connect_errno) {
     printf("Connect failed: %s\n", $mysqli->connect_error);
     exit();
 }
-$mysqli->query("SET NAMES 'utf8'");
 
 $user = User::getFromSession();
 
@@ -24,8 +23,8 @@ if($user){
 
     ob_start();
 
-          header("Content-type: application/vnd.ms-excel; charset=iso-8859-1");
-          header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
+    header("Content-type: application/vnd.ms-excel; charset=iso-8859-1");
+    header("Content-Disposition: attachment; filename=TimeLine_Orcidee.xls");
 
     $startDate = new DateTime($controls->getDate(Controls::CONV_START, '%Y-%m-%d %H:%M:00'));
     $start = $controls->getDate(Controls::CONV_START);

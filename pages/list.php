@@ -18,8 +18,17 @@ $stateLabels['validated'] = "Validée";
 $stateLabels['refused'] = "Refusée";
 $stateLabels['canceled'] = "Annulée";
 
+$controls = new Controls();
 
-$isListShowable = Controls::isAppOpen() || ($user && $user->getRole() == 'administrator');
+$mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+/* check connection */
+if ($mysqli->connect_errno) {
+    printf("Connect failed: %s\n", $mysqli->connect_error);
+    exit();
+}
+$mysqli->query("SET NAMES 'utf8'");
+
+$isListShowable = $controls->isAppOpen() || ($user && $user->getRole() == 'administrator');
 $isListShowable = $isListShowable && (@$_GET['action'] != 'unsubscribe') ;
 
 // filters
@@ -113,7 +122,7 @@ if(@$_GET['formFiltered']){
 		$where[] = "p.userId IN (".implode($selectedAnimators, ','). ")";
 	}
 
-    if(is_array($_GET['partyState'])) {
+    if(is_array(@$_GET['partyState'])) {
         foreach ($_GET['partyState'] as $selectedState) {
             if (array_key_exists($selectedState, $stateLabels)) {
                 $selectedStates[] = $selectedState;
@@ -196,7 +205,7 @@ if($isListShowable){
 			<fieldset>
 				<legend>Filtrer par :</legend>
 
-                <?php if ($user->isAdmin()) { ?>
+                <?php if ($user && $user->isAdmin()) { ?>
                     <label for="year">Année</label>
                     <select name="year" id="year">
                         <?php
@@ -376,7 +385,7 @@ if($isListShowable){
 							<div class="planning">
 								<span class="start">Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h.</span> &ndash;
 								<?php
-								$isFull = count($party->getPlayers()) < $party->getPlayerMax();
+								$isFull = count($party->getPlayers()) >= $party->getPlayerMax();
 								?>
 								<span class="free-space <?= $isFull ? 'red' : 'green' ?>">
 									<?= $isFull ? 'Complet' : 'Place disponible'?>
@@ -447,4 +456,6 @@ if($isListShowable){
     if(!$controls->isPlayerOpen()){
         echo "<p>L'inscription joueur n'est pas encore disponible.</p>";
     }
-} ?>
+}
+
+$mysqli->close();

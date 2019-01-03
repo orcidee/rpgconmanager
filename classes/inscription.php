@@ -8,7 +8,7 @@ class Inscription {
     public $isValid;
     public $status;
     private $mysqli;
-    
+
     /**
     * Procède à l'inscription de l'utilisateur ($userId) à la partie ($partyId).
     */
@@ -17,10 +17,10 @@ class Inscription {
         if ($this->mysqli->connect_error) {
             die("Connection failed: " . $this->mysqli->connect_error);
         }
-    
+
         $userId = addslashes($userId);
         $partyId = addslashes($partyId);
-    
+
         $this->isValid = false;
         // Verifier la nouveauté
         $sql = "SELECT * FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'";
@@ -29,7 +29,7 @@ class Inscription {
             // Procède à l'inscription
             $sql = "INSERT INTO Inscriptions SET `userId`='$userId', `partyId`='$partyId'";
             $res = $this->mysqli->query($sql);
-            if($res && ($res->num_rows === 1)){
+            if($res){
                 // Get automatic inscriptionId
                 $sql = "SELECT * FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'";
                 $res = $this->mysqli->query($sql);
@@ -56,7 +56,7 @@ class Inscription {
         }
     }
     /**
-    * Supprime une inscription existante, sur la base d'un utilisateur ($userId) et d'une partie 
+    * Supprime une inscription existante, sur la base d'un utilisateur ($userId) et d'une partie
     * ($partyId).
     */
     public static function unsubscribe ($partyId, $userId){
@@ -66,8 +66,6 @@ class Inscription {
         }
         $userId = addslashes($userId);
         $partyId = addslashes($partyId);
-        $sql = "DELETE FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'";
-        $res = $mysqli->query($sql);
-        return $res && ($res->num_rows === 1);
+        return $mysqli->query("DELETE FROM Inscriptions WHERE userId='$userId' AND partyId='$partyId'");
     }
 }
