@@ -36,8 +36,8 @@ class Controls {
         }
     }
 
-    public static function setNbTables($nbTables){
-        return self::setProperty(self::NB_TABLES, $nbTables);
+    public function setNbTables($nbTables){
+        return $this->setProperty(self::NB_TABLES, $nbTables);
     }
 
     /**
