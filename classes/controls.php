@@ -5,8 +5,6 @@
 * ainsi que quelques méthodes transversales utiles au fonctionnement de l'application.
 */
 class Controls {
-
-
     const CONV_START = "convStart";
     const CONV_END = "convEnd";
     const APP_OPEN = "appOpenDate";
@@ -17,6 +15,8 @@ class Controls {
     const PLAYER_CLOSE = "playerCloseDate";
     const NB_TABLES = "numberOfTables";
 
+    protected $mysqli;
+
     function __construct() {
         $this->mysqli = new mysqli(HOST, USER, PASSWORD, DB);
         if ($this->mysqli->connect_error) {
@@ -24,11 +24,13 @@ class Controls {
         }
     }
 
+    function __destruct() {
+        $this->mysqli->close();
+    }
 
     public function getNbTables(){
         $sql = "SELECT * FROM Controls WHERE `key` = '".self::NB_TABLES."'";
         $result = $this->mysqli->query($sql);
-        $this->mysqli->close();
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -54,14 +56,14 @@ class Controls {
             $row = mysqli_fetch_assoc($res);
             // exemple: 2012/01/01 00:00
             $openStamp = strtotime($row['value']);
-            
+
             $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = 'appCloseDate'");
             if($this->mysqli->affected_rows == 1){
                 $row = mysqli_fetch_assoc($res);
                 // exemple: 2012/01/01 00:00
                 $closeStamp = strtotime($row['value']);
                 $now = time();
-                                
+
                 if($openStamp <= $now && $closeStamp > $now) {
                     return true;
                 }
@@ -69,7 +71,7 @@ class Controls {
         }
         return false;
     }
-    
+
     /**
     * Retourne TRUE si l'inscription de partie par les MJ est ouverte, FALSE sinon.
     * Cette fonction retournera toujours FALSE si la fonction isAppOpen() retourne FALSE.
@@ -95,7 +97,7 @@ class Controls {
         }
         return false;
     }
-    
+
     /**
     * Retourne TRUE si l'inscription aux parties est ouverte, FALSE sinon.
     * Cette fonction retournera toujours FALSE si la fonction isAppOpen() retourne FALSE.
@@ -112,7 +114,7 @@ class Controls {
                     $row = mysqli_fetch_assoc($res);
                     // exemple: 2012/01/01 00:00
                     $closeStamp = strtotime($row['value']);
-                    $now = time();     
+                    $now = time();
                     if($openStamp <= $now && $closeStamp > $now) {
                         return true;
                     }
@@ -131,7 +133,7 @@ class Controls {
      * @return bool|int|string
      */
     public function getDate($dateIdentifier, $pattern = null){
-        return $this->getDatesOfKey($pattern, $dateIdentifier);
+        return $this->getDatesOfKey($dateIdentifier, $pattern);
     }
 
     /**
@@ -185,13 +187,15 @@ class Controls {
     public function setPlayerCloseDate($stamp){
         return $this->setDatesOfKey($stamp, "playerCloseDate");
     }
-    
-    
+
     /**
-    * Retourne la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
-    * Retourne true si la nouvelle date a pu etre enregistree en BD.
-    */
-    private function getDatesOfKey($pattern = null, $key) {
+     * Retourne la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
+     * Retourne true si la nouvelle date a pu etre enregistree en BD.
+     * @param $key
+     * @param null $pattern
+     * @return bool|false|int|string
+     */
+    protected function getDatesOfKey($key, $pattern = null) {
         $key = (is_null($key)) ? "appOpenDate" : $key;
         $res = $this->mysqli->query("SELECT * FROM Controls WHERE `key` = '$key'");
         if($this->mysqli->affected_rows == 1){
@@ -205,12 +209,12 @@ class Controls {
         }
         return false;
     }
-    
+
     /**
     * Defini la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
     * Retourne true si la nouvelle date a pu etre enregistree en BD.
     */
-    private function setDatesOfKey($stamp, $key = NULL) {
+    protected function setDatesOfKey($stamp, $key = NULL) {
         $key = (is_null($key)) ? "appOpenDate" : $key;
         return $this->setProperty($key, $stamp);
     }
@@ -219,13 +223,13 @@ class Controls {
      * Defini la date (timestamp) d'une propriété passée en parametre (par defaut: appOpenDate).
      * Retourne true si la nouvelle date a pu etre enregistree en BD.
      */
-    private function setProperty($key, $val) {
+    protected function setProperty($key, $val) {
         $res = $this->mysqli->query(
             "INSERT INTO Controls (`key`,`value`) VALUES('$key','$val') ON DUPLICATE KEY UPDATE `value`='$val'"
         );
         return ($res)?true:false;
     }
-    
+
     /**
     * Retourne l'URL courrante sous forme de String
     */
@@ -244,7 +248,7 @@ class Controls {
         }
         return $pageURL;
     }
-    
+
     /**
     * Retourne l'URL de la home de l'application sous forme de String
     */
@@ -264,7 +268,7 @@ class Controls {
         }
         return $pageURL;
     }
-    
+
     /**
     * Retourne TRUE si l'email est valide selon RFC 2822 et 1035, ou FALSE sinon.
     */
@@ -274,7 +278,7 @@ class Controls {
         $regex = '/^'.$atom.'+'.'(\.'.$atom.'+)*'.'@'.'('.$domain.'{1,63}\.)+'.$domain.'{2,63}$/i';
         return (preg_match($regex, $email));
     }
-	
+
 	/**
 	* Supprime les éléments html et php d'une chaine, et ajoute des antishlashes
 	* Laisse les balises de mise en forme <i><b><u><br><ul><ol><li>, et converti les <br>
@@ -283,7 +287,7 @@ class Controls {
 		$string = str_replace(array("<br>","<br />"),"\r\n",$string);
 		$string = strip_tags($string, '<i><b><u><br><ul><ol><li>');
 		$string = addslashes($string);
-		
+
 		return $string;
 	}
 

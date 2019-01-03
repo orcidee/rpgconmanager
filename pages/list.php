@@ -55,7 +55,7 @@ if(isset($_GET['free-space-only']) && $_GET['free-space-only'] == "on" ){
 
 if(isset($_GET['filter'])){
     switch ($_GET['filter']){
-        
+
         // Filter by mail (or current user if logged in) => Parties I will play
         case 'mail':
             if(!$user && isset($_GET['email'])){
@@ -71,7 +71,7 @@ if(isset($_GET['filter'])){
                 $isListShowable = false;
             }
             break;
-            
+
         // Parties I animate
         case 'animate':
             if($user){
@@ -124,7 +124,7 @@ if(@$_GET['formFiltered']){
 		$where[] = "p.state IN ('".implode($selectedStates, "','")."')";
 	}
 }
-$thisYear = Controls::getDate(Controls::CONV_START, '%Y');
+$thisYear = $controls->getDate(Controls::CONV_START, '%Y');
 if(!$filterYear) $where[] = "p.year = ".$thisYear;
 
 $sortType = "p.start";
@@ -148,7 +148,7 @@ $order = " ORDER BY ".$sortType." ".$sortOrder;
 
 
 if($isListShowable){
-    
+
     echo "<h1>Liste des parties".$addTitle."</h1>";
 
 	// Lien pour ajouter une partie
@@ -165,7 +165,7 @@ if($isListShowable){
 		}
 		echo "<div><a href='login.php?forward=".urlencode($forwardValues)."'>Vous pouvez vous authentifier ici pour inscrire ou éditer une partie.</a></div>";
 	}
-    
+
     // Lightbox qui apparaît au clic sur "Je veux m'inscrire à cette partie"
     // Cf. javascript: orcidee.manager.list.dialogBox
     ?>
@@ -223,7 +223,7 @@ if($isListShowable){
 				<label for="animId">Animateur</label>
 				<?php
 				// ANIMATOR FILTER
-				$defaultYear = Controls::getDate(Controls::CONV_START, "%Y");
+				$defaultYear = $controls->getDate(Controls::CONV_START, "%Y");
 				$year = is_numeric(@$_GET['year'])?@$_GET['year']:$defaultYear;
 
 				$sqlUsers = "SELECT Distinct Users.userId, Users.firstname, Users.lastname FROM Users".
@@ -234,9 +234,9 @@ if($isListShowable){
 					$sqlUsers .= " AND Parties.typeId IN (".implode($selectedTypes, ',').')';
 				}
 				$sqlUsers .= " order by Users.firstname, Users.lastname";
-				$resUsers = mysql_query ( $sqlUsers ); ?>
+				$resUsers = $mysqli->query($sqlUsers); ?>
 				<select name='animId[]' multiple id="animId">
-					<?php while ($rowUser = mysql_fetch_assoc($resUsers)) {
+					<?php while ($rowUser = $resUsers->fetch_assoc()) {
 						echo "<option ".(in_array($rowUser['userId'], $selectedAnimators) ? "selected='selected'" : "")." value='".$rowUser['userId']."'>".stripslashes($rowUser['firstname'])." ".stripslashes($rowUser['lastname'])."</option>";
 					} ?>
 				</select>
@@ -289,7 +289,7 @@ if($isListShowable){
 		</div>
 
 		<?php
-		
+
 		// PAGINATION
 		$sqlCount .= $join;
 		if(count($where) > 0) {
@@ -298,12 +298,12 @@ if($isListShowable){
 			}else {
 				$sqlCount .= ' WHERE ' . implode(" AND ", $where);
 			}
-		}   
+		}
 
-		$res = mysql_query ( $sqlCount );
-		$row = mysql_fetch_assoc($res);
+		$res = $mysqli->query($sqlCount);
+		$row = $res->fetch_assoc();
 		$total = $row['NumberOfParties'];
-		
+
 		if ($total > 0){
 
 			// Pagination's stuff
@@ -333,7 +333,7 @@ if($isListShowable){
 
 			$sql .= $order . $limit;
 
-			$res = mysql_query ( $sql );
+			$res = $mysqli->query($sql);
 
 			?>
 			<div class='game-list'>
@@ -344,11 +344,11 @@ if($isListShowable){
 				<ul id='game-list' cellspacing='0' cellpadding='0'>
 
 					<?php
-					
+
 					// Foreach parties in this page
-					
-					while ($row = mysql_fetch_assoc($res)) {
-						
+
+					while ($row = $res->fetch_assoc()) {
+
 						$party = new Party($row['partyId'], false);
 
 						$isAdmin = $user && $user->isAdmin();
@@ -399,7 +399,7 @@ if($isListShowable){
 				</ul>
 
 				<?php include('includes/pagination.php'); ?>
-			
+
 			</div>
 			<?php
 		}else{
@@ -444,7 +444,7 @@ if($isListShowable){
         }
         echo "<a href='login.php?forward=".urlencode($forwardValues)."'>Vous pouvez vous enregistrer ou vous authentifier comme MJ ou administrateur en cliquant ici.</a>";
     }
-    if(!Controls::isPlayerOpen()){
+    if(!$controls->isPlayerOpen()){
         echo "<p>L'inscription joueur n'est pas encore disponible.</p>";
     }
 } ?>

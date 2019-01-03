@@ -9,11 +9,14 @@ echo "<h1>Configuration</h1><div class='dates-controls'>";
 $user = User::getFromSession();
 
 if($user){
-    
+
     if($user->getRole() == "administrator"){
 
+        /** @var Controls $controls */
+        $controls = new Controls();
+
         echo "<h2>Nombre de tables à disposition</h2>";
-        $nbTables = Controls::getNbTables();
+        $nbTables = $controls->getNbTables();
         ?>
         <div class="number-of-tables clearfix">
             <div class="clear">
@@ -26,12 +29,12 @@ if($user){
         <?php
 
         echo "<h2>Dates de la convention</h2>";
-        $convStartTime = Controls::getDate(Controls::CONV_START);
-        $convStartDate = Controls::getDate(Controls::CONV_START, "%d.%m.%Y à %H:%M");
-        $convStartHour = Controls::getDate(Controls::CONV_START, "%H");
-        $convEndTime = Controls::getDate(Controls::CONV_END);
-        $convEndDate = Controls::getDate(Controls::CONV_END, "%d.%m.%Y à %H:%M");
-        $convEndHour = Controls::getDate(Controls::CONV_END, "%H");
+        $convStartTime = $controls->getDate(Controls::CONV_START);
+        $convStartDate = $controls->getDate(Controls::CONV_START, "%d.%m.%Y à %H:%M");
+        $convStartHour = $controls->getDate(Controls::CONV_START, "%H");
+        $convEndTime = $controls->getDate(Controls::CONV_END);
+        $convEndDate = $controls->getDate(Controls::CONV_END, "%d.%m.%Y à %H:%M");
+        $convEndHour = $controls->getDate(Controls::CONV_END, "%H");
         ?>
         <div class='convention-date clear'>
             <p class="info">La prochaine convention aura lieu du
@@ -64,48 +67,39 @@ if($user){
 
             <input type="button" value="Définir" id="conv-date" style="margin:15px 0 20px;text-align:center;"/>
         </div>
-        <?php
-        
-        echo "<h2>Contrôles de l'application</h2>";
 
-        $appOpenTime = Controls::getDate(Controls::APP_OPEN);
-        $appOpenDate = Controls::getDate(Controls::APP_OPEN, "%d.%m.%Y à %H:%M");
-        $appOpenHour = Controls::getDate(Controls::APP_OPEN, "%H");
-        $appCloseTime = Controls::getDate(Controls::APP_CLOSE);
-        $appCloseDate = Controls::getDate(Controls::APP_CLOSE, "%d.%m.%Y à %H:%M");
-        $appCloseHour = Controls::getDate(Controls::APP_CLOSE, "%H");
+        <h2>Contrôles de l'application</h2>
 
-        ?>
         <div class='application-controls clear'>
 
             <p class="info">L'application est active du
-                <span class='info-<?=Controls::APP_OPEN;?>'><?=$appOpenDate;?></span> au
-                <span class='info-<?=Controls::APP_CLOSE;?>'><?=$appCloseDate;?></span>
+                <span class='info-<?=Controls::APP_OPEN;?>'><?=$controls->getDate(Controls::APP_OPEN, "%d.%m.%Y à %H:%M")?></span> au
+                <span class='info-<?=Controls::APP_CLOSE;?>'><?=$controls->getDate(Controls::APP_CLOSE, "%d.%m.%Y à %H:%M")?></span>
             </p>
 
             <p class="info">
-                L'application est actuellement <span><?=(Controls::isAppOpen()) ? "ouverte" : "fermée"?></span>
+                L'application est actuellement <span><?=($controls->isAppOpen()) ? "ouverte" : "fermée"?></span>
             </p>
 
             <div class='row clear'>
                 <div class='left w300' data-dateId="<?=Controls::APP_OPEN;?>">
                     <p>Redéfinir la date et l'heure d'ouverture</p>
-                    <div id='datepicker0' class='datepicker' data-selected='<?php echo $appOpenTime;?>'></div>
+                    <div id='datepicker0' class='datepicker' data-selected='<?= $controls->getDate(Controls::APP_OPEN) ?>'></div>
                     <select>
                         <?php for($i = 0 ; $i<24 ; $i++){
                             $v = ((strlen($i)==1)?'0':'')."$i";
-                            $selected = ($appOpenHour == $v)? "selected='selected'" : "";
+                            $selected = ($controls->getDate(Controls::APP_OPEN, "%H") == $v)? "selected='selected'" : "";
                             echo "<option value='$v:00' $selected>$v:00</option>";
                         } ?>
                     </select>
                 </div>
                 <div class='left w300' data-dateId="<?=Controls::APP_CLOSE;?>">
                     <p>Redéfinir la date et l'heure de fermeture</p>
-                    <div id='datepicker1' class='datepicker' data-selected='<?php echo $appCloseTime;?>'></div>
+                    <div id='datepicker1' class='datepicker' data-selected='<?= $controls->getDate(Controls::APP_CLOSE) ?>'></div>
                     <select>
                         <?php for($i = 0 ; $i<24 ; $i++){
                             $v = ((strlen($i)==1)?'0':'')."$i";
-                            $selected = ($appCloseHour == $v)? "selected='selected'" : "";
+                            $selected = ($controls->getDate(Controls::APP_CLOSE, "%H") == $v)? "selected='selected'" : "";
                             echo "<option value='$v:00' $selected>$v:00</option>";
                         } ?>
                     </select>
@@ -115,21 +109,21 @@ if($user){
             <input type="button" value="Définir" id="app-dates" style="margin:15px 0 20px;text-align:center;" class="clear"/>
 
         </div>
-        
+
         <?php
-        
+
         echo "<h2>Contrôles des services MJ</h2>";
-        if(!Controls::isAppOpen()){
+        if(!$controls->isAppOpen()){
             echo "<p>Attention l'application est fermée. Aucune fonctionnalités liées aux inscriptions de parties par les MJ n'est donc accessible.</p>";
         }
 
 
-        $mjOpenTime = Controls::getDate(Controls::MJ_OPEN);
-        $mjOpenDate = Controls::getDate(Controls::MJ_OPEN, "%d.%m.%Y à %H:%M");
-        $mjOpenHour = Controls::getDate(Controls::MJ_OPEN, "%H");
-        $mjCloseTime = Controls::getDate(Controls::MJ_CLOSE);
-        $mjCloseDate = Controls::getDate(Controls::MJ_CLOSE, "%d.%m.%Y à %H:%M");
-        $mjCloseHour = Controls::getDate(Controls::MJ_CLOSE, "%H");
+        $mjOpenTime =  $controls->getDate(Controls::MJ_OPEN);
+        $mjOpenDate =  $controls->getDate(Controls::MJ_OPEN, "%d.%m.%Y à %H:%M");
+        $mjOpenHour =  $controls->getDate(Controls::MJ_OPEN, "%H");
+        $mjCloseTime = $controls->getDate(Controls::MJ_CLOSE);
+        $mjCloseDate = $controls->getDate(Controls::MJ_CLOSE, "%d.%m.%Y à %H:%M");
+        $mjCloseHour = $controls->getDate(Controls::MJ_CLOSE, "%H");
         ?>
         <div class='mj-controls clear'>
 
@@ -162,21 +156,21 @@ if($user){
             </div>
             <input type="button" value="Définir" id="mj-dates" style="margin:15px 0 20px;text-align:center;" class="clear"/>
         </div>
-        
+
         <?php
-        
+
         echo "<h2>Contrôles des services Joueurs</h2>";
-        if(!Controls::isAppOpen()){
+        if(!$controls->isAppOpen()){
             echo "<p>Attention l'application est fermée. Aucune fonctionnalités liées aux inscriptions des joueurs n'est donc accessible.</p>";
         }
 
 
-        $playerOpenTime = Controls::getDate(Controls::PLAYER_OPEN);
-        $playerOpenDate = Controls::getDate(Controls::PLAYER_OPEN, "%d.%m.%Y à %H:%M");
-        $playerOpenHour = Controls::getDate(Controls::PLAYER_OPEN, "%H");
-        $playerCloseTime = Controls::getDate(Controls::PLAYER_CLOSE);
-        $playerCloseDate = Controls::getDate(Controls::PLAYER_CLOSE, "%d.%m.%Y à %H:%M");
-        $playerCloseHour = Controls::getDate(Controls::PLAYER_CLOSE, "%H");
+        $playerOpenTime =  $controls->getDate(Controls::PLAYER_OPEN);
+        $playerOpenDate =  $controls->getDate(Controls::PLAYER_OPEN, "%d.%m.%Y à %H:%M");
+        $playerOpenHour =  $controls->getDate(Controls::PLAYER_OPEN, "%H");
+        $playerCloseTime = $controls->getDate(Controls::PLAYER_CLOSE);
+        $playerCloseDate = $controls->getDate(Controls::PLAYER_CLOSE, "%d.%m.%Y à %H:%M");
+        $playerCloseHour = $controls->getDate(Controls::PLAYER_CLOSE, "%H");
         ?>
         <div class='player-controls clear'>
 
@@ -209,13 +203,13 @@ if($user){
             </div>
             <input type="button" value="Définir" id="player-dates" style="margin:15px 0 20px;text-align:center;" class="clear"/>
         </div>
-        
+
         <?php
-        
+
     }else{
         echo "<p>Acces restreint à l'administrateur</p>";
     }
-    
+
 }else{
     echo "<p>Vous n'êtes pas authentifié.</p>";
 }

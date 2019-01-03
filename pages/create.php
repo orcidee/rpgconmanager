@@ -13,7 +13,9 @@ echo "<h1>Partie</h1>".
 $user = User::getFromSession();
 
 if($user){
-    
+
+    $controls = new Controls();
+
     if($user->getRole() == "administrator" or $user->getRole() == "animator"){
 
         // Indicate if the intial creation/edition form should be used
@@ -21,7 +23,7 @@ if($user){
 
         // AFFICHAGE DES DONNEES SAISIES - DEMANDE DE CONFIRMATION
         if (isset($_POST) && (@$_POST['action'] == 'create' || @$_POST['action'] == 'edit')) {
-            
+
             if(IS_DEBUG) {
                 echo "<div class='dbg'>demande de confirmation (" . @$_POST['action'] . ")</div>";
             }
@@ -41,7 +43,7 @@ if($user){
             }
 
             if($party->isValid){
-            
+
                 // Display the party & talk about validity & ask confirmation
                 $txt = "<div class='your-party'>" .
                 "<p>Le gratte-papier chargé de valider les parties considère que ces informations ".
@@ -59,7 +61,7 @@ if($user){
                         "<tr><td>Nombre de joueur minimum</td><td>".$party->getPlayerMin()."</td></tr>".
                         "<tr><td>Nombre de joueur maximum</td><td>".$party->getPlayerMax()."</td></tr>".
                         "<tr><td>Niveau de jeu</td><td>";
-                            
+
                 $txt .= $party->getLevel()."</td></tr>".
                         "<tr><td>Nombre de tables</td><td>".$party->getTableAmount()."</td></tr>".
                         "<tr><td>Durée prévue</td><td>".$party->getDuration()." heure(s)</td></tr>".
@@ -76,9 +78,9 @@ if($user){
                 $txt .= "<p class='mj'>Jeu animé par: ".$animator->getFirstname()." ".$animator->getLastname()."</p></div>";
 
                 echo $txt;
-                
+
                 $_SESSION['party'] = serialize($party); ?>
-                
+
                 <form action="" method="POST">
                     <input type="hidden" name="action" value="confirm" />
                     <input type="submit" class="submit" value="Confirmer" />
@@ -87,7 +89,7 @@ if($user){
                     <input type="hidden" name="action" value="undo" />
                     <input type="submit" class="submit" value="Corriger" />
                 </form> <?php
-                
+
             }else{
                 print "<p>Le gratte-papier chargé de valider les parties pense que ces informations ".
                 "contiennent des erreurs.</p><p>Pouvez-vous vérifier :</p><ul>".
@@ -99,7 +101,7 @@ if($user){
                 $createOrEdit = true;
             }
         }
-        
+
         // SAUVEGARDE DE LA PARTIE CONFIRMEE
         elseif(isset($_POST) and @$_POST['action'] == 'confirm' && isset($_SESSION['party'])) {
 
@@ -112,24 +114,24 @@ if($user){
                 echo is_null($party->getId()) ? " (création)" : " (édition partie n°" . $party->getId() . ")";
                 echo "</div>";
             }
-            
+
             if($party->isValid){
                 unset($_SESSION['party']);
                 $saveOK = $party->save();
                 if($saveOK) {
                     echo "<p>Partie <strong>".(($edit)?'éditée':'créée')."</strong> avec succès.</p>".
                     "<p>Vous allez recevoir un mail de confirmation sous peu!</p>";
-                
+
                     // Send congratulation's mail
                     $isMailOk = Orcimail::notifyCreate($party, $edit);
-                    
+
                 }else{
                     // Display errors
                     echo "<p class='dbg'>Sauvegarde impossible.</p>";
                 }
             }
         }
-        
+
         // SAISIE INITIALE DES DONNEES  / (RE)EDITION
         elseif( ! isset($_POST) or @$_POST['action'] == 'undo' or count($_POST) == 0) {
         	$createOrEdit = true;
@@ -141,7 +143,7 @@ if($user){
             // pv = previous values. No previous values by default.
             $editExisting = false;
             $pv = null;
-            
+
             if(@$_POST['action'] == 'undo' && isset($_SESSION['party'])) {
                 // Case of undo previous edition
                 $party = unserialize($_SESSION['party']);
@@ -175,7 +177,7 @@ if($user){
                 echo $editExisting ? "édition partie n°" . $pv['partyId'] : "création (?)";
                 echo "</div>";
             }
-            
+
             // Avoid reediting critical fields when the party has been validated already
             $enable = "";
             if($editExisting && isset($party) && $party->getState() == 'validated'){
@@ -190,11 +192,11 @@ if($user){
             }
 
             ?>
-            
+
             <form action="" method="POST">
-            
+
                 <input type="hidden" name="context" value="party" />
-                
+
                 <?php
                 if($editExisting){
                     echo '<input type="hidden" id="partyId" name="partyId" value="'.$pv['partyId'].'" />';
@@ -208,15 +210,15 @@ if($user){
                 }
 
                 ?>
-                
+
                 <fieldset>
-                
+
                     <legend>Champs obligatoires</legend>
-                
+
                     <fieldset>
-                
+
                         <legend>Descriptions de la partie</legend>
-                
+
                         <label for="typeId">Type</label>
                         <?php
                         echo "<select name='typeId' $enable>";
@@ -237,7 +239,7 @@ if($user){
                         
                         <label for='level'>Niveau de jeu</label>
                         <select name='level' $enable>";
-                            
+
                             echo "<option value='anyway' ".(($pv['level']=="anyway")?"selected='selected'" : "").">Peu importe</option>";
                             echo "<option value='low' ".(($pv['level']=="low")?"selected='selected'" : "").">Débutant</option>";
                             echo "<option value='middle' ".(($pv['level']=="middle")?"selected='selected'" : "").">Initié</option>";
@@ -270,7 +272,7 @@ if($user){
                         
                         <label for='duration'>Durée prévue</label>
                         <select name='duration' id='duration' $enable>";
-                            
+
                             for($i = 1 ; $i<=15 ; $i++){
                                 echo "<option value='$i' ".(($pv['duration']==$i)?"selected='selected'":"").">$i heure".(($i==1)?'':'s')."</option>";
                             }
@@ -279,8 +281,8 @@ if($user){
 
                         <label for='day-start'>Jour de début de la partie</label>
                         <select     id='day-start' name='startDay'
-                                    data-start='<?= Controls::getDate(Controls::CONV_START)?>'
-                                    data-end='<?= Controls::getDate(Controls::CONV_END)?>'
+                                    data-start='<?= $controls->getDate(Controls::CONV_START)?>'
+                                    data-end='<?= $controls->getDate(Controls::CONV_END)?>'
                                     <?=$enable?>>
                             <option value='1' <?= $pv['startDay'] == 1 ? "selected='selected'" : '' ?>>Samedi</option>
                             <option value='2' <?= $pv['startDay'] == 2 ? "selected='selected'" : '' ?>>Dimanche</option>
@@ -289,9 +291,9 @@ if($user){
                         <label for="time-start-day1" class="time-start-day">Heure de début</label>
                         <select id='time-start-day1' name="time-start-day1" <?=$enable?> class="time-start-day">
                             <?php
-                            $start  = Controls::getDate(Controls::CONV_START);
-                            $midnight = strtotime(Controls::getDate(Controls::CONV_END, '%Y-%m-%d 00:00'));
-                            $end    = Controls::getDate(Controls::CONV_END);
+                            $start  = $controls->getDate(Controls::CONV_START);
+                            $midnight = strtotime($controls->getDate(Controls::CONV_END, '%Y-%m-%d 00:00'));
+                            $end    = $controls->getDate(Controls::CONV_END);
 
                             for($i = $start ; $i<$midnight ; $i+=1800){
                                 $l = strftime("%H:%M", $i);
@@ -343,30 +345,30 @@ if($user){
                     
                     <label for='language'>Langue</label>
                     <select name='language' $enable>";
-                        
+
                         echo "<option value='fr' ".(($pv['language']=="fr")?"selected='selected'" : "").">Français</option>";
                         echo "<option value='en' ".(($pv['language']=="en")?"selected='selected'" : "").">Anglais</option>";
                         echo "<option value='other' ".(($pv['language']=="other")?"selected='selected'" : "").">Autre</option>";
                         ?>
                     </select>
-                    
+
                 </fieldset>
-                
+
                 <input type="submit" class="submit" value="Soumettre les données" />
                 <input type="reset" class="submit" value="Réinitialiser le formulaire" />
-                
+
             </form>
-            
+
             <p class="center"><a href="?page=contact" id="create-help">Help!</a></p>
 
             <?php
-                
-            
+
+
         }
     }else{
         echo "<p>Acces restreint aux animateurs et maîtres de jeu</p>";
     }
-    
+
 }else{
     echo "<p>Vous n'êtes pas authentifié.</p>";
 }

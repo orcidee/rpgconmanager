@@ -47,11 +47,7 @@ require_once(dirname(__FILE__).'/classes/controls.php');
 require_once(dirname(__FILE__).'/classes/user.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
-if(!$db){
-    if(IS_DEBUG){
-        echo "<p class='dbg'>Impossible de selectionner la base de donnees</p>";
-    }
-}else{
+
 
     $view = new View();
     $user = User::getFromSession();
@@ -169,20 +165,20 @@ if(!$db){
         }
     }
 
-	if( ! @$_GET["modal"] == true ){
-		include("menu.php");
-	}
+    if( ! @$_GET["modal"] == true ){
+      include("menu.php");
+    }
 
     if(!is_null($view->content)){
         $view->html();
     } else {
-		echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>
-		<br/><br/>
-		<div style='margin:auto; text-align:center;'><img src='http://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
-	}
+        echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>
+        <br/><br/>
+        <div style='margin:auto; text-align:center;'><img src='http://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
+    }
 
 
-}
+
 $mysqli->close();
 
 include("scripts.php");

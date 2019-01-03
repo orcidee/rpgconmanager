@@ -12,7 +12,7 @@ echo ($user) ? ($user->getLastname()." (".$user->getRole().") ") : "0" ;
 echo "<br/>Adresse en session : ".@$_SESSION["userEmail"]."</div>";
 
 if($user){
-    
+
     if($user->getRole() == "administrator"){
 ?>
 		<h1>Définition des numéros de table</h1>
@@ -20,14 +20,14 @@ if($user){
 
       <?php
 
-      $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
+      $thisYear = $controls->getDate(Controls::CONV_START, '%Y');
       $sql = "SELECT Parties.*, Types.typeId as typeId, Users.* FROM Parties".
           " JOIN Types on Parties.typeId = Types.typeId".
           " JOIN Users on Parties.userId = Users.userId".
           " WHERE Parties.state in ('validated', 'verified')".
           " AND Parties.year = ".$thisYear.
           " ORDER BY Parties.start ASC";
-      $res = mysql_query ( $sql );
+      $res = $mysqli->query($sql);
 
       $updatedParties = array();
       $errorParties = array();
@@ -39,7 +39,7 @@ if($user){
         $parties[$type['typeId']] = array();
       }
 
-      while($row = mysql_fetch_array($res)) {
+      while($row = $res->fetch_array()) {
         $parties[$row['typeId']][] = $row;
       }
 

@@ -4,9 +4,7 @@ error_reporting(E_ALL);
 session_start();
 header('Content-type: text/html; charset=UTF-8');
 ini_set('mbstring.language', 'UTF-8');
-ini_set('mbstring.internal_encoding','UTF-8');
-ini_set('mbstring.http_input','UTF-8');
-ini_set('mbstring.http_output','UTF-8');
+ini_set('default_charset','UTF-8');
 ini_set('mbstring.detect_order','auto');
 
 //putenv("TZ=UTC");
