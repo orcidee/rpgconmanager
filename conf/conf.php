@@ -26,7 +26,7 @@ define("CACHE_KILL", "20161118T17:30");
 
 
 if(ENV == "test"){
-    require_once(dirname(__FILE__).'/bd_prod.php');
+    require_once(dirname(__FILE__).'/bd_test.php');
     define("MODULE_PATH", "orcidee/manager_dev/");
 }elseif(ENV == "prod"){
     require_once(dirname(__FILE__).'/bd_prod.php');
