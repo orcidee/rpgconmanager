@@ -88,9 +88,18 @@ if(@$_GET['action'] == 'unsubscribe') {
     </h2>
 
     <div class="planning">
-        Débute le: <?= $date ?>, durée: <?= $party->getDuration() ?>h. &ndash;
-        Nombre de joueurs: <?= $nbPlayers ?> &ndash; Niveau de jeu: <?= $party->getLevel() ?> &ndash;
+      <p>
+        Débute le: <b><?= $date ?></b>,
+        durée: <b><?= $party->getDuration() ?>h.</b>
+      </p>
+      <p>
+        <b><?= $nbPlayers ?> joueur(s) / joueuse(s)</b>
+      </p>
+      <p>
+        Niveau de jeu: <?= $party->getLevel() ?>,
         Langue: <?= $party->getLanguage() ?>
+      </p>
+      <p>Nombre de tables occupées: <b><?= $party->getTableAmount() ?></b></p>
     </div>
 
     <div class="animator">
