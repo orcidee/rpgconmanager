@@ -17,12 +17,22 @@ if(!$db){
 	$user = User::getFromSession();
 
 	if($user){
-		
+
+	    $controls = new Controls();
+
+        $mysqli = new mysqli(HOST, USER, PASSWORD, DB);
+        /* check connection */
+        if ($mysqli->connect_errno) {
+            printf("Connect failed: %s\n", $mysqli->connect_error);
+            exit();
+        }
+        $mysqli->query("SET NAMES 'utf8'");
+
 		if($user->getRole() == "administrator"){
-            $thisYear = Controls::getDate(Controls::CONV_START, '%Y');
+            $thisYear = $controls->getDate(Controls::CONV_START, '%Y');
 
 			$sql = "SELECT Parties.*, Users.lastname, Users.firstname FROM Parties join Users on Parties.userId = Users.userId WHERE Parties.state in ('validated', 'verified') AND Parties.year = ".$thisYear." order by Parties.partyId ASC";
-			$res = mysql_query ( $sql );
+			$res = $mysqli->query($sql);
 
 			include("../FPDF/fpdf.php");
 			$PDF = new FPDF();
@@ -33,18 +43,18 @@ if(!$db){
 			$Col2width = 90;
 			$Col3width = 25;
 			$Col4width = 45;
-			
-			while($row = mysql_fetch_array($res))
+
+			while($row = $res->fetch_array())
 			{
 				$sql2 = "SELECT Users.* FROM Users join Inscriptions on Users.userId = Inscriptions.userId WHERE partyId = '".$row["partyId"]."'";
-				$res2 = mysql_query ( $sql2 );
+				$res2 = $mysqli->query($sql2);
 
 				$PDF->AddPage();
 				$PDF->SetFont('','B', 18);
 				$PDF->Cell($Col1width + $Col2width,15," Table n° ".$row['table'],"LT");
 				$PDF->SetTextColor(255,0,0);
 				$fullText = " ";
-				if (mysql_num_rows($res2) >= $row["playerMax"]) $fullText = "COMPLET";
+				if ($res2->num_rows >= $row["playerMax"]) $fullText = "COMPLET";
 				$PDF->Cell($Col3width + $Col4width,15,$fullText,"RT",1);
 				$PDF->SetTextColor(0);
 
@@ -97,7 +107,7 @@ if(!$db){
 				$PDF->SetLineWidth(.1);
 				$PDF->Cell($Col1width + $Col2width + $Col3width + $Col4width,0,"","T",1);
 				$PDF->SetLineWidth(.5);
-				
+
 				$PDF->SetFont('','B');
 				$PDF->Cell($Col1width,7,"Description :","L",0,"R");
 				$PDF->SetFont('');
@@ -108,12 +118,12 @@ if(!$db){
 				$PDF->SetLineWidth(.1);
 				$PDF->Cell($Col1width + $Col2width + $Col3width + $Col4width,0,"","T",1);
 				$PDF->SetLineWidth(.5);
-				
+
 				$PDF->SetFont('','B');
 				$PDF->Cell($Col1width + $Col2width + $Col3width + $Col4width,7,"Joueurs Inscrits :","LR",1);
 
 				$PDF->SetFont('');
-				while ($row2 = mysql_fetch_assoc($res2)) {
+				while ($row2 = $res2->fetch_assoc()) {
 					$PDF->Cell($Col1width,7,"","L");
 					$PDF->Cell($Col2width + $Col3width + $Col4width,7,$row2["firstname"]." ".$row2["lastname"],"R",1);
 				}
@@ -122,10 +132,11 @@ if(!$db){
 			}
 
 			$PDF->Output();
+            $mysqli->close();
 		}else{
 			echo "<p>Acces restreint à l'administrateur</p>";
 		}
-		
+
 	}else{
 		echo "<p>Vous n'êtes pas authentifié.</p>";
 
