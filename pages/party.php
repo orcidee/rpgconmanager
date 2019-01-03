@@ -75,10 +75,6 @@ if(@$_GET['action'] == 'unsubscribe') {
     }
 } ?>
 
-
-
-
-
 <div class="party-detail" data-id="<?= $party->getId()?>">
 
     <h1>

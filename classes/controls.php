@@ -24,10 +24,6 @@ class Controls {
         }
     }
 
-    function __destruct() {
-        $this->mysqli->close();
-    }
-
     public function getNbTables(){
         $sql = "SELECT * FROM Controls WHERE `key` = '".self::NB_TABLES."'";
         $result = $this->mysqli->query($sql);

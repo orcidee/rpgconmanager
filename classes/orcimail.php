@@ -17,7 +17,7 @@ class Orcimail {
         <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a>.</p><br/>
         
         <p><strong>Nous nous réjouissons de te voir à Orc'idée et espérons que tu passeras un excellent week-end !</strong></p>";
-    
+
         return self::sendMail (array(
             'body' => $body,
             'to' => $to,
@@ -29,7 +29,7 @@ class Orcimail {
 
         $u = $party->getAnimator();
         $to = $u->getEmail();
-    
+
         $body = "
         <p>Bonjour ".$u->getFirstname().",</p>
         <p>L'animation que vous avez inscrite (no ".$party->getId().") a été annulée
@@ -39,18 +39,18 @@ class Orcimail {
         <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a>.</p><br/>
         
         <p><strong>Nous nous réjouissons de vous voir à Orc'idée et espérons que vous passerez un excellent week-end !</strong></p>";
-    
+
         return self::sendMail (array(
             'body' => $body,
             'to' => $to,
             'subject' => "Orc'idee - Animation ".$party->getId()." annulée"
         ));
     }
-    
+
     public static function notifyVerify($party){
         $u = new User($party->getUserId());
         $to = $u->getEmail();
-    
+
         $body = "
         <p>Bonjour ".$u->getFirstname().",</p>
         <p>L'animation que vous avez inscrite (no ".$party->getId().") a été acceptée par le comité d'organisation.</p>
@@ -63,18 +63,18 @@ class Orcimail {
         
         <p>N'hésitez pas à nous contacter: <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a>.</p><br/>
         <p><strong>Nous nous réjouissons de vous voir à Orc'idée et espérons que vous passerez un excellent week-end !</strong></p>";
-    
+
         return self::sendMail (array(
             'body' => $body,
             'to' => $to,
             'subject' => "Orc'idee - Animation ".$party->getId()." vérifée"
         ));
     }
-    
+
     public static function notifyValidate($party){
         $u = new User($party->getUserId());
         $to = $u->getEmail();
-    
+
         $body = "
         <p>Bonjour ".$u->getFirstname().",</p>
         <p>Ça y est, votre animation (".$party->getId().") a été validée par le comité d'organisation.</p>
@@ -87,19 +87,19 @@ class Orcimail {
         <p>Si par malheur vous deviez annuler cette animation, nous vous prions de nous contacter:
         <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a>.</p><br/>
         <p><strong>Nous nous réjouissons de vous voir à Orc'idée et espérons que vous passerez un excellent week-end !</strong></p>";
-    
+
         return self::sendMail (array(
             'body' => $body,
             'to' => $to,
             'subject' => "Orc'idee - Animation ".$party->getId()." validée"
         ));
     }
-    
+
     public static function notifyRefuse($party){
-    
+
         $u = new User($party->getUserId());
         $to = $u->getEmail();
-    
+
         $body = "
         <p>Bonjour ".$u->getFirstname().",</p>
         <p>L'animation que vous avez inscrite (no ".$party->getId().") a été refusée par le comité.</p>
@@ -113,8 +113,8 @@ class Orcimail {
         (Par exemple pour connaître les raisons de ce refus)</p><br/>
         
         <p>Merci pour votre compréhension.</p>";
-        
-            
+
+
         return self::sendMail (array(
             'body' => $body,
             'to' => $to,
@@ -123,10 +123,10 @@ class Orcimail {
     }
 
     public static function notifySubscribtion($party, $user){
-    
+
         $mj = $party->getAnimator();
         $to = $mj->getEmail();
-    
+
         $body = "
         <p>Bonjour ".$mj->getFirstname().",</p>
         <br/>
@@ -147,10 +147,10 @@ class Orcimail {
     }
 
     public static function notifyUnsubscribtion($party, $user, $forced = false){
-    
+
         $mj = $party->getAnimator();
         $to = $mj->getEmail();
-    
+
         $body = "
         <p>Bonjour ".$mj->getFirstname().",</p>
         <br/>
@@ -176,9 +176,9 @@ class Orcimail {
      * @return bool
      */
     public static function subscribeToParty ($p, $user){
-    
+
         $mj = $p->getAnimator();
-    
+
         // Corps de l'email à l'inscription joueur, à une partie.
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
@@ -192,13 +192,13 @@ class Orcimail {
             <tr><td>Scénario</td><td>".$p->getScenario()."</td></tr>
             <tr><td>Description</td><td>".$p->getDescription()."</td></tr>
             <tr><td>Niveau de jeu</td><td>";
-            
+
             $message .= $p->getLevel()."</td></tr>
             <tr><td>Durée</td><td>".$p->getDuration()." heures</td></tr>
             <tr><td><strong>Date & Heure de début</strong></td><td><strong>";
-            
+
             $date = strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart()));
-            
+
             $message .= $date."</strong></td></tr>
         </table>
         
@@ -206,15 +206,15 @@ class Orcimail {
         <p>Au cas où vous auriez besoin de contacter l'animateur de cette partie, vous pouvez utiliser le formulaire sur 
         la <a href='".Controls::home()."?page=party&partyId=".$p->getId()."'>page de la partie</a></p>
 		<br/>";
-        
+
         $unlink = Controls::home()."?page=party&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
-        
+
         $message .= "<p>Cliquez ici pour <strong><a href='".$unlink."'>vous désinscrire</a></strong></p>
         <br />
         <p>N'hésitez pas à nous contacter si besoin : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
 		<br/>
         <p><strong>Nous nous réjouissons de vous voir à Orc'idée et espérons que vous passerez un excellent week-end !</strong></p>";
-        
+
         return self::sendMail(array(
             'to' => $user->getEmail(),
             'subject' => ("Orc'idee - Confirmation d'inscription à la partie ".$p->getId()),
@@ -231,9 +231,9 @@ class Orcimail {
 			intitulée '".$p->getName()."',
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>
 		<br/>";
-			        
+
         $unlink = Controls::home()."?page=party&action=unsubscribe&partyId=".$p->getId()."&u=".sha1($user->getId());
-        
+
         $message .= "<p><strong>Veuillez confirmer</strong> en cliquant sur le lien suivant :
 			<a href='".$unlink."'>".$unlink."</a></p>
 		<p>(sinon, ignorez juste ce message)</p>
@@ -242,7 +242,7 @@ class Orcimail {
 		<br/>
         <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>
 		<br/>";
-        
+
         return self::sendMail(array(
             'to' => $user->getEmail(),
             'subject' => ("Orc'idee - Demande de désinscription de la partie ".$p->getId()),
@@ -259,7 +259,7 @@ class Orcimail {
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).".</p>
         <p>N'hésitez pas à nous contacter si besoin de détails : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
         <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>";
-        
+
         return self::sendMail(array(
             'to' => $user->getEmail(),
             'subject' => ("Orc'idee - Désinscription de la partie ".$p->getId()),
@@ -268,7 +268,7 @@ class Orcimail {
     }
 
     public static function contactAdmin($pBody, $pId, $pMail, $pEmail){
-        
+
         return self::sendMail(array(
             'to' => $pMail,
             'subject' => ("Orc'idee - Contact pour la partie ".$pId),
@@ -276,7 +276,7 @@ class Orcimail {
         ));
     }
 
-    public static function unsubscribedToCanceledParty ($p, $user){    
+    public static function unsubscribedToCanceledParty ($p, $user){
         // Corps de l'email
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
@@ -285,7 +285,7 @@ class Orcimail {
 			et prévue le ".strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart())).". Vous avez été désinscrit.</p>
         <p>N'hésitez pas à nous contacter si besoin de détails : <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p>
         <p>Nous espérons vous voir tout de même à Orc'idée en vous souhaitant de passer un excellent week-end !</p>";
-        
+
         return self::sendMail(array(
             'to' => $user->getEmail(),
             'subject' => ("Orc'idee - Annulation de la partie ".$p->getId()),
@@ -299,9 +299,11 @@ class Orcimail {
      * @return bool
      */
     public static function notifyCreate ($p, $edit){
-        
+
         $user = $p->getAnimator();
-        
+        $see_url = Controls::home()."?page=party&partyId=".$p->getId();
+        $modify_url = Controls::home()."?page=edit&partyId=".$p->getId();
+
         $message = "
         <p>Bonjour ".$user->getFirstname().",</p>
         <p>Ceci est une confirmation ".(($edit)?"de mise à jour":"d'inscription")." de l'animation no ".$p->getId().". (Les n° des parties sont sujets à d'éventuels changements. Merci de ne pas trop vous y attacher ;-) )</p>
@@ -316,13 +318,13 @@ class Orcimail {
             <tr><td>Nombre de joueurs minimum</td><td>".$p->getPlayerMin()."</td></tr>
             <tr><td>Nombre de joueurs maximum</td><td>".$p->getPlayerMax()."</td></tr>
             <tr><td>Niveau de jeu</td><td>";
-            
+
             $message .= $p->getLevel()."</td></tr>
             <tr><td>Durée</td><td>".$p->getDuration()." heures</td></tr>
             <tr><td>Date & Heure de début</td><td>";
-            
+
             $date = strftime("%d.%m.%Y à %H:%M", strtotime($p->getStart()));
-            
+
             $message .= $date."</td></tr>
         </table>
         <p><strong>Note aux organisateurs</strong><br/>".$p->getNote()."</p>
@@ -345,38 +347,44 @@ class Orcimail {
         Elle sera disponible aux joueurs, dès que nous l'aurons validée.
         Merci pour votre compréhension.</p>
         
-        <p>Lien pour <strong>modifier votre partie</strong>: <a href='".Controls::home()
-        ."?page=edit&partyId=".$p->getId()."'>".
-        Controls::home()."?page=edit&partyId=".$p->getId()."</a></p>
+        <p>
+          <strong>Voir</strong> votre partie (partager, s'inscrire, etc): 
+          <a href='".$see_url."'>".$see_url."</a>
+        </p>
+        
+        <p>
+          <strong>Modifier</strong> votre partie: 
+          <a href='".$modify_url."'>".$modify_url."</a>
+        </p>
         
         <p>N'hésitez pas à nous contacter: <a href='mailto:info@orcidee.ch'>info@orcidee.ch</a></p><br/>
         <p><strong>Nous nous réjouissons de vous voir à Orc'idée et espérons que vous passerez un excellent week-end !</strong></p>";
-        
-        
+
+
         return self::sendMail(array(
             'to' => $user->getEmail(),
             'subject' => "Orc'idee - Partie ".$p->getId()." enregistrée",
             'body' => $message
         ));
     }
-    
+
     private static function sendMail ($data){
-        
+
         $headers =  "From: " . MAIL_FROM . "\r\n" .
                     "Reply-To: " . MAIL_FROM . "\r\n" .
                     "Cc: " . MAIL_CC . "\r\n" .
                     "X-Mailer: PHP/" . phpversion() . "\r\n" .
                     "MIME-Version: 1.0" . "\r\n" .
                     "Content-type: text/html; charset=UTF-8";
-        
+
         $signature = "<div style='clear:both;'><img src='http://www.orcidee.ch/images/divers/Logop.png' alt='Orcidee'/>".
         "<p>Convention lémanique de jeu de simulation</p>".
         "<p>Lausanne</p>".
         "<p><strong><a href='http://www.orcidee.ch'>www.orcidee.ch</a></strong></p></div>";
-        
+
         $body = $data['body'] . $signature ;
-        
+
         return mail ($data['to'],$data['subject'],$body,$headers);
     }
-    
+
 }

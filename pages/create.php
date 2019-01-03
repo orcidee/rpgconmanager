@@ -168,6 +168,7 @@ if($user){
                     }
                 }else{
                     echo "<p><strong>Vous ne pouvez pas éditer la partie no ".$party->getId()." nommée '".$party->getName()."' !</strong></p>";
+                    exit;
                 }
             }
 
