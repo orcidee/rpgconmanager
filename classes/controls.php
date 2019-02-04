@@ -250,14 +250,12 @@ class Controls {
     */
     public static function home() {
         $pageURL = 'http';
-        /* // https
-        if($_SERVER["AUTH_TYPE"] !== "Basic"){
-            if ($_SERVER["HTTPS"] == "on") {
-                $pageURL .= "s";
-            }
-        }*/
+        // https
+        if ($_SERVER["HTTPS"] == "on") {
+            $pageURL .= "s";
+        }
         $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
+        if ($_SERVER["SERVER_PORT"] != "80" or $_SERVER["SERVER_PORT"] != "443") {
             $pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"]."/".MODULE_PATH;
         } else {
             $pageURL .= $_SERVER["HTTP_HOST"]."/".MODULE_PATH;

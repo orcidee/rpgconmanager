@@ -166,7 +166,7 @@ if(!is_null($view->content)){
 } else {
     echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>
     <br/><br/>
-    <div style='margin:auto; text-align:center;'><img src='http://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
+    <div style='margin:auto; text-align:center;'><img src='https://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
 }
 
 
