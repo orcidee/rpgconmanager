@@ -224,7 +224,7 @@ class User {
 
         $sql = "UPDATE $table SET `password`='".sha1($pwd)."' WHERE `userId` = '".$this->userId."'";
         $res = $this->mysqli->query($sql);
-        return ($res && ($res->num_rows === 1));
+        return $res && "" === $this->mysqli->error;
     }
 
     /**
