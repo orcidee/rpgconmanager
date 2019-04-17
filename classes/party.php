@@ -294,7 +294,7 @@ class Party {
         $sql = "UPDATE Parties SET  `state`='canceled' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query ( $sql );
 
-        if($res && ($res->num_rows === 1)){
+        if($res && empty($this->mysqli->error)){
 			// unsubscribe all players and notify them !
 			$players = $this->getPlayers();
 			foreach($players as $player){
@@ -314,7 +314,7 @@ class Party {
         $sql = "UPDATE Parties SET  `state`='refused' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query ( $sql );
 
-        if($res && ($res->num_rows === 1)){
+        if($res && empty($this->mysqli->error)){
             // TODO Insert history line
             // Send a mail
             Orcimail::notifyRefuse($this);
@@ -328,7 +328,7 @@ class Party {
         $sql = "UPDATE Parties SET  `state`='validated' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query ( $sql );
 
-        if($res && ($res->num_rows === 1)){
+        if($res && empty($this->mysqli->error)){
             // TODO Insert history line
             // Send a mail
             Orcimail::notifyValidate($this);
@@ -341,7 +341,7 @@ class Party {
         $sql = "UPDATE Parties SET  `state`='verified' WHERE `partyId` = '".$this->partyId."'";
         $res = $this->mysqli->query( $sql );
 
-        if($res && ($res->num_rows === 1)){
+        if($res && empty($this->mysqli->error)){
             // TODO Insert history line
             // Send a mail
             Orcimail::notifyVerify($this);
