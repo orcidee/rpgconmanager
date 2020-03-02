@@ -1,0 +1,508 @@
+html
+{
+font-family: 'courrier new';
+    color: #000000;
+background-color: rgba(255, 255, 255, 0.01);
+font-size: 16px;
+}
+
+body
+{
+
+font-family:"Open Sans", serif;
+
+}
+a {
+color: #948477;
+text-decoration:underline;
+}
+
+nav#main-nav {
+margin: 0  0 0 0;
+min-height: 35px;
+padding-top: 10px;
+text-align:center;
+font-family: 'Marcellus SC', serif;
+font-size: 20px;
+color:#948477;
+
+}
+nav#bottom-nav {
+    margin: 15px 0 0 0;
+
+}
+nav a{
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+nav a:hover{
+    margin: 0 10px;
+    text-decoration: underline;
+}
+#manager-main-menu li
+{
+display: inline;
+
+}
+
+
+ul, li{
+    list-style:none;
+    overflow:hidden;
+    padding:0;
+    margin:0;
+
+}
+p
+{
+font-size: 15px;
+}
+h2
+{
+font-size: 20px;
+
+}
+
+h1
+{
+font-size: 35px;
+height: 30px;
+text-align: center;
+font-family: 'Marcellus SC', serif;
+font-weight: normal;
+color: #948477;
+}
+
+fieldset
+{
+    border: 1px solid #000000;
+
+}
+
+
+
+ input.submit,
+.login input.submit
+{
+margin:auto;
+text-align: center;
+padding: 3px;
+background-color: transparent;
+border: 3px double #948477;
+clear: both;
+color: #948477;
+font-family: 'Marcellus SC',serif;
+font-size: 20px;
+cursor: pointer;
+
+}
+
+input.subscribe
+{
+margin:auto;
+text-align: center;
+padding: 3px;
+background-color: transparent;
+border:3px #948477 double;
+color: #948477;
+cursor: pointer;
+
+}
+
+
+div.profile input.submit
+{
+margin:auto;
+margin-right: 10px;
+Margin-left: 10px;
+text-align: center;
+padding: 3px;
+background-color: transparent;
+border:3px #948477 double;
+color: #948477;
+cursor: pointer;
+font-weight: bold;
+}
+
+input.submit:active,
+.login input.submit:active,
+input.subscribe:active,
+div.profile input.submit:active
+{
+text-align: center;
+padding: 3px;
+background-color: #948477;
+border: 3px double #948477;
+clear: both;
+color: #ffffff;
+font-family: 'Marcellus SC',serif;
+cursor: pointer;
+
+
+}
+
+div.profile form
+{
+display: inline-block;
+
+
+}
+
+div.party-create a
+{
+margin:auto;
+}
+a.edit
+{
+padding: 5px 4px;
+padding-left: 0px;
+
+}
+
+a.verify
+{
+padding: 5px 4px;
+padding-left: 0px;
+}
+
+a.refuse
+{
+padding: 5px 4px;
+padding-left: 0px;
+}
+
+a.cancel
+{
+padding: 5px 4px;
+padding-left: 0px;
+}
+
+#animation
+{
+margin-top: 5px;
+margin-bottom: 5px;
+border: 1px solid #000000;
+text-align: center;
+font-size: 1.1em;
+padding: 4px;
+width: 98%;
+
+}
+
+.login .right{
+    float:left;
+    padding: 0 0 0 15px;
+    border-left: 1px solid #000000;
+
+}
+.login fieldset{
+    width:auto;
+    margin:10px 0 20px 0;
+    padding:0;
+    border:none;
+}
+.login fieldset legend{
+    display:none;
+}
+.login p{
+    height: 55px;
+    text-align: center;
+}
+.login p.auth-result{
+    height: 55px;
+    color:red;
+}
+.login div.forgottenPwd{
+    display:block;
+    margin: 10px auto;
+}
+
+p.message
+{
+
+text-align: center;
+color: #704214;
+
+}
+
+.ui-dialog.t2012 .ui-dialog-titlebar{
+    background:none repeat scroll 0 0 ;
+    color:#FFFfff;
+}
+.ui-dialog.ui-widget{
+    font-size:0.8em;
+	color: #000000;
+}
+.ui-dialog label,
+.ui-dialog input,
+.ui-dialog fieldset,
+.ui-dialog form{
+    float:none;
+    clear:none;
+    text-align:left;
+}
+.ui-dialog fieldset{
+    border:none;
+    margin:0;
+    padding:0;
+    width:auto;
+	color: #000000;
+}
+.ui-dialog label{
+    width:55px;
+    margin:4px 10px;
+    display:block;
+    float:left;
+}
+.ui-dialog input{
+    float:left;
+    width:160px;
+    padding:2px 4px;
+    margin:2px 10px 2px 15px;
+}
+.ui-dialog input.readonly{
+    border-color:#ffffff;
+}
+.ui-dialog p{
+    font-size:1em;
+    margin:15px 0 5px;
+	color: #000000;
+}
+.ui-dialog p.partyTitle{
+    font-weight:bold;
+    margin:10px 0;
+	color: #000000;
+
+}
+
+.ui-dialog.ui-dialog-buttonpane button,
+.ui-widget button
+{
+
+margin:auto;
+text-align: center;
+padding: 3px;
+background-color: #7d0000;
+border:3px #ffffff double;
+color: #ffffff;
+cursor: pointer;
+font-weight: bold;
+}
+
+#ctct_mj_13000
+{
+padding-top: 10px;
+
+}
+ul.pagination
+{
+    text-align: center;
+	margin-bottom: 10px;
+	font-size: 18px;
+}
+ul.pagination li{
+    display: inline;
+    margin: 0 10px;
+}
+ul.pagination li a{
+    text-decoration:none;
+    font-weight:normal;
+}
+ul.pagination li a:active{
+    color:#000;
+    font-weight:bold;
+}
+ul.pagination li a:hover
+{
+    text-decoration:underline;
+}
+
+.party-create.party-preview{
+    border:1px solid;
+}
+.party-create.party-preview td{
+    border:1px solid;
+    padding: 3px 5px;
+}
+
+
+.ui-dialog.ui-widget{
+    font-size:0.8em;
+}
+
+.ui-dialog fieldset{
+    border:none;
+    margin:0;
+    padding:0;
+    width:auto;
+}
+.ui-dialog label{
+    width:55px;
+    margin:4px 10px;
+    display:block;
+    float:left;
+}
+.ui-dialog input{
+    float:left;
+    width:160px;
+    padding:2px 4px;
+    margin:2px 10px 2px 15px;
+}
+.ui-dialog input.readonly{
+    border-color:#fff;
+}
+.ui-dialog p{
+    font-size:1em;
+    margin:15px 0 5px;
+}
+.ui-dialog p.partyTitle{
+    font-weight:bold;
+    margin:10px 0;
+}
+
+
+ul.profile li
+{
+color: #000000;
+border-bottom-color: #000000;
+	margin: 0px 20px;
+}
+
+.Pactions
+{
+margin: 15px 235px 15px 235px;
+}
+
+ul.profile input.info {
+
+border: 1px solid #7d0000;
+color: #000000;
+font-size: 16px;
+width: 60%;
+
+}
+ul.profile input
+{
+   border: 1px solid #ddcb90;
+color: #000000;
+font-size: 16px;
+width: 60%;
+
+
+}
+
+ul.profile label
+{
+width: 30%;
+}
+div.profile ul.result
+{
+	margin: 0px 20px 15px 20px;
+}
+
+input#check-dispo {
+background-color: transparent;
+border: 3px double #948477;
+clear: both;
+color: #948477;
+font-family: 'Marcellus SC',serif;
+font-size: 20px;
+margin: 0 36% 15px 36%;
+width: auto;
+}
+input#check-dispo:active {
+background-color: #948477;
+border: 3px double #948477;
+clear: both;
+color: #ffffff;
+font-family: 'Marcellus SC',serif;
+}
+
+#filteringForm
+{
+text-align:left;
+margin-left: 0px;
+}
+
+#filteringForm fieldset
+{
+
+margin-left: 0px;
+
+}
+#filteringForm input.submit
+{
+margin:7px 43% 0 43%;
+text-align: center;
+padding: 3px;
+background-color: transparent;
+border: 3px double #948477;
+clear: both;
+color: #948477;
+font-family: 'Marcellus SC',serif;
+font-size: 20px;
+cursor: pointer;
+
+
+
+}
+#filteringForm input.submit:active
+{
+text-align: center;
+padding: 3px;
+background-color: #948477;
+border: 3px double #948477;
+clear: both;
+color: #ffffff;
+font-family: 'Marcellus SC',serif;
+cursor: pointer;
+
+}
+
+.register-result
+{
+color: red;
+}
+
+.party-create,
+.login
+
+{
+padding: 0 10px 0 10px;
+}
+
+
+a.unsubscribeNow img
+
+{
+margin-left: 3px;
+}
+
+#myBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: red; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+}
+
+#myBtn:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+}
+
+span.free-space.green
+{
+color:green;
+}
+span.free-space.red
+{
+color:red;
+}
