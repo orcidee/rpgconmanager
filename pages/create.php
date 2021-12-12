@@ -284,8 +284,8 @@ if($user){
                                     data-start='<?= $controls->getDate(Controls::CONV_START)?>'
                                     data-end='<?= $controls->getDate(Controls::CONV_END)?>'
                                     <?=$enable?>>
-                            <option value='1' <?= $pv['startDay'] == 1 ? "selected='selected'" : '' ?>>Samedi</option>
-                            <option value='2' <?= $pv['startDay'] == 2 ? "selected='selected'" : '' ?>>Dimanche</option>
+                            <option value='1' <?= (!is_null($pv) && $pv['startDay'] == 1) ? "selected='selected'" : '' ?>>Samedi</option>
+                            <option value='2' <?= (!is_null($pv) && $pv['startDay'] == 2) ? "selected='selected'" : '' ?>>Dimanche</option>
                         </select>
 
                         <label for="time-start-day1" class="time-start-day">Heure de début</label>
