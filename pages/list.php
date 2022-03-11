@@ -115,11 +115,11 @@ if(@$_GET['formFiltered']){
 	}
 	if(@$_GET['typeId'] != "" && is_array($_GET['typeId'])){
         $selectedTypes = $_GET['typeId'];
-		$where[] = "p.typeId IN (".implode($selectedTypes, ','). ")";
+		$where[] = "p.typeId IN (".implode(',', $selectedTypes). ")";
 	}
 	if(@$_GET['animId'] != "" && is_array($_GET['animId'])){
         $selectedAnimators = $_GET['animId'];
-		$where[] = "p.userId IN (".implode($selectedAnimators, ','). ")";
+		$where[] = "p.userId IN (".implode(',', $selectedAnimators). ")";
 	}
 
     if(is_array(@$_GET['partyState'])) {
@@ -130,7 +130,7 @@ if(@$_GET['formFiltered']){
         }
     }
 	if(count($selectedStates) > 0) {
-		$where[] = "p.state IN ('".implode($selectedStates, "','")."')";
+		$where[] = "p.state IN ('".implode("','", $selectedStates)."')";
 	}
 }
 $thisYear = $controls->getDate(Controls::CONV_START, '%Y');
@@ -240,7 +240,7 @@ if($isListShowable){
 				" WHERE Parties.year = ".$year;
 
 				if(count($selectedTypes) > 0){
-					$sqlUsers .= " AND Parties.typeId IN (".implode($selectedTypes, ',').')';
+					$sqlUsers .= " AND Parties.typeId IN (".implode(',', $selectedTypes).')';
 				}
 				$sqlUsers .= " order by Users.firstname, Users.lastname";
 				$resUsers = $mysqli->query($sqlUsers); ?>
@@ -303,9 +303,9 @@ if($isListShowable){
 		$sqlCount .= $join;
 		if(count($where) > 0) {
 			if($freeSpaceOnly){
-				$sqlCount .= ' AND ' . implode(" AND ", $where);
+				$sqlCount .= ' AND ' . implode($where, " AND ");
 			}else {
-				$sqlCount .= ' WHERE ' . implode(" AND ", $where);
+				$sqlCount .= ' WHERE ' . implode($where, " AND ");
 			}
 		}
 
@@ -334,9 +334,9 @@ if($isListShowable){
 			$sql .= $join;
 			if(count($where) > 0) {
 				if($freeSpaceOnly){
-					$sql .= ' AND ' . implode(" AND ",$where);
+					$sql .= ' AND ' . implode($where, " AND ");
 				}else{
-					$sql .= ' WHERE ' . implode(" AND ",$where);
+					$sql .= ' WHERE ' . implode($where, " AND ");
 				}
 			}
 
