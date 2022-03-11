@@ -1,1 +1,0 @@
-ALTER TABLE Parties ADD COLUMN `tableAmount` int(10) DEFAULT 1;

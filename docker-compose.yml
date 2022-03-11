@@ -1,0 +1,53 @@
+# use version 3 of the docker compose syntax
+version: '3'
+services:
+  # we named our first service 'web'
+  web:
+#    # pass a hostname to the container (optinal)
+#    hostname: orcidee.local
+
+    # build a custom image
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+#    # a name for easier reference
+#    image: orcidee.local
+
+    # map host port 8080 to container port 80
+    ports:
+        - 8080:80
+
+    # volumes are like shared folders
+    # container will see your local code changes
+    volumes:
+      - .:/app
+
+    # first load the 'db' service
+    depends_on:
+      - db
+
+    # make 'db' a known service/host inside of 'web'
+    # use this to make a mysql connection to host 'db'
+    links:
+      - db
+
+  db:
+    # use a default image
+    image: mysql:5.7
+
+    volumes:
+      - .:/app
+      - .docker/docker.cnf:/etc/mysql/conf.d/docker.cnf
+
+    # again, port mapping
+    # e.g. to use Sequel Pro on our mac
+    ports:
+      - 13306:3306
+
+    # the mysql image uses these to create database and users
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: orcidee
+      MYSQL_USER: orcidee
+      MYSQL_PASSWORD: test

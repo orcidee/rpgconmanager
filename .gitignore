@@ -1,1 +1,3 @@
 conf/bd*
+# Avoid versioning DATA !
+db_migrations/*.sql
