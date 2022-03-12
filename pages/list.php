@@ -303,9 +303,9 @@ if($isListShowable){
 		$sqlCount .= $join;
 		if(count($where) > 0) {
 			if($freeSpaceOnly){
-				$sqlCount .= ' AND ' . implode($where, " AND ");
+				$sqlCount .= ' AND ' . implode(" AND ", $where);
 			}else {
-				$sqlCount .= ' WHERE ' . implode($where, " AND ");
+				$sqlCount .= ' WHERE ' . implode(" AND ", $where);
 			}
 		}
 
@@ -334,9 +334,9 @@ if($isListShowable){
 			$sql .= $join;
 			if(count($where) > 0) {
 				if($freeSpaceOnly){
-					$sql .= ' AND ' . implode($where, " AND ");
+					$sql .= ' AND ' . implode(" AND ", $where);
 				}else{
-					$sql .= ' WHERE ' . implode($where, " AND ");
+					$sql .= ' WHERE ' . implode(" AND ", $where);
 				}
 			}
 

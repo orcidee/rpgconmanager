@@ -101,8 +101,6 @@ text-align: center;
 padding:3px;
 }
 
-}
-
 input.subscribe
 {
 margin:auto;
@@ -124,7 +122,7 @@ padding:3px;
 div.profile input.submit
 {
 
-margin: 0 3 0 3;
+margin: 0 3px;
 background: url("http://www.orcidee.ch/templates/orcidee/images/input2.png") bottom no-repeat transparent;
 background-size:100% 100%;
 background-clip:border-box;
@@ -406,9 +404,8 @@ font-family: 'courrier new';
 }
 
 .list li div.type{
-
     font-weight:bold;
-    font-size: 1.3em
+    font-size: 1.3em;
     padding:13px 0 0 0;
 }
 
@@ -438,7 +435,7 @@ ul.pagination li a{
     text-decoration:none;
     font-weight:normal;
 }
-ul.pagination li a:activ{
+ul.pagination li a:active{
     color:#000;
     font-weight:bold;
 }

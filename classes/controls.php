@@ -250,7 +250,7 @@ class Controls {
     */
     public static function home() {
         $pageURL = 'http';
-        if (array_key_exists("HTTPS", $_SERVER) and $_SERVER["HTTPS"] == "on") {
+        if (@$_SERVER["HTTPS"] == "on") {
             $pageURL .= "s";
         }
         $pageURL .= "://";

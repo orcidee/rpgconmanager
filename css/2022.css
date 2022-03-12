@@ -1,26 +1,27 @@
-
-@font-face {
-font-family: 'BooterFZ';
-src: url(../fonts/booterfz.woff);
-}
-
 html
 {
 font-family: 'courrier new';
     color: #000000;
 background-color: rgba(255, 255, 255, 0.01);
-font-size: 14px;
+font-size: 18px;
 }
 
 body
 {
-margin: 0;
-font-family: 'Merriweather', serif;
-   
+
+font-family: 'Josefin Sans', sans-serif;
+
 }
 a {
-color: #704214;
+color: #fd532d;
 text-decoration:underline;
+}
+
+label, input, select, textarea{
+    float:left;
+    margin: 0.5%;
+    text-align:left;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 nav#main-nav {
@@ -28,18 +29,20 @@ margin: 0  0 0 0;
 min-height: 35px;
 padding-top: 10px;
 text-align:center;
-font-family: 'BooterFZ', serif;
-font-size: 23px;
-color:#704214;
+font-family: 'Bangers', cursive;
+font-size: 20px;
+color:#ffffff;
+background-color: #225380;
 
 }
 nav#bottom-nav {
     margin: 15px 0 0 0;
-	
+
 }
 nav a{
     margin: 0 10px;
     text-decoration: none;
+    color:#ffffff;
 }
 
 nav a:hover{
@@ -48,8 +51,8 @@ nav a:hover{
 }
 #manager-main-menu li
 {
-display: inline;	
-	
+display: inline;
+
 }
 
 
@@ -62,7 +65,8 @@ ul, li{
 }
 p
 {
-font-size: 13px;
+font-size: 16px;
+line-height: 18px;
 }
 h2
 {
@@ -72,15 +76,15 @@ font-size: 20px;
 
 h1
 {
-font-size: 40px;
-height: 30px;
+font-size: 35px;
+line-height: 40px;
 text-align: center;
-font-family: 'BooterFZ', serif;
+font-family: 'Bangers', cursive;
 font-weight: normal;
-color: #704214;
+color: #fd532d;
 }
 
-fieldset 
+fieldset
 {
     border: 1px solid #000000;
 
@@ -93,12 +97,12 @@ fieldset
 {
 margin:auto;
 text-align: center;
-padding: 3px;
-background-color: transparent;
-border: 3px double #704214;
+padding: 5px;
+background-color: #fd532d;
+border: 3px double #ffffff;
 clear: both;
-color: #704214;
-font-family: "BooterFZ",serif;
+color: #ffffff;
+font-family: 'Bangers', cursive;
 font-size: 20px;
 cursor: pointer;
 
@@ -108,10 +112,10 @@ input.subscribe
 {
 margin:auto;
 text-align: center;
-padding: 3px;
+padding: 5px;
 background-color: transparent;
-border:3px #704214 double;
-color: #704214;
+border:3px #948477 double;
+color: #948477;
 cursor: pointer;
 
 }
@@ -123,10 +127,11 @@ margin:auto;
 margin-right: 10px;
 Margin-left: 10px;
 text-align: center;
-padding: 3px;
-background-color: transparent;
-border:3px #704214 double;
-color: #704214;
+padding: 5px;
+background-color: #fd532d;
+border: 3px double #ffffff;
+clear: both;
+color: #ffffff;
 cursor: pointer;
 font-weight: bold;
 }
@@ -137,15 +142,15 @@ input.subscribe:active,
 div.profile input.submit:active
 {
 text-align: center;
-padding: 3px;
-background-color: #704214;
-border: 3px double #e2d7bd;
+padding: 5px;
+background-color: #ffffff;
+border: 3px double #fd532d;
 clear: both;
-color: #ffffff;
-font-family: "BooterFZ",serif;
+color: #fd532d;
+font-family: 'Bangers', cursive;
 cursor: pointer;
 
-	
+
 }
 
 div.profile form
@@ -193,7 +198,7 @@ text-align: center;
 font-size: 1.1em;
 padding: 4px;
 width: 98%;
-	
+
 }
 
 .login .right{
@@ -229,41 +234,16 @@ p.message
 
 text-align: center;
 color: #704214;
-	
+
 }
 
-.list li {
-    margin: 0 0 20px 0;
-}
-.list ul.players li {
-    margin: 2px 0;
-}
-.list li div{
-    display:block;
-    overflow:hidden;
-    float:left;
-	text-align:left;
-}
-.list li div.clear{
-    clear:both;
-}
-.list li div.clear div{
-    padding:0;
-	text-align:left;
-}
-
-.list li div.top,
-.list li div.main,
-.list li div.more{
-    border-bottom: 1px solid #000000;
-}
 .ui-dialog.t2012 .ui-dialog-titlebar{
     background:none repeat scroll 0 0 ;
     color:#FFFfff;
 }
 .ui-dialog.ui-widget{
     font-size:0.8em;
-	color: #000000; 
+	color: #000000;
 }
 .ui-dialog label,
 .ui-dialog input,
@@ -300,11 +280,6 @@ color: #704214;
     margin:15px 0 5px;
 	color: #000000;
 }
-.list li span.partyName {
-    font-size: 20px;
-    text-align: left;
-		/**font-family: 'menu';*/
-}
 .ui-dialog p.partyTitle{
     font-weight:bold;
     margin:10px 0;
@@ -326,58 +301,12 @@ cursor: pointer;
 font-weight: bold;
 }
 
-
-.list li div.more
-{
-padding-top: 5px;
-padding-bottom: 5px;
-
-}
-.list li span{
-font-size: 0.9em;
-    font-weight:bold;
-    color:#000000;
-}
-.list li span.etat
-{
-   font-size: 14px;
-font-family: 'Playfair Display', serif;
-   text-decoration:none;
-   font-weight: normal;
-
-}
-.list li span.partyName 
-{
-text-decoration: underline;
-}
-.list li div.top
-{
-
-border: 3px double #000000;
-font-size: 20px;
-font-family: 'Playfair Display SC', serif;
-}
-
-.list li div.type{
-
-    font-size: 20px;
-    padding:13px 0 0 0;
-}
-
-.list li div.name
-{
-}
-.list li div.more span.mailMJ
-{
-	cursor: pointer;
-}
-
 #ctct_mj_13000
 {
-padding-top: 10px;	
-	
+padding-top: 10px;
+
 }
-ul.pagination 
+ul.pagination
 {
     text-align: center;
 	margin-bottom: 10px;
@@ -453,12 +382,12 @@ border-bottom-color: #000000;
 
 .Pactions
 {
-margin: 15px 235px 15px 235px;
+text-align: center;
 }
 
 ul.profile input.info {
 
-border: 1px solid #7d0000;
+border: 1px solid #000000;
 color: #000000;
 font-size: 16px;
 width: 60%;
@@ -466,7 +395,7 @@ width: 60%;
 }
 ul.profile input
 {
-   border: 1px solid #ddcb90;
+   border: 1px solid #000000;
 color: #000000;
 font-size: 16px;
 width: 60%;
@@ -482,62 +411,24 @@ div.profile ul.result
 {
 	margin: 0px 20px 15px 20px;
 }
-#dispo-preview li
-{
-    display:block;
-    height:12px;
-    margin:0;
-    padding:0;
-    font-size:0.6em;
-    background-color:#efefef;
-}
-#dispo-preview li.flip{
-    background-color:#f7f7f7;
-}
-#dispo-preview li div{
-    margin: 0;
-    height:8px;
-}
-#dispo-preview li div.bar{
-    margin: 2px 0 0 80px;
-    height:10px;
-}
-#dispo-preview li div.h{
-    width: 70px;
-    margin:0 0 1px 10px;
-    height:12px;
-    float:left;
-    text-align:left;
-}
-#dispo-preview li .green{
-    background-color:green;
-}
-#dispo-preview li .orange{
-    background-color:orange;
-}
-#dispo-preview li .red{
-    background-color:red;
-}
-#dispo-preview li .black{
-    background-color:black;
-}
 
 input#check-dispo {
-background-color: transparent;
-border: 3px double #704214;
+padding: 5px;
+background-color: #fd532d;
+border: 3px double #ffffff;
 clear: both;
-color: #704214;
-font-family: "BooterFZ",serif;
+color: #ffffff;
+font-family: 'Bangers', cursive;
 font-size: 20px;
-margin: 0 38.5% 15px 38.5%;
+margin: 0 36% 15px 36%;
 width: auto;
 }
 input#check-dispo:active {
-background-color: #704214;
-border: 3px double #e2d7bd;
+background-color: #ffffff;
+border: 3px double #fd532d;
 clear: both;
-color: #ffffff;
-font-family: "BooterFZ",serif;
+color: #fd532d;
+font-family: 'Bangers', cursive;
 }
 
 #filteringForm
@@ -556,13 +447,13 @@ margin-left: 0px;
 {
 margin:7px 43% 0 43%;
 text-align: center;
-padding: 3px;
-background-color: transparent;
-border: 3px double #704214;
+padding: 5px;
+background-color: #fd532d;
+border: 3px double #ffffff;
 clear: both;
-color: #704214;
-font-family: "BooterFZ",serif;
-font-size: 20px;
+color: #ffffff;
+font-family: 'Bangers', cursive;
+font-size: 22px;
 cursor: pointer;
 
 
@@ -571,24 +462,14 @@ cursor: pointer;
 #filteringForm input.submit:active
 {
 text-align: center;
-padding: 3px;
-background-color: #704214;
-border: 3px double #e2d7bd;
+padding: 5px;
+background-color: #ffffff;
+border: 3px double #fd532d;
 clear: both;
-color: #ffffff;
-font-family: "BooterFZ",serif;
+color: #fd532d;
+font-family: 'Bangers', cursive;
 cursor: pointer;
-	
-}
-.separator
-{
-clear:both;
-width:100%;
-height:60px;
-margin:auto;
-background-position: center center;
-background-image: url("http://www.orcidee.ch/templates/surson31/images/separateur.png");
-background-repeat: no-repeat;
+
 }
 
 .register-result
@@ -600,7 +481,7 @@ color: red;
 .login
 
 {
-padding: 0 10px 0 10px;	
+padding: 0 10px 0 10px;
 }
 
 
@@ -610,8 +491,40 @@ a.unsubscribeNow img
 margin-left: 3px;
 }
 
+#myBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: red; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+}
 
-html body div#main form#filteringForm div.list ul#game-list li div.main div.clear.name span.partyId
+#myBtn:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+}
+
+span.free-space.green
 {
-display: none;
+color:green;
+}
+span.free-space.red
+{
+color:red;
+}
+
+.messageCOVID
+{
+text-align:center;
+font-weight:bold;
+font-size:1.2em;
+color: #fd532d;
+border: 1px solid #fd532d;
+padding: 5px;
 }

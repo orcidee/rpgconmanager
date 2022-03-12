@@ -103,8 +103,6 @@ font-weight: bold;
 font-style: italic;
 }
 
-}
-
 input.subscribe
 {
 margin:auto;
@@ -121,7 +119,7 @@ font-style: italic;
 div.profile input.submit
 {
 
-margin: 0 3 0 3;
+margin: 0 3px;
 background-image: url("http://www.orcidee.ch/templates/western/images/cuivre1.jpg");
 background-color: #66390d;
 border: 3px solid #ba6835;
@@ -385,7 +383,7 @@ font-family: 'courrier new';
 .list li div.type{
 
     font-weight:bold;
-    font-size: 1.3em
+    font-size: 1.3em;
     padding:13px 0 0 0;
 }
 
@@ -415,7 +413,7 @@ ul.pagination li a{
     text-decoration:none;
     font-weight:normal;
 }
-ul.pagination li a:activ{
+ul.pagination li a:active{
     color:#000;
     font-weight:bold;
 }

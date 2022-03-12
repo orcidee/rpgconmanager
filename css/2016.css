@@ -104,8 +104,6 @@ cursor: pointer;
 
 }
 
-}
-
 input.subscribe
 {
 margin:auto;
@@ -392,7 +390,7 @@ ul.pagination li a{
     text-decoration:none;
     font-weight:normal;
 }
-ul.pagination li a:activ{
+ul.pagination li a:active{
     color:#000;
     font-weight:bold;
 }
