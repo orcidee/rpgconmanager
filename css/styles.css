@@ -257,6 +257,9 @@ td.application-controls{
 .game-list .actions > a > img{
     height: 15px;
 }
+.admin .actions > a > img {
+    height: 15px;
+}
 .game-list li .separator {
     clear:both;
     height:1px;
