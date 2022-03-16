@@ -6,13 +6,17 @@ require_once(dirname(__FILE__).'/conf/conf.php');
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	    <title>Module de gestion des parties Orc/'idée</title>
         <meta name="description" lang="fr" content="Module de gestion des parties Orc'Idee">
         <meta name="keywords" lang="fr" content="orcidee">
 		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href="css/styles.css?_<?php echo CACHE_KILL;?>" />
 		<link rel="stylesheet" type="text/css" href="css/2022.css?_<?php echo CACHE_KILL;?>"/>
         <link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC|Playfair+Display:400,400italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
-        <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Josefin+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
         <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
         <script type="text/javascript">
@@ -166,7 +170,7 @@ if(!is_null($view->content)){
 } else {
     echo "<br/><br/><br/><br/><div style='text-align:center; font-weight:bold;font-size:1.2em;'>Bienvenue sur le module de gestion des parties d'Orc'idée !</div>
     <br/><br/>
-    <div style='margin:auto; text-align:center;'><img src='https://www.orcidee.ch/images/divers/parties.png' alt=''/></div>";
+    <div style='margin:auto; text-align:center;'><img src='https://parties.orcidee.ch/img/BanFb.jpg' alt='' style='max-width:90%;'/></div>";
 }
 
 
